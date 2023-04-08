@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        # image: cocktail-grid-backend:latest
+        command: reflex -r '\.go$$' -s go run main.go
+        # command: go run main.go
+        volumes:
+          - ./backend:/go/src/app
+        ports:
+          - "8080:8080"
