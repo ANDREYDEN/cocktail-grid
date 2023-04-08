@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,6 +36,15 @@ func getCocktails(context *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			"https://cocktailgrid.com",
+			"https://127.0.0.1:3000",
+			"http://127.0.0.1:3000",
+		},
+	}))
+
 	router.GET("/cocktails", getCocktails)
 
 	router.Run("localhost:8080")
