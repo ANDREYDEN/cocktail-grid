@@ -41,6 +41,18 @@ You have a choice of two development setups:
     docker compose up
   ```
 
+Optionally you can run the containers separately:
+- from the root directory:
+  ```bash
+    docker compose up frontend
+    docker compose up backend
+  ```
+
+## References
+
+- [Go containarization](https://karol-filipczuk.medium.com/development-environment-for-web-app-with-containers-docker-vue-js-go-part-1-b0f4d663bd64)
+- [Vue containarization](https://karol-filipczuk.medium.com/development-environment-for-web-app-with-containers-docker-vue-js-go-part-2-25f059d88cb8)
+
 ## Future Development
 
 - replace Reflex with Mutagen?
