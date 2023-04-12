@@ -1,5 +1,8 @@
 version: "3.8"
 
+networks:
+  internal-network:
+
 services:
     backend:
         build:
@@ -9,8 +12,10 @@ services:
         command: reflex -r '\.go$$' -s go run main.go
         volumes:
           - ./backend:/go/src/app
-        expose: 
-          - "8080"
+        ports: 
+          - "8080:8080"
+        networks:
+          - internal-network
 
     frontend:
         build:
@@ -21,4 +26,6 @@ services:
             - "80:80"
         volumes:
             - ./frontend:/app
+        networks:
+          - internal-network
 

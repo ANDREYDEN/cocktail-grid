@@ -6,7 +6,7 @@ import { Cocktail } from '../types/cocktail';
 const cocktails = ref<Cocktail[] | null>()
 
 onMounted(async () => {
-  const response = await axios.get('http://localhost:8080/cocktails')
+  const response = await axios.get('http://backend:8080/cocktails')
 
   if (response.status === 200) {
     console.log(response.data);
