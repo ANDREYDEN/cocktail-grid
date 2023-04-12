@@ -18,7 +18,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <h1>Cocktails</h1>
+  <h1>Cocktailss</h1>
 
   <div v-if="cocktails">
     <div v-for="cocktail in cocktails" :key="cocktail.id">
