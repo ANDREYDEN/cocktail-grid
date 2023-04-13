@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
     backend:
         build:
@@ -16,9 +17,8 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
         image: cocktail_grid-frontend:latest
+        command: yarn dev
         ports:
             - "3000:3000"
         volumes:
-            - type: bind
-              source: ./frontend
-              target: /app
+            - ./frontend:/app

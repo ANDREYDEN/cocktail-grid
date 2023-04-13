@@ -6,11 +6,11 @@ import { Cocktail } from '../types/cocktail';
 const cocktails = ref<Cocktail[] | null>()
 
 onMounted(async () => {
-  const response = await axios.get('http://backend:8080/cocktails')
+  const baseUrl = import.meta.env.VITE_BACKEND_URL
+
+  const response = await axios.get(`${baseUrl}/cocktails`)
 
   if (response.status === 200) {
-    console.log(response.data);
-
     cocktails.value = response.data
   }
 })

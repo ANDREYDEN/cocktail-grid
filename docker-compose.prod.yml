@@ -1,8 +1,5 @@
 version: "3.8"
 
-networks:
-  internal-network:
-
 services:
     backend:
         build:
@@ -14,8 +11,6 @@ services:
           - ./backend:/go/src/app
         ports: 
           - "8080:8080"
-        networks:
-          - internal-network
 
     frontend:
         build:
@@ -26,6 +21,4 @@ services:
             - "80:80"
         volumes:
             - ./frontend:/app
-        networks:
-          - internal-network
 
