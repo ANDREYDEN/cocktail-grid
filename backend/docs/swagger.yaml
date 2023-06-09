@@ -1,0 +1,33 @@
+basePath: /
+definitions:
+  models.cocktail:
+    properties:
+      id:
+        type: integer
+      image_url:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: An API to get cocktails and ingredients
+  title: CocktailGrid API
+  version: "1"
+paths:
+  /cocktails:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.cocktail'
+      summary: retrieves cocktails
+      tags:
+      - cocktails
+swagger: "2.0"

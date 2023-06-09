@@ -1,0 +1,51 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "An API to get cocktails and ingredients",
+        "title": "CocktailGrid API",
+        "contact": {},
+        "version": "1"
+    },
+    "basePath": "/",
+    "paths": {
+        "/cocktails": {
+            "get": {
+                "description": "do ping",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cocktails"
+                ],
+                "summary": "retrieves cocktails",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.cocktail"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.cocktail": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

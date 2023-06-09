@@ -5,13 +5,12 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-)
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 
-type cocktail struct {
-	ID       int    `json:"id"`
-	Title    string `json:"title"`
-	ImageURL string `json:"image_url"`
-}
+	docs "cocktail-grid/backend/docs"
+	models "cocktail-grid/backend/models"
+)
 
 type ingredient struct {
 	ID   int    `json:"id"`
@@ -24,18 +23,28 @@ type cocktail_ingredient struct {
 	Quantity     int `json:"quantity"`
 }
 
-var cocktails = []cocktail{
-	{ID: 1, Title: "Mojito", ImageURL: "https://www.thecocktaildb.com/images/media/drink/3z6xdi1589574608.jpg"},
-	{ID: 2, Title: "Margarita", ImageURL: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg"},
-	{ID: 3, Title: "Long Island Iced Tea", ImageURL: "https://www.thecocktaildb.com/images/media/drink/loezxn1504373874.jpg"},
-}
+// @title CocktailGrid API
+// @description An API to get cocktails and ingredients
+// @version 1
+// @BasePath /
 
+// getCocktails godoc
+// @Summary retrieves cocktails
+// @Schemes
+// @Description do ping
+// @Tags cocktails
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.cocktail
+// @Router /cocktails [get]
 func getCocktails(context *gin.Context) {
-	context.IndentedJSON(http.StatusOK, cocktails)
+	context.IndentedJSON(http.StatusOK, models.GetAllCocktails())
 }
 
 func main() {
 	router := gin.Default()
+
+	docs.SwaggerInfo.BasePath = "/"
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
@@ -49,6 +58,8 @@ func main() {
 	}))
 
 	router.GET("/cocktails", getCocktails)
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	router.Run("0.0.0.0:8080")
 }
