@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cocktail-grid/backend/db"
 	docs "cocktail-grid/backend/docs"
 	"fmt"
 )
@@ -12,6 +13,8 @@ import (
 
 func main() {
 	docs.SwaggerInfo.BasePath = "/"
+
+	db.Init()
 
 	port := "8080"
 	router := NewRouter()

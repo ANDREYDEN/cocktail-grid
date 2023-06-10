@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/cocktails": {
             "get": {
-                "description": "retrieves all available cocktails",
+                "description": "Retrieves all available cocktails",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,12 +28,12 @@ const docTemplate = `{
                 "tags": [
                     "cocktails"
                 ],
-                "summary": "retrieves cocktails",
+                "summary": "Gets all cocktails",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Cocktail"
+                            "$ref": "#/definitions/dtos.CocktailDto"
                         }
                     }
                 }
@@ -41,12 +41,9 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Cocktail": {
+        "dtos.CocktailDto": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "image_url": {
                     "type": "string"
                 },

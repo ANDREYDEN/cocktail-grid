@@ -11,7 +11,7 @@ import (
 
 func NewRouter() *gin.Engine {
 	router := gin.Default()
-	
+
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
 			"https://cocktailgrid.com",
@@ -23,10 +23,10 @@ func NewRouter() *gin.Engine {
 		},
 	}))
 
-	cocktailsGroup := router.Group("/cocktails") 
+	cocktailsGroup := router.Group("/cocktails")
 	{
-		cocktail := new(controllers.CocktailController)
-		cocktailsGroup.GET("/", cocktail.GetCocktails)
+		cocktailController := new(controllers.CocktailController)
+		cocktailsGroup.GET("/", cocktailController.List)
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

@@ -1,9 +1,7 @@
 basePath: /
 definitions:
-  models.Cocktail:
+  dtos.CocktailDto:
     properties:
-      id:
-        type: integer
       image_url:
         type: string
       title:
@@ -19,15 +17,15 @@ paths:
     get:
       consumes:
       - application/json
-      description: retrieves all available cocktails
+      description: Retrieves all available cocktails
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Cocktail'
-      summary: retrieves cocktails
+            $ref: '#/definitions/dtos.CocktailDto'
+      summary: Gets all cocktails
       tags:
       - cocktails
 swagger: "2.0"
