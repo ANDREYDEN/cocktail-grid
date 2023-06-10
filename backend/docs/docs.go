@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/cocktails": {
             "get": {
-                "description": "do ping",
+                "description": "retrieves all available cocktails",
                 "consumes": [
                     "application/json"
                 ],
@@ -33,7 +33,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.cocktail"
+                            "$ref": "#/definitions/models.Cocktail"
                         }
                     }
                 }
@@ -41,7 +41,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.cocktail": {
+        "models.Cocktail": {
             "type": "object",
             "properties": {
                 "id": {

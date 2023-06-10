@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  models.cocktail:
+  models.Cocktail:
     properties:
       id:
         type: integer
@@ -19,14 +19,14 @@ paths:
     get:
       consumes:
       - application/json
-      description: do ping
+      description: retrieves all available cocktails
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.cocktail'
+            $ref: '#/definitions/models.Cocktail'
       summary: retrieves cocktails
       tags:
       - cocktails

@@ -10,13 +10,13 @@ import (
 type CocktailController struct {}
 
 // getCocktails godoc
-// @Summary retrieves cocktails
+// @Summary Gets all cocktails
 // @Schemes
-// @Description retrieves all available cocktails
+// @Description Retrieves all available cocktails
 // @Tags cocktails
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.cocktail
+// @Success 200 {object} models.Cocktail
 // @Router /cocktails [get]
 func (cocktailController CocktailController) GetCocktails(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, models.GetAllCocktails())

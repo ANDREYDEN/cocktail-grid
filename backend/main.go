@@ -2,6 +2,7 @@ package main
 
 import (
 	docs "cocktail-grid/backend/docs"
+	"fmt"
 )
 
 // @title CocktailGrid API
@@ -12,6 +13,8 @@ import (
 func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
+	port := "8080"
 	router := NewRouter()
-	router.Run("0.0.0.0:8080")
+	fmt.Printf("\nVisit http://localhost:%v/swagger/index.html to view Swagger documentation.\n\n", port)
+	router.Run(fmt.Sprintf("0.0.0.0:%v", port))
 }

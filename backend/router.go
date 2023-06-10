@@ -23,8 +23,11 @@ func NewRouter() *gin.Engine {
 		},
 	}))
 
-	cocktail := new(controllers.CocktailController)
-	router.GET("/cocktails", cocktail.GetCocktails)
+	cocktailsGroup := router.Group("/cocktails") 
+	{
+		cocktail := new(controllers.CocktailController)
+		cocktailsGroup.GET("/", cocktail.GetCocktails)
+	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router
