@@ -7,5 +7,5 @@ type Cocktail struct {
 	Title    string
 	ImageURL string
 	
-	Ingredients []Ingredient `gorm:"many2many:cocktail_ingredients;"`
+	CocktailIngredients []CocktailIngredient
 }

@@ -5,7 +5,8 @@ type CocktailIngredientDto struct {
 }
 
 type CocktailIngredientResultDto struct {
-	CocktailID   int    `json:"cocktailId"`
-	IngredientID int    `json:"ingredientId"`
-	Quantity     float32 `json:"quantity"`
+	CocktailID     int     `json:"cocktailId"`
+	IngredientID   int     `json:"ingredientId"`
+	IngredientName string  `json:"ingredientName"`
+	Quantity       float32 `json:"quantity"`
 }

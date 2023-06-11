@@ -23,13 +23,25 @@ type CocktailController struct{}
 func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	db := db.GetDB()
 	var cocktails []models.Cocktail
-	db.Find(&cocktails)
+	db.Preload("CocktailIngredients.Ingredient").Find(&cocktails)
 
 	cocktailDtos := []dtos.CocktailDto{}
 	for _, cocktail := range cocktails {
+		ingredientResultDtos := []dtos.CocktailIngredientResultDto{}
+		for _, cocktailIngredient := range cocktail.CocktailIngredients {
+			cocktailIngredientResultDto := dtos.CocktailIngredientResultDto{
+				CocktailID:     int(cocktail.ID),
+				IngredientID:   cocktailIngredient.IngredientID,
+				IngredientName: cocktailIngredient.Ingredient.Name,
+				Quantity:       cocktailIngredient.Quantity,
+			}
+			ingredientResultDtos = append(ingredientResultDtos, cocktailIngredientResultDto)
+		}
+
 		cocktailDto := dtos.CocktailDto{
-			Title:    cocktail.Title,
-			ImageURL: cocktail.ImageURL,
+			Title:       cocktail.Title,
+			ImageURL:    cocktail.ImageURL,
+			Ingredients: ingredientResultDtos,
 		}
 		cocktailDtos = append(cocktailDtos, cocktailDto)
 	}

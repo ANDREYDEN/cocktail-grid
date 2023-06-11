@@ -4,6 +4,10 @@ definitions:
     properties:
       image_url:
         type: string
+      ingredients:
+        items:
+          $ref: '#/definitions/dtos.CocktailIngredientResultDto'
+        type: array
       title:
         type: string
     type: object
@@ -14,10 +18,12 @@ definitions:
     type: object
   dtos.CocktailIngredientResultDto:
     properties:
-      cocktail_id:
+      cocktailId:
         type: integer
-      ingredient_id:
+      ingredientId:
         type: integer
+      ingredientName:
+        type: string
       quantity:
         type: number
     type: object

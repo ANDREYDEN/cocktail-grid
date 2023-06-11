@@ -161,6 +161,12 @@ const docTemplate = `{
                 "image_url": {
                     "type": "string"
                 },
+                "ingredients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
+                    }
+                },
                 "title": {
                     "type": "string"
                 }
@@ -177,11 +183,14 @@ const docTemplate = `{
         "dtos.CocktailIngredientResultDto": {
             "type": "object",
             "properties": {
-                "cocktail_id": {
+                "cocktailId": {
                     "type": "integer"
                 },
-                "ingredient_id": {
+                "ingredientId": {
                     "type": "integer"
+                },
+                "ingredientName": {
+                    "type": "string"
                 },
                 "quantity": {
                     "type": "number"

@@ -53,6 +53,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	cocktailIngredientResultDto := dtos.CocktailIngredientResultDto{
 		CocktailID:   cocktailIngredient.CocktailID,
 		IngredientID: cocktailIngredient.IngredientID,
+		IngredientName: cocktailIngredient.Ingredient.Name,
 		Quantity:     cocktailIngredient.Quantity,
 	}
 
