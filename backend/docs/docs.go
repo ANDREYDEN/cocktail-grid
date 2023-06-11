@@ -26,7 +26,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "cocktails"
+                    "cocktail"
                 ],
                 "summary": "Gets all cocktails",
                 "responses": {
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "cocktails"
+                    "cocktail"
                 ],
                 "summary": "Creates a cocktail",
                 "parameters": [
@@ -70,6 +70,88 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/cocktails/{cocktailId}/ingredients/{ingredientId}": {
+            "post": {
+                "description": "Adds an existing ingredient to the cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cocktail"
+                ],
+                "summary": "Adds an ingredient",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cocktail ID",
+                        "name": "cocktailId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Ingredient ID",
+                        "name": "ingredientId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Cocktail ingredient object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailIngredientDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingredients": {
+            "post": {
+                "description": "Creates a new ingredient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingredient"
+                ],
+                "summary": "Creates an ingredient",
+                "parameters": [
+                    {
+                        "description": "Ingredient object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.IngredientDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.IngredientResultDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -80,6 +162,44 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.CocktailIngredientDto": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "number"
+                }
+            }
+        },
+        "dtos.CocktailIngredientResultDto": {
+            "type": "object",
+            "properties": {
+                "cocktail_id": {
+                    "type": "integer"
+                },
+                "ingredient_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "number"
+                }
+            }
+        },
+        "dtos.IngredientDto": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.IngredientResultDto": {
+            "type": "object",
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }

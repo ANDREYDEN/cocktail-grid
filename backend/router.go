@@ -26,9 +26,31 @@ func NewRouter() *gin.Engine {
 	cocktailsGroup := router.Group("/cocktails")
 	{
 		cocktailController := new(controllers.CocktailController)
-		cocktailsGroup.GET("/", cocktailController.GetAll)
-		cocktailsGroup.POST("/", cocktailController.Create)
+
+		cocktailsGroup.GET("/", cocktailController.GetAllCocktails)
+		cocktailsGroup.POST("/", cocktailController.CreateCocktail)
+
+		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
+		{
+			ingredientsGroup := cocktailGroup.Group("/ingredients")
+			{
+				ingredientGroup := ingredientsGroup.Group("/:ingredientId")
+				{
+					cocktailIngredientController := new(controllers.CocktailIngredientController)
+
+					ingredientGroup.POST("/", cocktailIngredientController.CreateCocktailIngredient)
+				}
+			}
+		}
 	}
+
+	ingredientsGroup := router.Group("/ingredients")
+	{
+		ingredientController := new(controllers.IngredientController)
+
+		ingredientsGroup.POST("/", ingredientController.CreateIngredient)
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return router

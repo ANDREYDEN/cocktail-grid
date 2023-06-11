@@ -7,6 +7,30 @@ definitions:
       title:
         type: string
     type: object
+  dtos.CocktailIngredientDto:
+    properties:
+      quantity:
+        type: number
+    type: object
+  dtos.CocktailIngredientResultDto:
+    properties:
+      cocktail_id:
+        type: integer
+      ingredient_id:
+        type: integer
+      quantity:
+        type: number
+    type: object
+  dtos.IngredientDto:
+    properties:
+      name:
+        type: string
+    type: object
+  dtos.IngredientResultDto:
+    properties:
+      name:
+        type: string
+    type: object
 info:
   contact: {}
   description: An API to get cocktails and ingredients
@@ -27,7 +51,7 @@ paths:
             $ref: '#/definitions/dtos.CocktailDto'
       summary: Gets all cocktails
       tags:
-      - cocktails
+      - cocktail
     post:
       consumes:
       - application/json
@@ -48,5 +72,59 @@ paths:
             $ref: '#/definitions/dtos.CocktailDto'
       summary: Creates a cocktail
       tags:
-      - cocktails
+      - cocktail
+  /cocktails/{cocktailId}/ingredients/{ingredientId}:
+    post:
+      consumes:
+      - application/json
+      description: Adds an existing ingredient to the cocktail
+      parameters:
+      - description: Cocktail ID
+        in: path
+        name: cocktailId
+        required: true
+        type: integer
+      - description: Ingredient ID
+        in: path
+        name: ingredientId
+        required: true
+        type: integer
+      - description: Cocktail ingredient object
+        in: body
+        name: cocktail
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CocktailIngredientDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dtos.CocktailIngredientResultDto'
+      summary: Adds an ingredient
+      tags:
+      - cocktail
+  /ingredients:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new ingredient
+      parameters:
+      - description: Ingredient object
+        in: body
+        name: cocktail
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.IngredientDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dtos.IngredientResultDto'
+      summary: Creates an ingredient
+      tags:
+      - ingredient
 swagger: "2.0"
