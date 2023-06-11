@@ -11,7 +11,7 @@ import (
 
 type CocktailController struct{}
 
-// List godoc
+// GetAll godoc
 // @Summary Gets all cocktails
 // @Schemes
 // @Description Retrieves all available cocktails
@@ -20,7 +20,7 @@ type CocktailController struct{}
 // @Produce json
 // @Success 200 {object} dtos.CocktailDto
 // @Router /cocktails [get]
-func (cocktailController CocktailController) List(context *gin.Context) {
+func (cocktailController CocktailController) GetAll(context *gin.Context) {
 	db := db.GetDB()
 	var cocktails []models.Cocktail
 	db.Find(&cocktails)
@@ -35,4 +35,32 @@ func (cocktailController CocktailController) List(context *gin.Context) {
 	}
 
 	context.IndentedJSON(http.StatusOK, cocktailDtos)
+}
+
+// Create godoc
+// @Summary Creates a cocktail
+// @Schemes
+// @Description Creates a new cocktail
+// @Tags cocktails
+// @Accept json
+// @Produce json
+// @Param cocktail body dtos.CocktailDto true "Cocktail object"
+// @Success 201 {object} dtos.CocktailDto
+// @Router /cocktails [post]
+func (cocktailController CocktailController) Create(context *gin.Context) {
+	var cocktailDto dtos.CocktailDto
+
+	if err := context.BindJSON(&cocktailDto); err != nil {
+		return
+	}
+
+	cocktail := models.Cocktail{
+		Title:    cocktailDto.Title,
+		ImageURL: cocktailDto.ImageURL,
+	}
+
+	db := db.GetDB()
+	db.Create(&cocktail)
+
+	context.IndentedJSON(http.StatusCreated, cocktailDto)
 }

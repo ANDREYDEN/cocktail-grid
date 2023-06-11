@@ -28,4 +28,25 @@ paths:
       summary: Gets all cocktails
       tags:
       - cocktails
+    post:
+      consumes:
+      - application/json
+      description: Creates a new cocktail
+      parameters:
+      - description: Cocktail object
+        in: body
+        name: cocktail
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CocktailDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dtos.CocktailDto'
+      summary: Creates a cocktail
+      tags:
+      - cocktails
 swagger: "2.0"

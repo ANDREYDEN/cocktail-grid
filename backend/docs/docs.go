@@ -37,6 +37,38 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Creates a new cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cocktails"
+                ],
+                "summary": "Creates a cocktail",
+                "parameters": [
+                    {
+                        "description": "Cocktail object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                }
             }
         }
     },
