@@ -6,7 +6,7 @@ services:
             context: ./backend
             dockerfile: Dockerfile
         image: cocktail_grid-backend:latest
-        command: reflex -r '\.go$$' -s go run main.go
+        command: go run .
         volumes:
           - ./backend:/go/src/app
         ports: 
@@ -21,4 +21,3 @@ services:
             - "80:80"
         volumes:
             - ./frontend:/app
-

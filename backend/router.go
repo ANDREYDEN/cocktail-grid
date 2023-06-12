@@ -15,6 +15,7 @@ func NewRouter() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
 			"https://cocktailgrid.com",
+			"http://cocktailgrid.com",
 			"https://127.0.0.1:3000",
 			"http://127.0.0.1:3000",
 			"http://localhost:3000",
