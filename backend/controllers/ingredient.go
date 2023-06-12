@@ -29,6 +29,7 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 	ingredientResultDtos := []dtos.IngredientResultDto{}
 	for _, ingredient := range ingredients {
 		ingredientResultDto := dtos.IngredientResultDto{
+			ID:   ingredient.ID,
 			Name: ingredient.Name,
 		}
 		ingredientResultDtos = append(ingredientResultDtos, ingredientResultDto)

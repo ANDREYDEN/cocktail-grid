@@ -179,7 +179,10 @@ const docTemplate = `{
         "dtos.CocktailDto": {
             "type": "object",
             "properties": {
-                "image_url": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
                     "type": "string"
                 },
                 "ingredients": {
@@ -221,7 +224,7 @@ const docTemplate = `{
         "dtos.CreateCocktailDto": {
             "type": "object",
             "properties": {
-                "image_url": {
+                "imageUrl": {
                     "type": "string"
                 },
                 "title": {
@@ -240,6 +243,9 @@ const docTemplate = `{
         "dtos.IngredientResultDto": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 }

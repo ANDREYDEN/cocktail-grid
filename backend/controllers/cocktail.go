@@ -39,6 +39,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 		}
 
 		cocktailDto := dtos.CocktailDto{
+			ID:          cocktail.ID,
 			Title:       cocktail.Title,
 			ImageURL:    cocktail.ImageURL,
 			Ingredients: ingredientResultDtos,

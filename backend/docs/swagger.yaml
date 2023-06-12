@@ -2,7 +2,9 @@ basePath: /
 definitions:
   dtos.CocktailDto:
     properties:
-      image_url:
+      id:
+        type: integer
+      imageUrl:
         type: string
       ingredients:
         items:
@@ -29,7 +31,7 @@ definitions:
     type: object
   dtos.CreateCocktailDto:
     properties:
-      image_url:
+      imageUrl:
         type: string
       title:
         type: string
@@ -41,6 +43,8 @@ definitions:
     type: object
   dtos.IngredientResultDto:
     properties:
+      id:
+        type: integer
       name:
         type: string
     type: object

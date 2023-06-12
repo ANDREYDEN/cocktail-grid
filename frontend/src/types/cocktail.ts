@@ -1,5 +1,13 @@
-export type Cocktail = {
+export type CocktailDto = {
     id: number;
     title: string;
-    imageURL: string;
+    imageUrl: string;
+    ingredients: CocktailIngredientResultDto[];
+}
+
+type CocktailIngredientResultDto = {
+    cocktailId: number
+	ingredientId: number
+	ingredientName: string
+	quantity: number
 }

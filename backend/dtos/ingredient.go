@@ -5,5 +5,6 @@ type IngredientDto struct {
 }
 
 type IngredientResultDto struct {
+	ID   int   `json:"id"`
 	Name string `json:"name"`
 }
