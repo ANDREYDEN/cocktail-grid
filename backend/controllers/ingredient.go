@@ -11,11 +11,37 @@ import (
 
 type IngredientController struct{}
 
+// GetAllIngredients godoc
+// @Summary Get all ingredients
+// @Schemes
+// @Description Retrieves all available ingredients
+// @Tags Ingredients
+// @Accept json
+// @Produce json
+// @Success 200 {object} dtos.IngredientResultDto
+// @Router /ingredients [get]
+func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Context) {
+	var ingredients []models.Ingredient
+
+	db := db.GetDB()
+	db.Find(&ingredients)
+
+	ingredientResultDtos := []dtos.IngredientResultDto{}
+	for _, ingredient := range ingredients {
+		ingredientResultDto := dtos.IngredientResultDto{
+			Name: ingredient.Name,
+		}
+		ingredientResultDtos = append(ingredientResultDtos, ingredientResultDto)
+	}
+
+	ctx.IndentedJSON(http.StatusOK, ingredientResultDtos)
+}
+
 // CreateIngredient godoc
 // @Summary Creates an ingredient
 // @Schemes
 // @Description Creates a new ingredient
-// @Tags ingredient
+// @Tags Ingredients
 // @Accept json
 // @Produce json
 // @Param cocktail body dtos.IngredientDto true "Ingredient object"

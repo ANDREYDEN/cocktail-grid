@@ -48,6 +48,7 @@ func NewRouter() *gin.Engine {
 	{
 		ingredientController := new(controllers.IngredientController)
 
+		ingredientsGroup.GET("/", ingredientController.GetAllIngredients)
 		ingredientsGroup.POST("/", ingredientController.CreateIngredient)
 	}
 

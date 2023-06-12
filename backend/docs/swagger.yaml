@@ -57,7 +57,7 @@ paths:
             $ref: '#/definitions/dtos.CocktailDto'
       summary: Gets all cocktails
       tags:
-      - cocktail
+      - Cocktails
     post:
       consumes:
       - application/json
@@ -78,7 +78,7 @@ paths:
             $ref: '#/definitions/dtos.CocktailDto'
       summary: Creates a cocktail
       tags:
-      - cocktail
+      - Cocktails
   /cocktails/{cocktailId}/ingredients/{ingredientId}:
     post:
       consumes:
@@ -110,8 +110,22 @@ paths:
             $ref: '#/definitions/dtos.CocktailIngredientResultDto'
       summary: Adds an ingredient
       tags:
-      - cocktail
+      - Cocktails
   /ingredients:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all available ingredients
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.IngredientResultDto'
+      summary: Get all ingredients
+      tags:
+      - Ingredients
     post:
       consumes:
       - application/json
@@ -132,5 +146,5 @@ paths:
             $ref: '#/definitions/dtos.IngredientResultDto'
       summary: Creates an ingredient
       tags:
-      - ingredient
+      - Ingredients
 swagger: "2.0"

@@ -18,7 +18,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
                 "responses": {
@@ -39,7 +39,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Creates a cocktail",
                 "parameters": [
@@ -73,7 +73,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Adds an ingredient",
                 "parameters": [
@@ -112,6 +112,27 @@
             }
         },
         "/ingredients": {
+            "get": {
+                "description": "Retrieves all available ingredients",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Get all ingredients",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.IngredientResultDto"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Creates a new ingredient",
                 "consumes": [
@@ -121,7 +142,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "ingredient"
+                    "Ingredients"
                 ],
                 "summary": "Creates an ingredient",
                 "parameters": [

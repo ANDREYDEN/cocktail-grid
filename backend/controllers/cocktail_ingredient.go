@@ -15,7 +15,7 @@ type CocktailIngredientController struct{}
 // @Summary Adds an ingredient
 // @Schemes
 // @Description Adds an existing ingredient to the cocktail
-// @Tags cocktail
+// @Tags Cocktails
 // @Accept json
 // @Produce json
 // @Param        cocktailId   path      int  true  "Cocktail ID"
@@ -51,10 +51,10 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	db.Create(&cocktailIngredient)
 
 	cocktailIngredientResultDto := dtos.CocktailIngredientResultDto{
-		CocktailID:   cocktailIngredient.CocktailID,
-		IngredientID: cocktailIngredient.IngredientID,
+		CocktailID:     cocktailIngredient.CocktailID,
+		IngredientID:   cocktailIngredient.IngredientID,
 		IngredientName: cocktailIngredient.Ingredient.Name,
-		Quantity:     cocktailIngredient.Quantity,
+		Quantity:       cocktailIngredient.Quantity,
 	}
 
 	ctx.IndentedJSON(http.StatusCreated, cocktailIngredientResultDto)

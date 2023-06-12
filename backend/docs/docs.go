@@ -26,7 +26,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
                 "responses": {
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Creates a cocktail",
                 "parameters": [
@@ -81,7 +81,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "cocktail"
+                    "Cocktails"
                 ],
                 "summary": "Adds an ingredient",
                 "parameters": [
@@ -120,6 +120,27 @@ const docTemplate = `{
             }
         },
         "/ingredients": {
+            "get": {
+                "description": "Retrieves all available ingredients",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Get all ingredients",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.IngredientResultDto"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Creates a new ingredient",
                 "consumes": [
@@ -129,7 +150,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ingredient"
+                    "Ingredients"
                 ],
                 "summary": "Creates an ingredient",
                 "parameters": [

@@ -15,7 +15,7 @@ type CocktailController struct{}
 // @Summary Gets all cocktails
 // @Schemes
 // @Description Retrieves all available cocktails
-// @Tags cocktail
+// @Tags Cocktails
 // @Accept json
 // @Produce json
 // @Success 200 {object} dtos.CocktailDto
@@ -53,7 +53,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 // @Summary Creates a cocktail
 // @Schemes
 // @Description Creates a new cocktail
-// @Tags cocktail
+// @Tags Cocktails
 // @Accept json
 // @Produce json
 // @Param cocktail body dtos.CocktailDto true "Cocktail object"
