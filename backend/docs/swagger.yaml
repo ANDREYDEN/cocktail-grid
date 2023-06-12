@@ -27,6 +27,13 @@ definitions:
       quantity:
         type: number
     type: object
+  dtos.CreateCocktailDto:
+    properties:
+      image_url:
+        type: string
+      title:
+        type: string
+    type: object
   dtos.IngredientDto:
     properties:
       name:
@@ -68,7 +75,7 @@ paths:
         name: cocktail
         required: true
         schema:
-          $ref: '#/definitions/dtos.CocktailDto'
+          $ref: '#/definitions/dtos.CreateCocktailDto'
       produces:
       - application/json
       responses:

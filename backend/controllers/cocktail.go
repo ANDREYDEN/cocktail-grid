@@ -56,7 +56,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 // @Tags Cocktails
 // @Accept json
 // @Produce json
-// @Param cocktail body dtos.CocktailDto true "Cocktail object"
+// @Param cocktail body dtos.CreateCocktailDto true "Cocktail object"
 // @Success 201 {object} dtos.CocktailDto
 // @Router /cocktails [post]
 func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {

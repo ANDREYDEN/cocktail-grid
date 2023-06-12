@@ -27,8 +27,8 @@ func NewRouter() *gin.Engine {
 	{
 		cocktailController := new(controllers.CocktailController)
 
-		cocktailsGroup.GET("/", cocktailController.GetAllCocktails)
-		cocktailsGroup.POST("/", cocktailController.CreateCocktail)
+		cocktailsGroup.GET("", cocktailController.GetAllCocktails)
+		cocktailsGroup.POST("", cocktailController.CreateCocktail)
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
 		{
@@ -38,7 +38,7 @@ func NewRouter() *gin.Engine {
 				{
 					cocktailIngredientController := new(controllers.CocktailIngredientController)
 
-					ingredientGroup.POST("/", cocktailIngredientController.CreateCocktailIngredient)
+					ingredientGroup.POST("", cocktailIngredientController.CreateCocktailIngredient)
 				}
 			}
 		}
@@ -48,8 +48,8 @@ func NewRouter() *gin.Engine {
 	{
 		ingredientController := new(controllers.IngredientController)
 
-		ingredientsGroup.GET("/", ingredientController.GetAllIngredients)
-		ingredientsGroup.POST("/", ingredientController.CreateIngredient)
+		ingredientsGroup.GET("", ingredientController.GetAllIngredients)
+		ingredientsGroup.POST("", ingredientController.CreateIngredient)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
