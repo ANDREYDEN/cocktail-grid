@@ -8,7 +8,8 @@ const cocktails = ref<CocktailDto[] | null>()
 const ingredients = ref<Ingredient[] | null>()
 const baseUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<CocktailDto[]>([])
-const cocktailsToRender = computed(() => cocktails)
+const selectedIngredients = ref<Ingredient[]>([])
+const cocktailsToRender = computed(() => selectedIngredients.value.length == 0 ? cocktails.value : cocktails.value?.filter(c => selectedIngredients.value.some(i => c.ingredients.some(ci => ci.ingredientId === i.id))))
 const ingredientsToRender = computed(() => selectedCocktails.value.length == 0 ? ingredients.value : ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients.some(ci => ci.ingredientId === i.id))))
 
 onMounted(async () => {
@@ -33,10 +34,22 @@ const getIngredients = async () => {
 }
 
 const handleCocktailSelect = (cocktail: CocktailDto) => {
+  if (selectedIngredients.value.length > 0) return
+
   if (selectedCocktails.value.includes(cocktail)) {
     selectedCocktails.value = selectedCocktails.value.filter(c => c.id !== cocktail.id)
   } else {
     selectedCocktails.value.push(cocktail)
+  }
+}
+
+const handleIngredientSelect = (ingredient: Ingredient) => {
+  if (selectedCocktails.value.length > 0) return
+
+  if (selectedIngredients.value.includes(ingredient)) {
+    selectedIngredients.value = selectedIngredients.value.filter(i => i.id !== ingredient.id)
+  } else {
+    selectedIngredients.value.push(ingredient)
   }
 }
 
@@ -51,11 +64,13 @@ const handleCocktailSelect = (cocktail: CocktailDto) => {
   <div v-else class="m-10">
     <div class="flex flex-row w-full">
       <h2 class="flex-1 border"></h2>
-      <h2 v-for="ingredient in ingredientsToRender" :key="ingredient.id" class="flex-1 text-lg border">
+      <h2 v-for="ingredient in ingredientsToRender" :key="ingredient.id" class="flex-1 text-lg border cursor-pointer"
+        :class="selectedIngredients.includes(ingredient) ? 'bg-blue-200' : ''"
+        @click="() => handleIngredientSelect(ingredient)">
         {{ ingredient.name }}
       </h2>
     </div>
-    <div v-for="cocktail in cocktails" :key="cocktail.id" class="flex flex-row w-full justify-between">
+    <div v-for="cocktail in cocktailsToRender" :key="cocktail.id" class="flex flex-row w-full justify-between">
       <h2 class="flex-1 text-lg border cursor-pointer" :class="selectedCocktails.includes(cocktail) ? 'bg-blue-200' : ''"
         @click="() => handleCocktailSelect(cocktail)">
         {{ cocktail.title }}
