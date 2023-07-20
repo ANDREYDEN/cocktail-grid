@@ -27,23 +27,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 
 	cocktailDtos := []dtos.CocktailDto{}
 	for _, cocktail := range cocktails {
-		ingredientResultDtos := []dtos.CocktailIngredientResultDto{}
-		for _, cocktailIngredient := range cocktail.CocktailIngredients {
-			cocktailIngredientResultDto := dtos.CocktailIngredientResultDto{
-				CocktailID:     int(cocktail.ID),
-				IngredientID:   cocktailIngredient.IngredientID,
-				IngredientName: cocktailIngredient.Ingredient.Name,
-				Quantity:       cocktailIngredient.Quantity,
-			}
-			ingredientResultDtos = append(ingredientResultDtos, cocktailIngredientResultDto)
-		}
-
-		cocktailDto := dtos.CocktailDto{
-			ID:          cocktail.ID,
-			Title:       cocktail.Title,
-			ImageURL:    cocktail.ImageURL,
-			Ingredients: ingredientResultDtos,
-		}
+		cocktailDto := dtos.FromCocktailToDto(cocktail)
 		cocktailDtos = append(cocktailDtos, cocktailDto)
 	}
 
