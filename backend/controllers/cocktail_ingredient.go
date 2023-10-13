@@ -25,8 +25,8 @@ type CocktailIngredientController struct{}
 // @Router /cocktails/{cocktailId}/ingredients/{ingredientId} [post]
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
-		CocktailID   int `uri:"cocktailId" binding:"required"`
-		IngredientID int `uri:"ingredientId" binding:"required"`
+		CocktailID   uint `uri:"cocktailId" binding:"required"`
+		IngredientID uint `uri:"ingredientId" binding:"required"`
 	}
 
 	var pathParams CreateCocktailIngredientPathParams
