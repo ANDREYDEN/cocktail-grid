@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { CocktailDto } from '../types/cocktail';
 import { Ingredient } from '../types/ingredient';
+import GridCell from './GridCell.vue'
 
 const cocktails = ref<CocktailDto[] | null>()
 const ingredients = ref<Ingredient[] | null>()
@@ -63,21 +64,25 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
   </div>
   <div v-else class="m-10">
     <div class="flex flex-row w-full">
-      <h2 class="flex-1 border"></h2>
-      <h2 v-for="ingredient in ingredientsToRender" :key="ingredient.id" class="flex-1 text-lg border cursor-pointer"
-        :class="selectedIngredients.includes(ingredient) ? 'bg-blue-200' : ''"
-        @click="() => handleIngredientSelect(ingredient)">
-        {{ ingredient.name }}
-      </h2>
+      <grid-cell />
+      <grid-cell 
+        v-for="ingredient in ingredientsToRender" 
+        is-selectable
+        :selected="selectedIngredients.includes(ingredient)"
+        @click="handleIngredientSelect(ingredient)"
+        :text="ingredient.name" />
     </div>
-    <div v-for="cocktail in cocktailsToRender" :key="cocktail.id" class="flex flex-row w-full justify-between">
-      <h2 class="flex-1 text-lg border cursor-pointer" :class="selectedCocktails.includes(cocktail) ? 'bg-blue-200' : ''"
-        @click="() => handleCocktailSelect(cocktail)">
-        {{ cocktail.title }}
-      </h2>
-      <h2 v-for="ingredient in ingredientsToRender" :key="ingredient.id" class="flex-1 border">
-        {{ cocktail.ingredients.find(ci => ci.ingredientId === ingredient.id)?.quantity ?? "" }}
-      </h2>
+    <div v-for="cocktail in cocktailsToRender" class="flex flex-row w-full justify-between">
+      <grid-cell 
+        is-selectable
+        :selected="selectedCocktails.includes(cocktail)"
+        @click="handleCocktailSelect(cocktail)"
+        :text="cocktail.title"
+      />
+      <grid-cell 
+        v-for="ingredient in ingredientsToRender"
+        :text="cocktail.ingredients.find(ci => ci.ingredientId === ingredient.id)?.quantity ?? ''"
+      />
     </div>
   </div>
 </template>
