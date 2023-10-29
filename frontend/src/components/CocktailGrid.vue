@@ -10,6 +10,7 @@ const ingredients = ref<Ingredient[] | null>()
 const baseUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<CocktailDto[]>([])
 const selectedIngredients = ref<Ingredient[]>([])
+const cocktailsAsRows = ref<boolean>(true)
 
 const cocktailsToRender = computed(() => {
   if (selectedIngredients.value.length == 0) {
@@ -66,6 +67,10 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
   }
 }
 
+const flipAxis = () => {
+  cocktailsAsRows.value = !cocktailsAsRows.value
+}
+
 </script>
 
 <template>
@@ -75,29 +80,63 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
     <p>Loading...</p>
   </div>
   <div v-else class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
-    <div class="flex gap-2">
-      <grid-cell />
-      <grid-cell 
-        v-for="ingredient in ingredientsToRender" 
-        is-selectable
-        :selected="selectedIngredients.includes(ingredient)"
-        @click="handleIngredientSelect(ingredient)"
-        :text="ingredient.name" />
+    <div v-if="cocktailsAsRows">
+      <div class="flex gap-2">
+        <grid-cell 
+          is-selectable
+          @click="flipAxis"
+          text="swap" />
+        <grid-cell 
+          v-for="ingredient in ingredientsToRender" 
+          is-selectable
+          :selected="selectedIngredients.includes(ingredient)"
+          @click="handleIngredientSelect(ingredient)"
+          :text="ingredient.name" />
+      </div>
+      <div v-if="cocktailsToRender?.length == 0" class="h-16 flex items-center align-center">
+        <p class="text-3xl text-gray-500">No cocktails match your selection</p>
+      </div>
+      <div v-else v-for="cocktail in cocktailsToRender" class="flex gap-2">
+        <grid-cell 
+          is-selectable
+          :selected="selectedCocktails.includes(cocktail)"
+          @click="handleCocktailSelect(cocktail)"
+          :text="cocktail.title"
+        />
+        <grid-cell 
+          v-for="ingredient in ingredientsToRender"
+          :text="cocktail.ingredients.find(ci => ci.ingredientId === ingredient.id)?.quantity ?? ''"
+        />
+      </div>
     </div>
-    <div v-if="cocktailsToRender?.length == 0" class="h-16 flex items-center align-center">
-      <p class="text-3xl text-gray-500">No cocktails match your selection</p>
-    </div>
-    <div v-else v-for="cocktail in cocktailsToRender" class="flex gap-2">
-      <grid-cell 
-        is-selectable
-        :selected="selectedCocktails.includes(cocktail)"
-        @click="handleCocktailSelect(cocktail)"
-        :text="cocktail.title"
-      />
-      <grid-cell 
-        v-for="ingredient in ingredientsToRender"
-        :text="cocktail.ingredients.find(ci => ci.ingredientId === ingredient.id)?.quantity ?? ''"
-      />
+    <div v-else>
+      <div class="flex gap-2">
+        <grid-cell 
+          is-selectable
+          @click="flipAxis"
+          text="swap" />
+        <grid-cell 
+          v-for="cocktail in cocktailsToRender"
+          is-selectable
+          :selected="selectedCocktails.includes(cocktail)"
+          @click="handleCocktailSelect(cocktail)"
+          :text="cocktail.title" />
+      </div>
+      <div v-if="cocktailsToRender?.length == 0" class="h-16 flex items-center align-center">
+        <p class="text-3xl text-gray-500">No cocktails match your selection</p>
+      </div>
+      <div v-else v-for="ingredient in ingredientsToRender" class="flex gap-2">
+        <grid-cell 
+          is-selectable
+          :selected="selectedIngredients.includes(ingredient)"
+          @click="handleIngredientSelect(ingredient)"
+          :text="ingredient.name" />
+        
+        <grid-cell 
+          v-for="cocktail in cocktailsToRender"
+          :text="cocktail.ingredients.find(ci => ci.ingredientId === ingredient.id)?.quantity ?? ''"
+        />
+      </div>
     </div>
   </div>
 </template>
