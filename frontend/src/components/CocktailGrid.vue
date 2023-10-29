@@ -10,8 +10,20 @@ const ingredients = ref<Ingredient[] | null>()
 const baseUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<CocktailDto[]>([])
 const selectedIngredients = ref<Ingredient[]>([])
-const cocktailsToRender = computed(() => selectedIngredients.value.length == 0 ? cocktails.value : cocktails.value?.filter(c => selectedIngredients.value.some(i => c.ingredients.some(ci => ci.ingredientId === i.id))))
-const ingredientsToRender = computed(() => selectedCocktails.value.length == 0 ? ingredients.value : ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients.some(ci => ci.ingredientId === i.id))))
+
+const cocktailsToRender = computed(() => {
+  if (selectedIngredients.value.length == 0) {
+    return cocktails.value
+  } 
+  return cocktails.value?.filter(c => selectedIngredients.value.some(i => c.ingredients.some(ci => ci.ingredientId === i.id)))
+})
+
+const ingredientsToRender = computed(() => {
+  if (selectedCocktails.value.length == 0) {
+    return ingredients.value
+  } 
+  return ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients.some(ci => ci.ingredientId === i.id)))
+})
 
 onMounted(async () => {
   await getCocktails()
@@ -74,6 +86,7 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
     </div>
     <div v-for="cocktail in cocktailsToRender" class="flex flex-row w-full justify-between">
       <grid-cell 
+        class="w-24"
         is-selectable
         :selected="selectedCocktails.includes(cocktail)"
         @click="handleCocktailSelect(cocktail)"
