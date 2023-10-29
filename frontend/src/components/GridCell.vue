@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed } from 'vue'
 
 export interface GridCellProps {
     isSelectable?: boolean
@@ -13,9 +13,11 @@ const props = withDefaults(defineProps<GridCellProps>(), {
 })
 
 const containerClass = computed(() => ({
-    'cursor-pointer text-gl': props.isSelectable,
+    'cursor-pointer text-lg': props.isSelectable,
     'hover:bg-blue-100': props.isSelectable && !props.selected,
     'bg-blue-300': props.selected,
+}))
+const textClass = computed(() => ({
     'text-3xl text-gray-500': !props.isSelectable
 }))
 
@@ -27,7 +29,7 @@ defineEmits(['click'])
         class="flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg"
         :class="containerClass"
         @click="$emit('click')">
-        <div class="flex items-baseline">
+        <div class="flex items-baseline" :class="textClass">
             <div class="inline">{{ text }}</div>
             <div v-if="!isSelectable && text != ''" class="ml-1 text-lg">oz.</div>
         </div>

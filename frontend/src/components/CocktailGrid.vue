@@ -15,7 +15,7 @@ const cocktailsToRender = computed(() => {
   if (selectedIngredients.value.length == 0) {
     return cocktails.value
   } 
-  return cocktails.value?.filter(c => selectedIngredients.value.some(i => c.ingredients.some(ci => ci.ingredientId === i.id)))
+  return cocktails.value?.filter(c => selectedIngredients.value.every(i => c.ingredients.some(ci => ci.ingredientId === i.id)))
 })
 
 const ingredientsToRender = computed(() => {
@@ -84,7 +84,10 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
         @click="handleIngredientSelect(ingredient)"
         :text="ingredient.name" />
     </div>
-    <div v-for="cocktail in cocktailsToRender" class="flex gap-2">
+    <div v-if="cocktailsToRender?.length == 0" class="h-16 flex items-center align-center">
+      <p class="text-3xl text-gray-500">No cocktails match your selection</p>
+    </div>
+    <div v-else v-for="cocktail in cocktailsToRender" class="flex gap-2">
       <grid-cell 
         is-selectable
         :selected="selectedCocktails.includes(cocktail)"
