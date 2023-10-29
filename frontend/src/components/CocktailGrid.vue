@@ -69,13 +69,13 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
 </script>
 
 <template>
-  <h1 class="text-center text-5xl">Cocktail Grid</h1>
+  <h1 class="text-center text-5xl mt-8">Cocktail Grid</h1>
 
   <div v-if="!cocktails || !ingredients">
     <p>Loading...</p>
   </div>
-  <div v-else class="m-10">
-    <div class="flex flex-row w-full">
+  <div v-else class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
+    <div class="flex gap-2">
       <grid-cell />
       <grid-cell 
         v-for="ingredient in ingredientsToRender" 
@@ -84,9 +84,8 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
         @click="handleIngredientSelect(ingredient)"
         :text="ingredient.name" />
     </div>
-    <div v-for="cocktail in cocktailsToRender" class="flex flex-row w-full justify-between">
+    <div v-for="cocktail in cocktailsToRender" class="flex gap-2">
       <grid-cell 
-        class="w-24"
         is-selectable
         :selected="selectedCocktails.includes(cocktail)"
         @click="handleCocktailSelect(cocktail)"

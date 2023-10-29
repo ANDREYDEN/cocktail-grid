@@ -14,7 +14,8 @@ const props = withDefaults(defineProps<GridCellProps>(), {
 
 const containerClass = computed(() => ({
     'cursor-pointer text-gl': props.isSelectable,
-    'bg-blue-200': props.selected,
+    'hover:bg-blue-100': props.isSelectable && !props.selected,
+    'bg-blue-300': props.selected,
     'text-3xl text-gray-500': !props.isSelectable
 }))
 
@@ -23,11 +24,11 @@ defineEmits(['click'])
 
 <template>
     <div 
-        class="flex-1 h-24 flex items-center justify-center"
+        class="flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg"
         :class="containerClass"
         @click="$emit('click')">
         <div class="flex items-baseline">
-            <div>{{ text }}</div>
+            <div class="inline">{{ text }}</div>
             <div v-if="!isSelectable && text != ''" class="ml-1 text-lg">oz.</div>
         </div>
     </div>
