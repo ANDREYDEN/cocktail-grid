@@ -117,6 +117,52 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Deletes an ingredient from a cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cocktails"
+                ],
+                "summary": "Deletes an ingredient from a cocktail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cocktail ID",
+                        "name": "cocktailId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Ingredient ID",
+                        "name": "ingredientId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Cocktail ingredient object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailIngredientDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
+                        }
+                    }
+                }
             }
         },
         "/ingredients": {
@@ -210,11 +256,11 @@ const docTemplate = `{
                 "cocktailId": {
                     "type": "integer"
                 },
+                "ingredie ntName": {
+                    "type": "string"
+                },
                 "ingredientId": {
                     "type": "integer"
-                },
-                "ingredientName": {
-                    "type": "string"
                 },
                 "quantity": {
                     "type": "number"

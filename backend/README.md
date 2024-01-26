@@ -13,3 +13,15 @@
     ```bash
     go run . --seed
     ```
+
+3. Generate swagger docs
+
+    ```bash
+    swag init
+    ```
+
+4. Format swagger docs
+    
+    ```bash
+    swag fmt 
+    ```

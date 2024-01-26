@@ -12,14 +12,14 @@ import (
 type IngredientController struct{}
 
 // GetAllIngredients godoc
-// @Summary Get all ingredients
-// @Schemes
-// @Description Retrieves all available ingredients
-// @Tags Ingredients
-// @Accept json
-// @Produce json
-// @Success 200 {object} dtos.IngredientResultDto
-// @Router /ingredients [get]
+//	@Summary	Get all ingredients
+//	@Schemes
+//	@Description	Retrieves all available ingredients
+//	@Tags			Ingredients
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	dtos.IngredientResultDto
+//	@Router			/ingredients [get]
 func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Context) {
 	var ingredients []models.Ingredient
 
@@ -39,15 +39,15 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 }
 
 // CreateIngredient godoc
-// @Summary Creates an ingredient
-// @Schemes
-// @Description Creates a new ingredient
-// @Tags Ingredients
-// @Accept json
-// @Produce json
-// @Param cocktail body dtos.IngredientDto true "Ingredient object"
-// @Success 201 {object} dtos.IngredientResultDto
-// @Router /ingredients [post]
+//	@Summary	Creates an ingredient
+//	@Schemes
+//	@Description	Creates a new ingredient
+//	@Tags			Ingredients
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktail	body		dtos.IngredientDto	true	"Ingredient object"
+//	@Success		201			{object}	dtos.IngredientResultDto
+//	@Router			/ingredients [post]
 func (cocktailController IngredientController) CreateIngredient(ctx *gin.Context) {
 	var ingredientDto dtos.IngredientDto
 

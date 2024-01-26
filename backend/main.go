@@ -9,10 +9,10 @@ import (
 	"os"
 )
 
-// @title CocktailGrid API
-// @description An API to get cocktails and ingredients
-// @version 1
-// @BasePath /
+//	@title			CocktailGrid API
+//	@description	An API to get cocktails and ingredients
+//	@version		1
+//	@BasePath		/
 func main() {
 	halt := handleArguments()
 	if (halt) {

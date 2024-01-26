@@ -12,14 +12,14 @@ import (
 type CocktailController struct{}
 
 // GetAllCocktails godoc
-// @Summary Gets all cocktails
-// @Schemes
-// @Description Retrieves all available cocktails
-// @Tags Cocktails
-// @Accept json
-// @Produce json
-// @Success 200 {object} dtos.CocktailDto
-// @Router /cocktails [get]
+//	@Summary	Gets all cocktails
+//	@Schemes
+//	@Description	Retrieves all available cocktails
+//	@Tags			Cocktails
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	dtos.CocktailDto
+//	@Router			/cocktails [get]
 func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	db := db.GetDB()
 	var cocktails []models.Cocktail
@@ -35,15 +35,15 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 }
 
 // CreateCocktail godoc
-// @Summary Creates a cocktail
-// @Schemes
-// @Description Creates a new cocktail
-// @Tags Cocktails
-// @Accept json
-// @Produce json
-// @Param cocktail body dtos.CreateCocktailDto true "Cocktail object"
-// @Success 201 {object} dtos.CocktailDto
-// @Router /cocktails [post]
+//	@Summary	Creates a cocktail
+//	@Schemes
+//	@Description	Creates a new cocktail
+//	@Tags			Cocktails
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktail	body		dtos.CreateCocktailDto	true	"Cocktail object"
+//	@Success		201			{object}	dtos.CocktailDto
+//	@Router			/cocktails [post]
 func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 	var cocktailDto dtos.CocktailDto
 
