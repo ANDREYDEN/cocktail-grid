@@ -40,6 +40,7 @@ func NewRouter() *gin.Engine {
 					cocktailIngredientController := new(controllers.CocktailIngredientController)
 
 					ingredientGroup.POST("", cocktailIngredientController.CreateCocktailIngredient)
+					ingredientGroup.DELETE("", cocktailIngredientController.DeleteCocktailIngredient)
 				}
 			}
 		}

@@ -22,10 +22,10 @@ definitions:
     properties:
       cocktailId:
         type: integer
+      ingredie ntName:
+        type: string
       ingredientId:
         type: integer
-      ingredientName:
-        type: string
       quantity:
         type: number
     type: object
@@ -91,6 +91,37 @@ paths:
       tags:
       - Cocktails
   /cocktails/{cocktailId}/ingredients/{ingredientId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an ingredient from a cocktail
+      parameters:
+      - description: Cocktail ID
+        in: path
+        name: cocktailId
+        required: true
+        type: integer
+      - description: Ingredient ID
+        in: path
+        name: ingredientId
+        required: true
+        type: integer
+      - description: Cocktail ingredient object
+        in: body
+        name: cocktail
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CocktailIngredientDto'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/dtos.CocktailIngredientResultDto'
+      summary: Deletes an ingredient from a cocktail
+      tags:
+      - Cocktails
     post:
       consumes:
       - application/json

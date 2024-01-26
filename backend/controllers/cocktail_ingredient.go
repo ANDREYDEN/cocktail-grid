@@ -12,17 +12,17 @@ import (
 type CocktailIngredientController struct{}
 
 // CreateCocktailIngredient godoc
-// @Summary Adds an ingredient
-// @Schemes
-// @Description Adds an existing ingredient to the cocktail
-// @Tags Cocktails
-// @Accept json
-// @Produce json
-// @Param        cocktailId   path      int  true  "Cocktail ID"
-// @Param        ingredientId   path      int  true  "Ingredient ID"
-// @Param cocktail body dtos.CocktailIngredientDto true "Cocktail ingredient object"
-// @Success 201 {object} dtos.CocktailIngredientResultDto
-// @Router /cocktails/{cocktailId}/ingredients/{ingredientId} [post]
+//	@Summary	Adds an ingredient
+//	@Schemes
+//	@Description	Adds an existing ingredient to the cocktail
+//	@Tags			Cocktails
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktailId		path		int							true	"Cocktail ID"
+//	@Param			ingredientId	path		int							true	"Ingredient ID"
+//	@Param			cocktail		body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
+//	@Success		201				{object}	dtos.CocktailIngredientResultDto
+//	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [post]
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
 		CocktailID   uint `uri:"cocktailId" binding:"required"`
@@ -58,4 +58,37 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	}
 
 	ctx.IndentedJSON(http.StatusCreated, cocktailIngredientResultDto)
+}
+
+// DeleteCocktailIngredient godoc
+//	@Summary	Deletes an ingredient from a cocktail
+//	@Schemes
+//	@Description	Deletes an ingredient from a cocktail
+//	@Tags			Cocktails
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktailId		path		int							true	"Cocktail ID"
+//	@Param			ingredientId	path		int							true	"Ingredient ID"
+//	@Success		204				{object}	dtos.CocktailIngredientResultDto
+//	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
+func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {
+	type CreateCocktailIngredientPathParams struct {
+		CocktailID   uint `uri:"cocktailId" binding:"required"`
+		IngredientID uint `uri:"ingredientId" binding:"required"`
+	}
+
+	var pathParams CreateCocktailIngredientPathParams
+	if err := ctx.ShouldBindUri(&pathParams); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	}
+
+	var cocktailIngredient = models.CocktailIngredient{
+		CocktailID:   pathParams.CocktailID,
+		IngredientID: pathParams.IngredientID,
+	}
+
+	db := db.GetDB()
+	db.Delete(&cocktailIngredient)
+
+	ctx.IndentedJSON(http.StatusNoContent, gin.H{})
 }
