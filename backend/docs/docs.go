@@ -69,6 +69,38 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Update an existing cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cocktails"
+                ],
+                "summary": "Update a cocktail",
+                "parameters": [
+                    {
+                        "description": "Cocktail object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                }
             }
         },
         "/cocktails/{cocktailId}/ingredients/{ingredientId}": {
@@ -144,15 +176,6 @@ const docTemplate = `{
                         "name": "ingredientId",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Cocktail ingredient object",
-                        "name": "cocktail",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CocktailIngredientDto"
-                        }
                     }
                 ],
                 "responses": {

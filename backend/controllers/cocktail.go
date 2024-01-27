@@ -61,3 +61,32 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusCreated, cocktailDto)
 }
+
+
+// UpdateCocktail godoc
+//	@Summary	Update a cocktail
+//	@Schemes
+//	@Description	Update an existing cocktail
+//	@Tags			Cocktails
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktail	body		dtos.CocktailDto	true	"Cocktail object"
+//	@Success		201			{object}	dtos.CocktailDto
+//	@Router			/cocktails [patch]
+func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {
+	var cocktailDto dtos.CocktailDto
+	if err := ctx.BindJSON(&cocktailDto); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	}
+
+	db := db.GetDB()
+	var cocktail models.Cocktail
+	db.Find(&cocktail, cocktailDto.ID)
+
+	cocktail.Title = cocktailDto.Title
+	cocktail.ImageURL = cocktailDto.ImageURL
+
+	db.Save(&cocktail)
+
+	ctx.IndentedJSON(http.StatusOK, cocktailDto)
+}

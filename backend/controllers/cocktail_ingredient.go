@@ -67,8 +67,8 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Tags			Cocktails
 //	@Accept			json
 //	@Produce		json
-//	@Param			cocktailId		path		int							true	"Cocktail ID"
-//	@Param			ingredientId	path		int							true	"Ingredient ID"
+//	@Param			cocktailId		path		int	true	"Cocktail ID"
+//	@Param			ingredientId	path		int	true	"Ingredient ID"
 //	@Success		204				{object}	dtos.CocktailIngredientResultDto
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {

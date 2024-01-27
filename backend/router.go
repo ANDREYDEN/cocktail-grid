@@ -30,6 +30,7 @@ func NewRouter() *gin.Engine {
 
 		cocktailsGroup.GET("", cocktailController.GetAllCocktails)
 		cocktailsGroup.POST("", cocktailController.CreateCocktail)
+		cocktailsGroup.PATCH("", cocktailController.UpdateCocktail)
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
 		{
