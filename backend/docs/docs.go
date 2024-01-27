@@ -38,6 +38,44 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Update an existing cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cocktails"
+                ],
+                "summary": "Update a cocktail",
+                "parameters": [
+                    {
+                        "description": "Cocktail object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Creates a new cocktail",
                 "consumes": [
@@ -58,38 +96,6 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/dtos.CreateCocktailDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Update an existing cocktail",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Cocktails"
-                ],
-                "summary": "Update a cocktail",
-                "parameters": [
-                    {
-                        "description": "Cocktail object",
-                        "name": "cocktail",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
                         }
                     }
                 ],

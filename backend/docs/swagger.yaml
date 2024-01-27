@@ -69,27 +69,6 @@ paths:
       summary: Gets all cocktails
       tags:
       - Cocktails
-    patch:
-      consumes:
-      - application/json
-      description: Update an existing cocktail
-      parameters:
-      - description: Cocktail object
-        in: body
-        name: cocktail
-        required: true
-        schema:
-          $ref: '#/definitions/dtos.CocktailDto'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dtos.CocktailDto'
-      summary: Update a cocktail
-      tags:
-      - Cocktails
     post:
       consumes:
       - application/json
@@ -109,6 +88,31 @@ paths:
           schema:
             $ref: '#/definitions/dtos.CocktailDto'
       summary: Creates a cocktail
+      tags:
+      - Cocktails
+    put:
+      consumes:
+      - application/json
+      description: Update an existing cocktail
+      parameters:
+      - description: Cocktail object
+        in: body
+        name: cocktail
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CocktailDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.CocktailDto'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dtos.CocktailDto'
+      summary: Update a cocktail
       tags:
       - Cocktails
   /cocktails/{cocktailId}/ingredients/{ingredientId}:

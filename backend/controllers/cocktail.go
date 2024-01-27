@@ -4,9 +4,12 @@ import (
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/dtos"
 	"cocktail-grid/backend/models"
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type CocktailController struct{}
@@ -71,17 +74,23 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.CocktailDto	true	"Cocktail object"
-//	@Success		201			{object}	dtos.CocktailDto
-//	@Router			/cocktails [patch]
+//	@Success		200			{object}	dtos.CocktailDto
+//	@Success		404			{object}	dtos.CocktailDto
+//	@Router			/cocktails [put]
 func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {
 	var cocktailDto dtos.CocktailDto
 	if err := ctx.BindJSON(&cocktailDto); err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
 	}
 
 	db := db.GetDB()
 	var cocktail models.Cocktail
-	db.Find(&cocktail, cocktailDto.ID)
+	result := db.First(&cocktail, cocktailDto.ID)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("No cocktail found with id %d", cocktail.ID)})
+		return
+	}
 
 	cocktail.Title = cocktailDto.Title
 	cocktail.ImageURL = cocktailDto.ImageURL
