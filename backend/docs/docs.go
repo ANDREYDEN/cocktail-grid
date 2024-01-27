@@ -33,7 +33,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vms.DetailedCocktailVm"
+                            }
                         }
                     }
                 }
@@ -65,13 +68,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
+                            "$ref": "#/definitions/vms.CocktailVm"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
+                            "$ref": "#/definitions/vms.CocktailVm"
                         }
                     }
                 }
@@ -103,7 +106,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
+                            "$ref": "#/definitions/vms.CocktailVm"
                         }
                     }
                 }
@@ -151,7 +154,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
+                            "$ref": "#/definitions/vms.CocktailIngredientVm"
                         }
                     }
                 }
@@ -188,7 +191,7 @@ const docTemplate = `{
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
+                            "type": "object"
                         }
                     }
                 }
@@ -260,12 +263,6 @@ const docTemplate = `{
                 "imageUrl": {
                     "type": "string"
                 },
-                "ingredients": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dtos.CocktailIngredientResultDto"
-                    }
-                },
                 "title": {
                     "type": "string"
                 }
@@ -274,23 +271,6 @@ const docTemplate = `{
         "dtos.CocktailIngredientDto": {
             "type": "object",
             "properties": {
-                "quantity": {
-                    "type": "number"
-                }
-            }
-        },
-        "dtos.CocktailIngredientResultDto": {
-            "type": "object",
-            "properties": {
-                "cocktailId": {
-                    "type": "integer"
-                },
-                "ingredie ntName": {
-                    "type": "string"
-                },
-                "ingredientId": {
-                    "type": "integer"
-                },
                 "quantity": {
                     "type": "number"
                 }
@@ -322,6 +302,57 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "vms.CocktailIngredientVm": {
+            "type": "object",
+            "properties": {
+                "cocktailId": {
+                    "type": "integer"
+                },
+                "ingredientId": {
+                    "type": "integer"
+                },
+                "ingredientName": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
+                }
+            }
+        },
+        "vms.CocktailVm": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "vms.DetailedCocktailVm": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "ingredients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vms.CocktailIngredientVm"
+                    }
+                },
+                "title": {
                     "type": "string"
                 }
             }

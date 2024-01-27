@@ -4,6 +4,7 @@ import (
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/dtos"
 	"cocktail-grid/backend/models"
+	"cocktail-grid/backend/vms"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +22,7 @@ type CocktailIngredientController struct{}
 //	@Param			cocktailId		path		int							true	"Cocktail ID"
 //	@Param			ingredientId	path		int							true	"Ingredient ID"
 //	@Param			cocktail		body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
-//	@Success		201				{object}	dtos.CocktailIngredientResultDto
+//	@Success		201				{object}	vms.CocktailIngredientVm
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [post]
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
@@ -50,14 +51,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	db := db.GetDB()
 	db.Create(&cocktailIngredient)
 
-	cocktailIngredientResultDto := dtos.CocktailIngredientResultDto{
-		CocktailID:     cocktailIngredient.CocktailID,
-		IngredientID:   cocktailIngredient.IngredientID,
-		IngredientName: cocktailIngredient.Ingredient.Name,
-		Quantity:       cocktailIngredient.Quantity,
-	}
-
-	ctx.IndentedJSON(http.StatusCreated, cocktailIngredientResultDto)
+	ctx.IndentedJSON(http.StatusCreated, vms.FromCocktailIngredientToVm(cocktailIngredient))
 }
 
 // DeleteCocktailIngredient godoc
@@ -69,7 +63,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Produce		json
 //	@Param			cocktailId		path		int	true	"Cocktail ID"
 //	@Param			ingredientId	path		int	true	"Ingredient ID"
-//	@Success		204				{object}	dtos.CocktailIngredientResultDto
+//	@Success		204				{object}    interface{}	
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
