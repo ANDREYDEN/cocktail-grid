@@ -29,13 +29,21 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "exclude ingredients",
+                        "name": "compact",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/vms.DetailedCocktailVm"
+                                "$ref": "#/definitions/vms.CocktailVm"
                             }
                         }
                     }

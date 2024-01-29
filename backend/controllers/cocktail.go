@@ -4,6 +4,7 @@ import (
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/dtos"
 	"cocktail-grid/backend/models"
+	slice_utils "cocktail-grid/backend/utils"
 	"cocktail-grid/backend/vms"
 	"errors"
 	"fmt"
@@ -16,29 +17,38 @@ import (
 type CocktailController struct{}
 
 // GetAllCocktails godoc
+//
 //	@Summary	Gets all cocktails
 //	@Schemes
 //	@Description	Retrieves all available cocktails
 //	@Tags			Cocktails
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	[]vms.DetailedCocktailVm
+//	@Param			compact	query		string	false	"exclude ingredients"
+//	@Success		200		{object}	[]vms.DetailedCocktailVm
+//	@Success		200		{object}	[]vms.CocktailVm
 //	@Router			/cocktails [get]
 func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	db := db.GetDB()
 	var cocktails []models.Cocktail
-	db.Preload("CocktailIngredients.Ingredient").Find(&cocktails)
-
-	cocktailVms := []vms.DetailedCocktailVm{}
-	for _, cocktail := range cocktails {
-		cocktailDto := vms.FromCocktailToDetailedVm(cocktail)
-		cocktailVms = append(cocktailVms, cocktailDto)
+	compact := ctx.Query("compact")
+	query := db
+	if compact == "" {
+		query = db.Preload("CocktailIngredients.Ingredient")
 	}
+	query.Find(&cocktails)
 
-	ctx.IndentedJSON(http.StatusOK, cocktailVms)
+	if compact == "" {
+		cocktailVms := slice_utils.Map(cocktails, vms.FromCocktailToDetailedVm)
+		ctx.IndentedJSON(http.StatusOK, cocktailVms)
+	} else {
+		cocktailVms := slice_utils.Map(cocktails, vms.FromCocktailToVm)
+		ctx.IndentedJSON(http.StatusOK, cocktailVms)
+	}
 }
 
 // CreateCocktail godoc
+//
 //	@Summary	Creates a cocktail
 //	@Schemes
 //	@Description	Creates a new cocktail
@@ -55,7 +65,7 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 		return
 	}
 
-	cocktail := dtos.FromDtoToCocktail(cocktailDto) 
+	cocktail := dtos.FromDtoToCocktail(cocktailDto)
 
 	db := db.GetDB()
 	db.Create(&cocktail)
@@ -64,6 +74,7 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 }
 
 // UpdateCocktail godoc
+//
 //	@Summary	Update a cocktail
 //	@Schemes
 //	@Description	Update an existing cocktail
@@ -71,7 +82,7 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.CocktailDto	true	"Cocktail object"
-//	@Success		200			{object}    vms.CocktailVm	
+//	@Success		200			{object}	vms.CocktailVm
 //	@Success		404			{object}	vms.CocktailVm
 //	@Router			/cocktails [put]
 func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {

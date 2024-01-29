@@ -77,6 +77,11 @@ paths:
       consumes:
       - application/json
       description: Retrieves all available cocktails
+      parameters:
+      - description: exclude ingredients
+        in: query
+        name: compact
+        type: string
       produces:
       - application/json
       responses:
@@ -84,7 +89,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/vms.DetailedCocktailVm'
+              $ref: '#/definitions/vms.CocktailVm'
             type: array
       summary: Gets all cocktails
       tags:
