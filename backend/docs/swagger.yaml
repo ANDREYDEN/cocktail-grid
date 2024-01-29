@@ -26,13 +26,6 @@ definitions:
       name:
         type: string
     type: object
-  dtos.IngredientResultDto:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   vms.CocktailIngredientVm:
     properties:
       cocktailId:
@@ -64,6 +57,13 @@ definitions:
           $ref: '#/definitions/vms.CocktailIngredientVm'
         type: array
       title:
+        type: string
+    type: object
+  vms.IngredientVm:
+    properties:
+      id:
+        type: integer
+      name:
         type: string
     type: object
 info:
@@ -203,7 +203,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dtos.IngredientResultDto'
+            items:
+              $ref: '#/definitions/vms.IngredientVm'
+            type: array
       summary: Get all ingredients
       tags:
       - Ingredients
@@ -224,7 +226,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dtos.IngredientResultDto'
+            $ref: '#/definitions/vms.IngredientVm'
       summary: Creates an ingredient
       tags:
       - Ingredients

@@ -4,6 +4,8 @@ import (
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/dtos"
 	"cocktail-grid/backend/models"
+	slice_utils "cocktail-grid/backend/utils"
+	"cocktail-grid/backend/vms"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,13 +14,14 @@ import (
 type IngredientController struct{}
 
 // GetAllIngredients godoc
+//
 //	@Summary	Get all ingredients
 //	@Schemes
 //	@Description	Retrieves all available ingredients
 //	@Tags			Ingredients
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	dtos.IngredientResultDto
+//	@Success		200	{object}	[]vms.IngredientVm
 //	@Router			/ingredients [get]
 func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Context) {
 	var ingredients []models.Ingredient
@@ -26,19 +29,13 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 	db := db.GetDB()
 	db.Find(&ingredients)
 
-	ingredientResultDtos := []dtos.IngredientResultDto{}
-	for _, ingredient := range ingredients {
-		ingredientResultDto := dtos.IngredientResultDto{
-			ID:   ingredient.ID,
-			Name: ingredient.Name,
-		}
-		ingredientResultDtos = append(ingredientResultDtos, ingredientResultDto)
-	}
+	ingredientVms := slice_utils.Map(ingredients, vms.FromIngredientToVm)
 
-	ctx.IndentedJSON(http.StatusOK, ingredientResultDtos)
+	ctx.IndentedJSON(http.StatusOK, ingredientVms)
 }
 
 // CreateIngredient godoc
+//
 //	@Summary	Creates an ingredient
 //	@Schemes
 //	@Description	Creates a new ingredient
@@ -46,7 +43,7 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.IngredientDto	true	"Ingredient object"
-//	@Success		201			{object}	dtos.IngredientResultDto
+//	@Success		201			{object}	vms.IngredientVm
 //	@Router			/ingredients [post]
 func (cocktailController IngredientController) CreateIngredient(ctx *gin.Context) {
 	var ingredientDto dtos.IngredientDto
@@ -62,9 +59,5 @@ func (cocktailController IngredientController) CreateIngredient(ctx *gin.Context
 	db := db.GetDB()
 	db.Create(&ingredient)
 
-	ingredientResultDto := dtos.IngredientResultDto{
-		Name: ingredient.Name,
-	}
-
-	ctx.IndentedJSON(http.StatusCreated, ingredientResultDto)
+	ctx.IndentedJSON(http.StatusCreated, vms.FromIngredientToVm(ingredient))
 }

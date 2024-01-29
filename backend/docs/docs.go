@@ -214,7 +214,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.IngredientResultDto"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/vms.IngredientVm"
+                            }
                         }
                     }
                 }
@@ -246,7 +249,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dtos.IngredientResultDto"
+                            "$ref": "#/definitions/vms.IngredientVm"
                         }
                     }
                 }
@@ -290,17 +293,6 @@ const docTemplate = `{
         "dtos.IngredientDto": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.IngredientResultDto": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "name": {
                     "type": "string"
                 }
@@ -353,6 +345,17 @@ const docTemplate = `{
                     }
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "vms.IngredientVm": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
