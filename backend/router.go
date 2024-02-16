@@ -2,6 +2,7 @@ package main
 
 import (
 	controllers "cocktail-grid/backend/controllers"
+	"cocktail-grid/backend/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,7 +30,7 @@ func NewRouter() *gin.Engine {
 		cocktailController := new(controllers.CocktailController)
 
 		cocktailsGroup.GET("", cocktailController.GetAllCocktails)
-		cocktailsGroup.POST("", cocktailController.CreateCocktail)
+		cocktailsGroup.POST("", middleware.EnsureValidToken(), cocktailController.CreateCocktail)
 		cocktailsGroup.PUT("", cocktailController.UpdateCocktail)
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")

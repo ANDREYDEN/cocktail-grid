@@ -9,13 +9,17 @@ import (
 	"os"
 )
 
-//	@title			CocktailGrid API
-//	@description	An API to get cocktails and ingredients
-//	@version		1
-//	@BasePath		/
+// @title						CocktailGrid API
+// @description				An API to get cocktails and ingredients
+// @version					1
+// @BasePath					/
+//
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
 func main() {
 	halt := handleArguments()
-	if (halt) {
+	if halt {
 		return
 	}
 
@@ -23,8 +27,8 @@ func main() {
 
 	db.Init()
 
-	port := "8080"
 	router := NewRouter()
+	port := "8080"
 	log.Printf("\nVisit http://localhost:%v/swagger/index.html to view Swagger documentation.\n\n", port)
 	router.Run(fmt.Sprintf("0.0.0.0:%v", port))
 }
@@ -32,14 +36,14 @@ func main() {
 func handleArguments() bool {
 	args := os.Args[1:]
 
-	if (len(args) == 0) {
+	if len(args) == 0 {
 		return false
 	}
-	
+
 	switch args[0] {
-		case "--seed":
-			seeders.Seed()
-			return true
+	case "--seed":
+		seeders.Seed()
+		return true
 	}
 
 	return false

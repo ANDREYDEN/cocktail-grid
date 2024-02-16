@@ -112,6 +112,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/vms.CocktailVm'
+      security:
+      - ApiKeyAuth: []
       summary: Creates a cocktail
       tags:
       - Cocktails
@@ -235,4 +237,9 @@ paths:
       summary: Creates an ingredient
       tags:
       - Ingredients
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

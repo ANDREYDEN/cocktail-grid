@@ -58,6 +58,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 //	@Param			cocktail	body		dtos.CreateCocktailDto	true	"Cocktail object"
 //	@Success		201			{object}	vms.CocktailVm
 //	@Router			/cocktails [post]
+//	@Security		ApiKeyAuth
 func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 	var cocktailDto dtos.CocktailDto
 
