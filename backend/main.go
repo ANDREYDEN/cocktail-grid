@@ -3,6 +3,7 @@ package main
 import (
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/docs"
+	"cocktail-grid/backend/router"
 	"cocktail-grid/backend/seeders"
 	"fmt"
 	"log"
@@ -27,7 +28,7 @@ func main() {
 
 	db.Init()
 
-	router := NewRouter()
+	router := router.NewRouter()
 	port := "8080"
 	log.Printf("\nVisit http://localhost:%v/swagger/index.html to view Swagger documentation.\n\n", port)
 	router.Run(fmt.Sprintf("0.0.0.0:%v", port))

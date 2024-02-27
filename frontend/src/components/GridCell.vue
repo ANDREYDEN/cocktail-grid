@@ -2,36 +2,43 @@
 import { computed } from 'vue'
 
 export interface GridCellProps {
-    isSelectable?: boolean
+    selectable?: boolean
     selected?: boolean
+    deletable?: boolean
     text?: string | number
 }
 const props = withDefaults(defineProps<GridCellProps>(), {
-    isSelectable: false,
+    selectable: false,
     selected: false,
+    deletable: false,
     text: ''
 })
 
 const containerClass = computed(() => ({
-    'cursor-pointer text-lg': props.isSelectable,
-    'hover:bg-blue-100': props.isSelectable && !props.selected,
+    'cursor-pointer text-lg': props.selectable,
+    'hover:bg-blue-100': props.selectable && !props.selected,
     'bg-blue-300': props.selected,
 }))
 const textClass = computed(() => ({
-    'text-3xl text-gray-500': !props.isSelectable
+    'text-3xl text-gray-500': !props.selectable
 }))
 
-defineEmits(['click'])
+const emit = defineEmits(['click', 'delete'])
+
+function handleDelete(e: MouseEvent) {
+    e.stopPropagation()
+    emit('delete')
+}
 </script>
 
 <template>
-    <div 
-        class="flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg"
-        :class="containerClass"
+    <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg" :class="containerClass"
         @click="$emit('click')">
+        <button v-if="deletable" class="bg-red-400 text-white w-5 h-5 absolute top-2 right-2"
+            @click="handleDelete">x</button>
         <div class="flex items-baseline" :class="textClass">
             <div class="inline">{{ text }}</div>
-            <div v-if="!isSelectable && text != ''" class="ml-1 text-lg">oz.</div>
+            <div v-if="!selectable && text != ''" class="ml-1 text-lg">oz.</div>
         </div>
     </div>
 </template>

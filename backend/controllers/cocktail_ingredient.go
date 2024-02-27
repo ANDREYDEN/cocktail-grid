@@ -13,6 +13,7 @@ import (
 type CocktailIngredientController struct{}
 
 // CreateCocktailIngredient godoc
+//
 //	@Summary	Adds an ingredient
 //	@Schemes
 //	@Description	Adds an existing ingredient to the cocktail
@@ -55,6 +56,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 }
 
 // DeleteCocktailIngredient godoc
+//
 //	@Summary	Deletes an ingredient from a cocktail
 //	@Schemes
 //	@Description	Deletes an ingredient from a cocktail
@@ -63,7 +65,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Produce		json
 //	@Param			cocktailId		path		int			true	"Cocktail ID"
 //	@Param			ingredientId	path		int			true	"Ingredient ID"
-//	@Success		204				{object}	interface{}	
+//	@Success		204				{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
@@ -74,6 +76,7 @@ func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(
 	var pathParams CreateCocktailIngredientPathParams
 	if err := ctx.ShouldBindUri(&pathParams); err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
 	}
 
 	var cocktailIngredient = models.CocktailIngredient{
@@ -82,7 +85,12 @@ func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(
 	}
 
 	db := db.GetDB()
-	db.Delete(&cocktailIngredient)
+
+	err := db.First(&cocktailIngredient).Delete(&models.CocktailIngredient{}).Error
+	if err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
 
 	ctx.IndentedJSON(http.StatusNoContent, gin.H{})
 }

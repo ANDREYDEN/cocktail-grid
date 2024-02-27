@@ -10,14 +10,12 @@ import { useAuth0 } from '@auth0/auth0-vue';
 
 const cocktails = ref<CocktailDto[] | null>()
 const ingredients = ref<Ingredient[] | null>()
-const baseUrl = import.meta.env.VITE_BACKEND_URL
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<CocktailDto[]>([])
 const selectedIngredients = ref<Ingredient[]>([])
 const cocktailsAsRows = ref<boolean>(true)
 
-const auth0 = useAuth0();
-console.log(auth0);
-
+const auth = useAuth0();
 
 const cocktailsToRender = computed(() => {
   if (selectedIngredients.value.length == 0) {
@@ -39,7 +37,7 @@ onMounted(async () => {
 })
 
 const getCocktails = async () => {
-  const response = await axios.get(`${baseUrl}/cocktails`)
+  const response = await axios.get(`${backendUrl}/cocktails`)
 
   if (response.status === 200) {
     cocktails.value = response.data
@@ -47,7 +45,7 @@ const getCocktails = async () => {
 }
 
 const getIngredients = async () => {
-  const response = await axios.get(`${baseUrl}/ingredients`)
+  const response = await axios.get(`${backendUrl}/ingredients`)
 
   if (response.status === 200) {
     ingredients.value = response.data
@@ -71,6 +69,21 @@ const handleIngredientSelect = (ingredient: Ingredient) => {
     selectedIngredients.value = selectedIngredients.value.filter(i => i.id !== ingredient.id)
   } else {
     selectedIngredients.value.push(ingredient)
+  }
+}
+
+const handleCocktailDelete = (cocktail: CocktailDto) => {
+
+}
+
+const handleIngredientDelete = (ingredient: Ingredient) => {
+
+}
+
+const handleCocktailIngredientDelete = async (cocktail: CocktailDto, ingredient: Ingredient) => {
+  const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {})
+  if (response.status == 204) {
+    await getCocktails()
   }
 }
 
@@ -119,6 +132,26 @@ const handleItemSelected = (row: number, column: number) => {
   }
 }
 
+const handleItemDelete = (row: number, column: number) => {
+  if (cocktailsAsRows.value) {
+    if (column === 0) {
+      return handleCocktailDelete(cocktails.value?.[row - 1]!)
+    }
+    if (row === 0) {
+      return handleIngredientDelete(ingredients.value?.[column - 1]!)
+    }
+    return handleCocktailIngredientDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
+  } else {
+    if (column === 0) {
+      return handleIngredientDelete(ingredients.value?.[row - 1]!)
+    }
+    if (row === 0) {
+      return handleCocktailDelete(cocktails.value?.[column - 1]!)
+    }
+    return handleCocktailIngredientDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
+  }
+}
+
 const itemText = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (row === 0) {
@@ -154,9 +187,9 @@ const columnIndexRange = computed(() => {
 <template>
   <h1 class="text-center text-5xl mt-8">Cocktail Grid</h1>
 
-  <LoginButton v-if="!auth0.isAuthenticated.value" />
-  <div v-if="auth0.isAuthenticated.value">{{ auth0.user.value?.name }}</div>
-  <LogoutButton v-if="auth0.isAuthenticated.value" />
+  <LoginButton v-if="!auth.isAuthenticated.value" />
+  <div v-if="auth.isAuthenticated.value">{{ auth.user.value?.name }}</div>
+  <LogoutButton v-if="auth.isAuthenticated.value" />
 
   <div v-if="!cocktails || !ingredients">
     <p>Loading...</p>
@@ -164,8 +197,9 @@ const columnIndexRange = computed(() => {
   <div v-else class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
     <div class="flex gap-2" v-for="row in rowIndexRange">
       <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
-        <grid-cell v-if="row === 0 && column === 0" is-selectable @click="flipAxis" text="swap" />
-        <grid-cell v-else :is-selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
+        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis" text="swap" />
+        <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
+          :deletable="auth.isAuthenticated.value" @delete="handleItemDelete(row, column)"
           @click="handleItemSelected(row, column)" :text="itemText(row, column)" />
       </div>
     </div>

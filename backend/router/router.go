@@ -1,4 +1,4 @@
-package main
+package router
 
 import (
 	controllers "cocktail-grid/backend/controllers"
@@ -13,17 +13,17 @@ import (
 func NewRouter() *gin.Engine {
 	router := gin.Default()
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{
-			"https://cocktailgrid.com",
-			"http://cocktailgrid.com",
-			"https://127.0.0.1:3000",
-			"http://127.0.0.1:3000",
-			"http://localhost:3000",
-			"http://159.89.80.154",
-			"https://159.89.80.154",
-		},
-	}))
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{
+		"https://cocktailgrid.com",
+		"http://cocktailgrid.com",
+		"https://127.0.0.1:3000",
+		"http://127.0.0.1:3000",
+		"http://localhost:3000",
+		"http://159.89.80.154",
+		"https://159.89.80.154",
+	}
+	router.Use(cors.New(corsConfig))
 
 	cocktailsGroup := router.Group("/cocktails")
 	{
