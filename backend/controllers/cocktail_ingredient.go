@@ -5,9 +5,12 @@ import (
 	"cocktail-grid/backend/dtos"
 	"cocktail-grid/backend/models"
 	"cocktail-grid/backend/vms"
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type CocktailIngredientController struct{}
@@ -88,6 +91,10 @@ func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(
 
 	err := db.First(&cocktailIngredient).Delete(&models.CocktailIngredient{}).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Cocktail ingredient (%d, %d) was not found", pathParams.CocktailID, pathParams.IngredientID)})
+			return
+		}
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
