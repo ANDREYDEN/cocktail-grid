@@ -26,6 +26,8 @@ const textClass = computed(() => ({
 const emit = defineEmits(['click', 'delete'])
 
 const hovering = ref(false)
+const hasText = computed(() => props.text !== '')
+const showDeleteButton = computed(() => props.deletable && hovering.value && hasText.value)
 
 function handleDelete(e: MouseEvent) {
     e.stopPropagation()
@@ -36,11 +38,11 @@ function handleDelete(e: MouseEvent) {
 <template>
     <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg" :class="containerClass"
         @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
-        <button v-if="deletable && hovering" class="bg-red-400 text-white w-5 h-5 absolute top-2 right-2"
+        <button v-if="showDeleteButton" class="bg-red-400 text-white w-5 h-5 absolute top-2 right-2"
             @click="handleDelete">x</button>
         <div class="flex items-baseline" :class="textClass">
             <div class="inline">{{ text }}</div>
-            <div v-if="!selectable && text != ''" class="ml-1 text-lg">oz.</div>
+            <div v-if="!selectable && hasText" class="ml-1 text-lg">oz.</div>
         </div>
     </div>
 </template>
