@@ -23,6 +23,9 @@ func NewRouter() *gin.Engine {
 		"http://159.89.80.154",
 		"https://159.89.80.154",
 	}
+	corsConfig.AllowHeaders = []string{
+		"Authorization",
+	}
 	router.Use(cors.New(corsConfig))
 
 	cocktailsGroup := router.Group("/cocktails")
@@ -42,7 +45,7 @@ func NewRouter() *gin.Engine {
 					cocktailIngredientController := new(controllers.CocktailIngredientController)
 
 					ingredientGroup.POST("", cocktailIngredientController.CreateCocktailIngredient)
-					ingredientGroup.DELETE("", cocktailIngredientController.DeleteCocktailIngredient)
+					ingredientGroup.DELETE("", middleware.EnsureValidToken(), cocktailIngredientController.DeleteCocktailIngredient)
 				}
 			}
 		}

@@ -81,7 +81,12 @@ const handleIngredientDelete = (ingredient: Ingredient) => {
 }
 
 const handleCocktailIngredientDelete = async (cocktail: CocktailDto, ingredient: Ingredient) => {
-  const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {})
+  const token = await auth.getAccessTokenSilently()
+  const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  })
   if (response.status == 204) {
     await getCocktails()
   }

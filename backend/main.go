@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 // @title						CocktailGrid API
@@ -19,6 +21,11 @@ import (
 // @in							header
 // @name						Authorization
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	halt := handleArguments()
 	if halt {
 		return
