@@ -7,6 +7,7 @@ import GridCell from './GridCell.vue'
 import LoginButton from './LoginButton.vue';
 import LogoutButton from './LogoutButton.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
+import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 
 const cocktails = ref<CocktailDto[] | null>()
 const ingredients = ref<Ingredient[] | null>()
@@ -202,7 +203,9 @@ const columnIndexRange = computed(() => {
   <div v-else class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
     <div class="flex gap-2" v-for="row in rowIndexRange">
       <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
-        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis" text="swap" />
+        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
+          <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
+        </GridCell>
         <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
           :deletable="auth.isAuthenticated.value" @delete="handleItemDelete(row, column)"
           @click="handleItemSelected(row, column)" :text="itemText(row, column)" />

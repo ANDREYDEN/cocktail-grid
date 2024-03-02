@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { TrashIcon } from '@heroicons/vue/24/solid'
 
 export interface GridCellProps {
     selectable?: boolean
@@ -11,7 +12,7 @@ const props = withDefaults(defineProps<GridCellProps>(), {
     selectable: false,
     selected: false,
     deletable: false,
-    text: ''
+    text: undefined
 })
 
 const containerClass = computed(() => ({
@@ -38,10 +39,11 @@ function handleDelete(e: MouseEvent) {
 <template>
     <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg" :class="containerClass"
         @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
-        <button v-if="showDeleteButton" class="bg-red-400 text-white w-5 h-5 absolute top-2 right-2"
-            @click="handleDelete">x</button>
+        <TrashIcon v-if="showDeleteButton" class="text-red-500 w-5 h-5 absolute hover:cursor-pointer top-2 right-2"
+            @click="handleDelete" />
         <div class="flex items-baseline" :class="textClass">
-            <div class="inline">{{ text }}</div>
+            <div class="inline" v-if="text !== undefined">{{ text }}</div>
+            <slot v-else></slot>
             <div v-if="!selectable && hasText" class="ml-1 text-lg">oz.</div>
         </div>
     </div>
