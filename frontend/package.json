@@ -9,11 +9,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "swaggergen": "npx openapi-codegen gen cocktailGrid"
   },
   "dependencies": {
     "@auth0/auth0-vue": "^2.3.3",
     "@heroicons/vue": "^2.1.1",
+    "@openapi-codegen/cli": "^2.0.0",
+    "@openapi-codegen/typescript": "^8.0.0",
+    "@tanstack/vue-query": "^5.24.2",
     "axios": "^1.3.5",
     "vue": "^3.3"
   },
