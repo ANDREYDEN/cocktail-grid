@@ -4,10 +4,9 @@ import axios from 'axios'
 import { CocktailDto } from '../types/cocktail';
 import { Ingredient } from '../types/ingredient';
 import GridCell from './GridCell.vue'
-import LoginButton from './LoginButton.vue';
-import LogoutButton from './LogoutButton.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
+import Account from './Account.vue'
 
 const cocktails = ref<CocktailDto[] | null>()
 const ingredients = ref<Ingredient[] | null>()
@@ -191,11 +190,11 @@ const columnIndexRange = computed(() => {
 </script>
 
 <template>
-  <h1 class="text-center text-5xl mt-8">Cocktail Grid</h1>
+  <header class="flex items-center">
+    <h1 class="text-center text-5xl my-8 grow">Cocktail Grid</h1>
 
-  <LoginButton v-if="!auth.isAuthenticated.value" />
-  <div v-if="auth.isAuthenticated.value">{{ auth.user.value?.name }}</div>
-  <LogoutButton v-if="auth.isAuthenticated.value" />
+    <Account class="" />
+  </header>
 
   <div v-if="!cocktails || !ingredients">
     <p>Loading...</p>
