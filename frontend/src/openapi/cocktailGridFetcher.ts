@@ -7,7 +7,7 @@ export type CocktailGridFetcherExtraProps = {
    **/
 };
 
-const baseUrl = "/";
+const baseUrl = import.meta.env.VITE_BACKEND_URL
 
 export type ErrorWrapper<TError> =
   | TError

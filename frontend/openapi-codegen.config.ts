@@ -1,4 +1,7 @@
-import { generateFetchers, generateSchemaTypes } from "@openapi-codegen/typescript";
+import {
+  generateSchemaTypes,
+  generateFetchers,
+} from "@openapi-codegen/typescript";
 import { defineConfig } from "@openapi-codegen/cli";
 export default defineConfig({
   cocktailGrid: {
@@ -8,13 +11,14 @@ export default defineConfig({
     },
     outputDir: "./src/openapi",
     to: async (context) => {
+      const filenamePrefix = "cocktailGrid";
       const { schemasFiles } = await generateSchemaTypes(context, {
-        filenamePrefix: "cocktailGrid",
+        filenamePrefix,
       });
       await generateFetchers(context, {
-        filenamePrefix: "cocktailGrid",
-        schemasFiles
-      })
+        filenamePrefix,
+        schemasFiles,
+      });
     },
   },
 });

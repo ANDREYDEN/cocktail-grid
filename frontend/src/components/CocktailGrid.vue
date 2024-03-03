@@ -1,39 +1,38 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
-import { CocktailDto } from '../types/cocktail';
-import { Ingredient } from '../types/ingredient';
 import GridCell from './GridCell.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import Account from './Account.vue'
+import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas'
 
-const cocktails = ref<CocktailDto[] | null>()
-const ingredients = ref<Ingredient[] | null>()
+const cocktails = ref<VmsDetailedCocktailVm[] | null>()
+const ingredients = ref<VmsIngredientVm[] | null>()
 const backendUrl = import.meta.env.VITE_BACKEND_URL
-const selectedCocktails = ref<CocktailDto[]>([])
-const selectedIngredients = ref<Ingredient[]>([])
+const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
+const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
 
 const auth = useAuth0();
 
 const cocktailsToRender = computed(() => {
-  if (selectedIngredients.value.length == 0) {
+  if (selectedVmsIngredientVms.value.length == 0) {
     return cocktails.value
   }
-  return cocktails.value?.filter(c => selectedIngredients.value.every(i => c.ingredients.some(ci => ci.ingredientId === i.id)))
+  return cocktails.value?.filter(c => selectedVmsIngredientVms.value.every(i => c.ingredients?.some(ci => ci.ingredientId === i.id)))
 })
 
 const ingredientsToRender = computed(() => {
   if (selectedCocktails.value.length == 0) {
     return ingredients.value
   }
-  return ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients.some(ci => ci.ingredientId === i.id)))
+  return ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients?.some(ci => ci.ingredientId === i.id)))
 })
 
 onMounted(async () => {
   await getCocktails()
-  await getIngredients()
+  await getVmsIngredientVms()
 })
 
 const getCocktails = async () => {
@@ -44,7 +43,7 @@ const getCocktails = async () => {
   }
 }
 
-const getIngredients = async () => {
+const getVmsIngredientVms = async () => {
   const response = await axios.get(`${backendUrl}/ingredients`)
 
   if (response.status === 200) {
@@ -52,8 +51,8 @@ const getIngredients = async () => {
   }
 }
 
-const handleCocktailSelect = (cocktail: CocktailDto) => {
-  if (selectedIngredients.value.length > 0) return
+const handleCocktailSelect = (cocktail: VmsDetailedCocktailVm) => {
+  if (selectedVmsIngredientVms.value.length > 0) return
 
   if (selectedCocktails.value.includes(cocktail)) {
     selectedCocktails.value = selectedCocktails.value.filter(c => c.id !== cocktail.id)
@@ -62,25 +61,25 @@ const handleCocktailSelect = (cocktail: CocktailDto) => {
   }
 }
 
-const handleIngredientSelect = (ingredient: Ingredient) => {
+const handleVmsIngredientVmSelect = (ingredient: VmsIngredientVm) => {
   if (selectedCocktails.value.length > 0) return
 
-  if (selectedIngredients.value.includes(ingredient)) {
-    selectedIngredients.value = selectedIngredients.value.filter(i => i.id !== ingredient.id)
+  if (selectedVmsIngredientVms.value.includes(ingredient)) {
+    selectedVmsIngredientVms.value = selectedVmsIngredientVms.value.filter(i => i.id !== ingredient.id)
   } else {
-    selectedIngredients.value.push(ingredient)
+    selectedVmsIngredientVms.value.push(ingredient)
   }
 }
 
-const handleCocktailDelete = (cocktail: CocktailDto) => {
+const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
 
 }
 
-const handleIngredientDelete = (ingredient: Ingredient) => {
+const handleVmsIngredientVmDelete = (ingredient: VmsIngredientVm) => {
 
 }
 
-const handleCocktailIngredientDelete = async (cocktail: CocktailDto, ingredient: Ingredient) => {
+const handleCocktailVmsIngredientVmDelete = async (cocktail: VmsDetailedCocktailVm, ingredient: VmsIngredientVm) => {
   const token = await auth.getAccessTokenSilently()
   const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {
     headers: {
@@ -99,8 +98,8 @@ const flipAxis = () => {
 const isItemSelected = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (row === 0) {
-      const targetedIngredient = ingredientsToRender.value?.[column - 1]
-      return selectedIngredients.value?.some(i => i.id === targetedIngredient?.id)
+      const targetedVmsIngredientVm = ingredientsToRender.value?.[column - 1]
+      return selectedVmsIngredientVms.value?.some(i => i.id === targetedVmsIngredientVm?.id)
     }
     if (column === 0) {
       const targetedCocktail = cocktailsToRender.value?.[row - 1]
@@ -112,8 +111,8 @@ const isItemSelected = (row: number, column: number) => {
       return selectedCocktails.value?.some(c => c.id === targetedCocktail?.id)
     }
     if (column === 0) {
-      const targetedIngredient = ingredientsToRender.value?.[row - 1]
-      return selectedIngredients.value?.some(i => i.id === targetedIngredient?.id)
+      const targetedVmsIngredientVm = ingredientsToRender.value?.[row - 1]
+      return selectedVmsIngredientVms.value?.some(i => i.id === targetedVmsIngredientVm?.id)
     }
   }
   return false
@@ -125,11 +124,11 @@ const handleItemSelected = (row: number, column: number) => {
       return handleCocktailSelect(cocktails.value?.[row - 1]!)
     }
     if (row === 0) {
-      return handleIngredientSelect(ingredients.value?.[column - 1]!)
+      return handleVmsIngredientVmSelect(ingredients.value?.[column - 1]!)
     }
   } else {
     if (column === 0) {
-      return handleIngredientSelect(ingredients.value?.[row - 1]!)
+      return handleVmsIngredientVmSelect(ingredients.value?.[row - 1]!)
     }
     if (row === 0) {
       return handleCocktailSelect(cocktails.value?.[column - 1]!)
@@ -143,17 +142,17 @@ const handleItemDelete = (row: number, column: number) => {
       return handleCocktailDelete(cocktails.value?.[row - 1]!)
     }
     if (row === 0) {
-      return handleIngredientDelete(ingredients.value?.[column - 1]!)
+      return handleVmsIngredientVmDelete(ingredients.value?.[column - 1]!)
     }
-    return handleCocktailIngredientDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
+    return handleCocktailVmsIngredientVmDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
   } else {
     if (column === 0) {
-      return handleIngredientDelete(ingredients.value?.[row - 1]!)
+      return handleVmsIngredientVmDelete(ingredients.value?.[row - 1]!)
     }
     if (row === 0) {
       return handleCocktailDelete(cocktails.value?.[column - 1]!)
     }
-    return handleCocktailIngredientDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
+    return handleCocktailVmsIngredientVmDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
   }
 }
 
@@ -165,7 +164,7 @@ const itemText = (row: number, column: number) => {
     if (column === 0) {
       return cocktailsToRender.value?.[row - 1]?.title ?? ''
     }
-    return cocktailsToRender.value?.[row - 1].ingredients.find(ci => ci.ingredientId === ingredientsToRender.value?.[column - 1]?.id)?.quantity ?? ''
+    return cocktailsToRender.value?.[row - 1].ingredients?.find(ci => ci.ingredientId === ingredientsToRender.value?.[column - 1]?.id)?.quantity ?? ''
   } else {
     if (row === 0) {
       return cocktailsToRender.value?.[column - 1]?.title ?? ''
@@ -173,7 +172,7 @@ const itemText = (row: number, column: number) => {
     if (column === 0) {
       return ingredientsToRender.value?.[row - 1]?.name ?? ''
     }
-    return cocktailsToRender.value?.[column - 1].ingredients.find(ci => ci.ingredientId === ingredientsToRender.value?.[row - 1]?.id)?.quantity ?? ''
+    return cocktailsToRender.value?.[column - 1].ingredients?.find(ci => ci.ingredientId === ingredientsToRender.value?.[row - 1]?.id)?.quantity ?? ''
   }
 }
 
