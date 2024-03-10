@@ -32,7 +32,7 @@ const ingredientsToRender = computed(() => {
 
 onMounted(async () => {
   await getCocktails()
-  await getVmsIngredientVms()
+  await getIngredient()
 })
 
 const getCocktails = async () => {
@@ -43,7 +43,7 @@ const getCocktails = async () => {
   }
 }
 
-const getVmsIngredientVms = async () => {
+const getIngredient = async () => {
   const response = await axios.get(`${backendUrl}/ingredients`)
 
   if (response.status === 200) {
@@ -61,7 +61,7 @@ const handleCocktailSelect = (cocktail: VmsDetailedCocktailVm) => {
   }
 }
 
-const handleVmsIngredientVmSelect = (ingredient: VmsIngredientVm) => {
+const handleIngredientSelect = (ingredient: VmsIngredientVm) => {
   if (selectedCocktails.value.length > 0) return
 
   if (selectedVmsIngredientVms.value.includes(ingredient)) {
@@ -75,11 +75,11 @@ const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
 
 }
 
-const handleVmsIngredientVmDelete = (ingredient: VmsIngredientVm) => {
+const handleIngredientDelete = (ingredient: VmsIngredientVm) => {
 
 }
 
-const handleCocktailVmsIngredientVmDelete = async (cocktail: VmsDetailedCocktailVm, ingredient: VmsIngredientVm) => {
+const handleCocktailIngredientDelete = async (cocktail: VmsDetailedCocktailVm, ingredient: VmsIngredientVm) => {
   const token = await auth.getAccessTokenSilently()
   const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {
     headers: {
@@ -124,11 +124,11 @@ const handleItemSelected = (row: number, column: number) => {
       return handleCocktailSelect(cocktails.value?.[row - 1]!)
     }
     if (row === 0) {
-      return handleVmsIngredientVmSelect(ingredients.value?.[column - 1]!)
+      return handleIngredientSelect(ingredients.value?.[column - 1]!)
     }
   } else {
     if (column === 0) {
-      return handleVmsIngredientVmSelect(ingredients.value?.[row - 1]!)
+      return handleIngredientSelect(ingredients.value?.[row - 1]!)
     }
     if (row === 0) {
       return handleCocktailSelect(cocktails.value?.[column - 1]!)
@@ -142,18 +142,26 @@ const handleItemDelete = (row: number, column: number) => {
       return handleCocktailDelete(cocktails.value?.[row - 1]!)
     }
     if (row === 0) {
-      return handleVmsIngredientVmDelete(ingredients.value?.[column - 1]!)
+      return handleIngredientDelete(ingredients.value?.[column - 1]!)
     }
-    return handleCocktailVmsIngredientVmDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
+    return handleCocktailIngredientDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
   } else {
     if (column === 0) {
-      return handleVmsIngredientVmDelete(ingredients.value?.[row - 1]!)
+      return handleIngredientDelete(ingredients.value?.[row - 1]!)
     }
     if (row === 0) {
       return handleCocktailDelete(cocktails.value?.[column - 1]!)
     }
-    return handleCocktailVmsIngredientVmDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
+    return handleCocktailIngredientDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
   }
+}
+
+const handleAddCocktail = () => {
+
+}
+
+const handleAddIngredient = () => {
+
 }
 
 const itemText = (row: number, column: number) => {
@@ -192,21 +200,27 @@ const columnIndexRange = computed(() => {
   <header class="flex items-center">
     <h1 class="text-center text-5xl my-8 grow">Cocktail Grid</h1>
 
-    <Account class="" />
+    <Account />
   </header>
 
   <div v-if="!cocktails || !ingredients">
     <p>Loading...</p>
   </div>
-  <div v-else class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
-    <div class="flex gap-2" v-for="row in rowIndexRange">
-      <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
-        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
-          <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
-        </GridCell>
-        <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
-          :deletable="auth.isAuthenticated.value" @delete="handleItemDelete(row, column)"
-          @click="handleItemSelected(row, column)" :text="itemText(row, column)" />
+  <div v-else>
+    <div>
+      <button @click="handleAddCocktail">Add Cocktail</button>
+      <button @click="handleAddIngredient">Add Ingredient</button>
+    </div>
+    <div class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
+      <div class="flex gap-2" v-for="row in rowIndexRange">
+        <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
+          <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
+            <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
+          </GridCell>
+          <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
+            :deletable="auth.isAuthenticated.value" @delete="handleItemDelete(row, column)"
+            @click="handleItemSelected(row, column)" :text="itemText(row, column)" />
+        </div>
       </div>
     </div>
   </div>
