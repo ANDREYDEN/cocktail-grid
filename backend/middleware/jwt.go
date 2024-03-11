@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	scope "cocktail-grid/backend/auth"
+
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
 	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
@@ -28,7 +30,7 @@ func (c CustomClaims) Validate(ctx context.Context) error {
 }
 
 // EnsureValidToken is a middleware that will check the validity of our JWT.
-func EnsureValidToken(scope string) gin.HandlerFunc {
+func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 	issuerURL, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/")
 	if err != nil {
 		log.Fatalf("Failed to parse the issuer url: %v", err)
@@ -71,7 +73,7 @@ func EnsureValidToken(scope string) gin.HandlerFunc {
 
 		middleware.CheckJWT(handler).ServeHTTP(ctx.Writer, ctx.Request)
 		jwtToken := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
-		hasScope := jwtToken.CustomClaims.(*CustomClaims).HasScope(scope)
+		hasScope := jwtToken.CustomClaims.(*CustomClaims).HasScope(scope.ToString())
 		if !hasScope {
 			ctx.AbortWithStatusJSON(
 				http.StatusUnauthorized,

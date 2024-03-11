@@ -1,6 +1,7 @@
 package router
 
 import (
+	scope "cocktail-grid/backend/auth"
 	controllers "cocktail-grid/backend/controllers"
 	"cocktail-grid/backend/middleware"
 
@@ -35,12 +36,12 @@ func NewRouter() *gin.Engine {
 		cocktailsGroup.GET("", cocktailController.GetAllCocktails)
 		cocktailsGroup.POST(
 			"",
-			middleware.EnsureValidToken("create:cocktail"),
+			middleware.EnsureValidToken(scope.CreateCocktail),
 			cocktailController.CreateCocktail,
 		)
 		cocktailsGroup.PUT(
 			"",
-			middleware.EnsureValidToken("update:cocktail"),
+			middleware.EnsureValidToken(scope.UpdateCocktail),
 			cocktailController.UpdateCocktail,
 		)
 
@@ -54,12 +55,12 @@ func NewRouter() *gin.Engine {
 
 					ingredientGroup.POST(
 						"",
-						middleware.EnsureValidToken("create:cocktailingredient"),
+						middleware.EnsureValidToken(scope.CreateCocktailIngredient),
 						cocktailIngredientController.CreateCocktailIngredient,
 					)
 					ingredientGroup.DELETE(
 						"",
-						middleware.EnsureValidToken("delete:cocktailingredient"),
+						middleware.EnsureValidToken(scope.DeleteCocktailIngredient),
 						cocktailIngredientController.DeleteCocktailIngredient,
 					)
 				}
@@ -74,7 +75,7 @@ func NewRouter() *gin.Engine {
 		ingredientsGroup.GET("", ingredientController.GetAllIngredients)
 		ingredientsGroup.POST(
 			"",
-			middleware.EnsureValidToken("create:ingredient"),
+			middleware.EnsureValidToken(scope.CreateIngredient),
 			ingredientController.CreateIngredient,
 		)
 	}
