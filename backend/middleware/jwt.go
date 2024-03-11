@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -27,7 +28,7 @@ func (c CustomClaims) Validate(ctx context.Context) error {
 }
 
 // EnsureValidToken is a middleware that will check the validity of our JWT.
-func EnsureValidToken() gin.HandlerFunc {
+func EnsureValidToken(scope string) gin.HandlerFunc {
 	issuerURL, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/")
 	if err != nil {
 		log.Fatalf("Failed to parse the issuer url: %v", err)
@@ -69,7 +70,14 @@ func EnsureValidToken() gin.HandlerFunc {
 		}
 
 		middleware.CheckJWT(handler).ServeHTTP(ctx.Writer, ctx.Request)
-
+		jwtToken := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+		hasScope := jwtToken.CustomClaims.(*CustomClaims).HasScope(scope)
+		if !hasScope {
+			ctx.AbortWithStatusJSON(
+				http.StatusUnauthorized,
+				map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope)},
+			)
+		}
 		if encounteredError {
 			ctx.AbortWithStatusJSON(
 				http.StatusUnauthorized,

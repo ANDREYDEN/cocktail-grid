@@ -33,8 +33,16 @@ func NewRouter() *gin.Engine {
 		cocktailController := new(controllers.CocktailController)
 
 		cocktailsGroup.GET("", cocktailController.GetAllCocktails)
-		cocktailsGroup.POST("", middleware.EnsureValidToken(), cocktailController.CreateCocktail)
-		cocktailsGroup.PUT("", cocktailController.UpdateCocktail)
+		cocktailsGroup.POST(
+			"",
+			middleware.EnsureValidToken("create:cocktail"),
+			cocktailController.CreateCocktail,
+		)
+		cocktailsGroup.PUT(
+			"",
+			middleware.EnsureValidToken("update:cocktail"),
+			cocktailController.UpdateCocktail,
+		)
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
 		{
@@ -44,8 +52,16 @@ func NewRouter() *gin.Engine {
 				{
 					cocktailIngredientController := new(controllers.CocktailIngredientController)
 
-					ingredientGroup.POST("", cocktailIngredientController.CreateCocktailIngredient)
-					ingredientGroup.DELETE("", middleware.EnsureValidToken(), cocktailIngredientController.DeleteCocktailIngredient)
+					ingredientGroup.POST(
+						"",
+						middleware.EnsureValidToken("create:cocktailingredient"),
+						cocktailIngredientController.CreateCocktailIngredient,
+					)
+					ingredientGroup.DELETE(
+						"",
+						middleware.EnsureValidToken("delete:cocktailingredient"),
+						cocktailIngredientController.DeleteCocktailIngredient,
+					)
 				}
 			}
 		}
@@ -56,7 +72,11 @@ func NewRouter() *gin.Engine {
 		ingredientController := new(controllers.IngredientController)
 
 		ingredientsGroup.GET("", ingredientController.GetAllIngredients)
-		ingredientsGroup.POST("", ingredientController.CreateIngredient)
+		ingredientsGroup.POST(
+			"",
+			middleware.EnsureValidToken("create:ingredient"),
+			ingredientController.CreateIngredient,
+		)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
