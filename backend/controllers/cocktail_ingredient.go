@@ -27,6 +27,7 @@ type CocktailIngredientController struct{}
 //	@Param			ingredientId	path		int							true	"Ingredient ID"
 //	@Param			cocktail		body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
 //	@Success		201				{object}	vms.CocktailIngredientVm
+//	@Failure		422				{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [post]
 //	@Security		BearerAuth
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
@@ -54,8 +55,14 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	}
 
 	db := db.GetDB()
-	db.Create(&cocktailIngredient)
-
+	result := db.Create(&cocktailIngredient)
+	if result.Error != nil {
+		ctx.AbortWithStatusJSON(
+			http.StatusUnprocessableEntity,
+			gin.H{"error": result.Error.Error()},
+		)
+		return
+	}
 	ctx.IndentedJSON(http.StatusCreated, vms.FromCocktailIngredientToVm(cocktailIngredient))
 }
 
@@ -71,6 +78,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Param			ingredientId	path		int	true	"Ingredient ID"
 //	@Success		204				{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
+//	@Security		BearerAuth
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
 		CocktailID   uint `uri:"cocktailId" binding:"required"`

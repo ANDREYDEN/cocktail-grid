@@ -174,10 +174,21 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/vms.CocktailIngredientVm"
                         }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object"
+                        }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deletes an ingredient from a cocktail",
                 "consumes": [
                     "application/json"

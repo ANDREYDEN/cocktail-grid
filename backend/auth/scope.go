@@ -11,6 +11,10 @@ func (s Scope) ToString() string {
 	return fmt.Sprintf("%s:%s", s.Verb, s.Noun)
 }
 
+func (s Scope) IsEmpty() bool {
+	return s.Verb == "" && s.Noun == "" 
+}
+
 var CreateCocktail Scope
 var UpdateCocktail Scope
 var CreateIngredient Scope

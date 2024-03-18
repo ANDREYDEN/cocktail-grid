@@ -165,6 +165,8 @@ paths:
           description: No Content
           schema:
             type: object
+      security:
+      - BearerAuth: []
       summary: Deletes an ingredient from a cocktail
       tags:
       - Cocktails
@@ -196,6 +198,10 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/vms.CocktailIngredientVm'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: object
       security:
       - BearerAuth: []
       summary: Adds an ingredient

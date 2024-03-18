@@ -18,18 +18,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CustomClaims contains custom data we want from the token.
 type CustomClaims struct {
 	Scope string `json:"scope"`
 }
 
-// Validate does nothing for this example, but we need
-// it to satisfy validator.CustomClaims interface.
 func (c CustomClaims) Validate(ctx context.Context) error {
-	return nil
+		hasScope := c.HasScope(scope.ToString())
+		if !hasScope {
+			ctx.AbortWithStatusJSON(
+				http.StatusUnauthorized,
+				map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope)},
+			)
+		}
 }
 
-// EnsureValidToken is a middleware that will check the validity of our JWT.
+func (c CustomClaims) HasScope(expectedScope string) bool {
+	result := strings.Split(c.Scope, " ")
+	for i := range result {
+		if result[i] == expectedScope {
+			return true
+		}
+	}
+
+	return false
+}
+
 func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 	issuerURL, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/")
 	if err != nil {
@@ -78,26 +91,11 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 				map[string]string{"message": "JWT is missing/invalid."},
 			)
 		}
-
-		jwtToken := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
-		hasScope := jwtToken.CustomClaims.(*CustomClaims).HasScope(scope.ToString())
-		if !hasScope {
-			ctx.AbortWithStatusJSON(
-				http.StatusUnauthorized,
-				map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope)},
-			)
+		
+		if (scope.IsEmpty()) {
+			return
 		}
+
 	}
 }
 
-// HasScope checks whether our claims have a specific scope.
-func (c CustomClaims) HasScope(expectedScope string) bool {
-	result := strings.Split(c.Scope, " ")
-	for i := range result {
-		if result[i] == expectedScope {
-			return true
-		}
-	}
-
-	return false
-}
