@@ -196,6 +196,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/vms.CocktailIngredientVm'
+      security:
+      - BearerAuth: []
       summary: Adds an ingredient
       tags:
       - Cocktails

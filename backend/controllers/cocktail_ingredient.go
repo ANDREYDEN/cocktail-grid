@@ -28,6 +28,7 @@ type CocktailIngredientController struct{}
 //	@Param			cocktail		body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
 //	@Success		201				{object}	vms.CocktailIngredientVm
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [post]
+//	@Security		BearerAuth
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
 	type CreateCocktailIngredientPathParams struct {
 		CocktailID   uint `uri:"cocktailId" binding:"required"`
@@ -66,8 +67,8 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Tags			Cocktails
 //	@Accept			json
 //	@Produce		json
-//	@Param			cocktailId		path		int			true	"Cocktail ID"
-//	@Param			ingredientId	path		int			true	"Ingredient ID"
+//	@Param			cocktailId		path		int	true	"Cocktail ID"
+//	@Param			ingredientId	path		int	true	"Ingredient ID"
 //	@Success		204				{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {

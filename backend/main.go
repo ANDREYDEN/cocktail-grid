@@ -12,14 +12,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// @title						CocktailGrid API
-// @description				An API to get cocktails and ingredients
-// @version					1
-// @BasePath					/
+//	@title						CocktailGrid API
+//	@description				An API to get cocktails and ingredients
+//	@version					1
+//	@BasePath					/
 //
-// @securityDefinitions.apikey	BearerAuth
-// @in							header
-// @name						Authorization
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {

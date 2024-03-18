@@ -72,18 +72,19 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 		}
 
 		middleware.CheckJWT(handler).ServeHTTP(ctx.Writer, ctx.Request)
+		if encounteredError {
+			ctx.AbortWithStatusJSON(
+				http.StatusUnauthorized,
+				map[string]string{"message": "JWT is missing/invalid."},
+			)
+		}
+
 		jwtToken := ctx.Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 		hasScope := jwtToken.CustomClaims.(*CustomClaims).HasScope(scope.ToString())
 		if !hasScope {
 			ctx.AbortWithStatusJSON(
 				http.StatusUnauthorized,
 				map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope)},
-			)
-		}
-		if encounteredError {
-			ctx.AbortWithStatusJSON(
-				http.StatusUnauthorized,
-				map[string]string{"message": "JWT is invalid."},
 			)
 		}
 	}

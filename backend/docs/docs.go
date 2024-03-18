@@ -127,6 +127,11 @@ const docTemplate = `{
         },
         "/cocktails/{cocktailId}/ingredients/{ingredientId}": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Adds an existing ingredient to the cocktail",
                 "consumes": [
                     "application/json"
