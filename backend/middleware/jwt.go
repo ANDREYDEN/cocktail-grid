@@ -23,13 +23,7 @@ type CustomClaims struct {
 }
 
 func (c CustomClaims) Validate(ctx context.Context) error {
-		hasScope := c.HasScope(scope.ToString())
-		if !hasScope {
-			ctx.AbortWithStatusJSON(
-				http.StatusUnauthorized,
-				map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope)},
-			)
-		}
+	return nil
 }
 
 func (c CustomClaims) HasScope(expectedScope string) bool {
@@ -81,6 +75,26 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 		var handler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
 			encounteredError = false
 			ctx.Request = r
+
+			contextKey := r.Context().Value(jwtmiddleware.ContextKey{})
+			if contextKey == nil {
+				ctx.AbortWithStatusJSON(
+					http.StatusUnauthorized,
+					map[string]string{"message": "Missing context key"},
+				)
+			}
+
+			token := contextKey.(*validator.ValidatedClaims)
+			claims := token.CustomClaims.(*CustomClaims)
+			log.Println(claims)
+			hasScope := claims.HasScope(scope.ToString())
+			if !hasScope {
+				ctx.AbortWithStatusJSON(
+					http.StatusUnauthorized,
+					map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope.ToString())},
+				)
+			}
+
 			ctx.Next()
 		}
 
@@ -91,11 +105,5 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 				map[string]string{"message": "JWT is missing/invalid."},
 			)
 		}
-		
-		if (scope.IsEmpty()) {
-			return
-		}
-
 	}
 }
-

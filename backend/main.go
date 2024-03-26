@@ -1,6 +1,7 @@
 package main
 
 import (
+	scope "cocktail-grid/backend/auth"
 	"cocktail-grid/backend/db"
 	"cocktail-grid/backend/docs"
 	"cocktail-grid/backend/router"
@@ -34,7 +35,7 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/"
 
 	db.Init()
-
+	scope.InitScopes()
 	router := router.NewRouter()
 	port := "8080"
 	log.Printf("\nVisit http://localhost:%v/swagger/index.html to view Swagger documentation.\n\n", port)

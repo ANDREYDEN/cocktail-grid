@@ -11,6 +11,7 @@ const auth0Plugin = createAuth0({
     authorizationParams: {
         redirect_uri: window.location.origin,
         audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        scope: "delete:cocktail_ingredient"
     },
 })
 
