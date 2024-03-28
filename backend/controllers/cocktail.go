@@ -22,6 +22,7 @@ type CocktailController struct{}
 //	@Schemes
 //	@Description	Retrieves all available cocktails
 //	@Tags			Cocktails
+//	@ID			Cocktail_Get
 //	@Accept			json
 //	@Produce		json
 //	@Param			compact	query		string	false	"exclude ingredients"
@@ -53,6 +54,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 //	@Schemes
 //	@Description	Creates a new cocktail
 //	@Tags			Cocktails
+//	@ID			Cocktail_Create
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.CreateCocktailDto	true	"Cocktail object"

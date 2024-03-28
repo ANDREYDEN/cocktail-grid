@@ -29,6 +29,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
+                "operationId": "Cocktail_Get",
                 "parameters": [
                     {
                         "type": "string",
@@ -104,6 +105,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Creates a cocktail",
+                "operationId": "Cocktail_Create",
                 "parameters": [
                     {
                         "description": "Cocktail object",

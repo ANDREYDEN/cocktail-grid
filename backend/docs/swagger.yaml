@@ -77,6 +77,7 @@ paths:
       consumes:
       - application/json
       description: Retrieves all available cocktails
+      operationId: Cocktail_Get
       parameters:
       - description: exclude ingredients
         in: query
@@ -98,6 +99,7 @@ paths:
       consumes:
       - application/json
       description: Creates a new cocktail
+      operationId: Cocktail_Create
       parameters:
       - description: Cocktail object
         in: body
