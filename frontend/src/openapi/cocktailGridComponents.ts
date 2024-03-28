@@ -5,3 +5,46 @@
  */
 import type * as Fetcher from "./cocktailGridFetcher";
 import { cocktailGridFetch } from "./cocktailGridFetcher";
+
+export type CocktailGetQueryParams = {
+  /**
+   * exclude ingredients
+   */
+  compact?: void;
+};
+
+export type CocktailGetError = Fetcher.ErrorWrapper<undefined>;
+
+export type CocktailGetVariables = {
+  queryParams?: CocktailGetQueryParams;
+};
+
+/**
+ * Retrieves all available cocktails
+ */
+export const cocktailGet = (
+  variables: CocktailGetVariables,
+  signal?: AbortSignal
+) =>
+  cocktailGridFetch<
+    undefined,
+    CocktailGetError,
+    undefined,
+    {},
+    CocktailGetQueryParams,
+    {}
+  >({ url: "/cocktails", method: "get", ...variables, signal });
+
+export type CocktailCreateError = Fetcher.ErrorWrapper<undefined>;
+
+/**
+ * Creates a new cocktail
+ */
+export const cocktailCreate = (signal?: AbortSignal) =>
+  cocktailGridFetch<undefined, CocktailCreateError, undefined, {}, {}, {}>({
+    url: "/cocktails",
+    method: "post",
+    signal,
+  });
+
+export const operationsByTag = { cocktails: { cocktailGet, cocktailCreate } };
