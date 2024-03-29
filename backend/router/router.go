@@ -26,6 +26,7 @@ func NewRouter() *gin.Engine {
 	}
 	corsConfig.AllowHeaders = []string{
 		"Authorization",
+		"Content-Type",
 	}
 	router.Use(cors.New(corsConfig))
 

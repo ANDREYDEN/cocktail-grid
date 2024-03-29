@@ -22,12 +22,11 @@ type CocktailController struct{}
 //	@Schemes
 //	@Description	Retrieves all available cocktails
 //	@Tags			Cocktails
-//	@ID			Cocktail_Get
+//	@ID				Get_Cocktails
 //	@Accept			json
 //	@Produce		json
 //	@Param			compact	query		string	false	"exclude ingredients"
 //	@Success		200		{object}	[]vms.DetailedCocktailVm
-//	@Success		200		{object}	[]vms.CocktailVm
 //	@Router			/cocktails [get]
 func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	db := db.GetDB()
@@ -54,7 +53,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 //	@Schemes
 //	@Description	Creates a new cocktail
 //	@Tags			Cocktails
-//	@ID			Cocktail_Create
+//	@ID				Create_Cocktail
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.CreateCocktailDto	true	"Cocktail object"

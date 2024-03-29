@@ -29,7 +29,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
-                "operationId": "Cocktail_Get",
+                "operationId": "Get_Cocktails",
                 "parameters": [
                     {
                         "type": "string",
@@ -44,7 +44,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/vms.CocktailVm"
+                                "$ref": "#/definitions/vms.DetailedCocktailVm"
                             }
                         }
                     }
@@ -105,7 +105,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Creates a cocktail",
-                "operationId": "Cocktail_Create",
+                "operationId": "Create_Cocktail",
                 "parameters": [
                     {
                         "description": "Cocktail object",

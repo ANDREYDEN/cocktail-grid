@@ -21,7 +21,7 @@
                     "Cocktails"
                 ],
                 "summary": "Gets all cocktails",
-                "operationId": "Cocktail_Get",
+                "operationId": "Get_Cocktails",
                 "parameters": [
                     {
                         "type": "string",
@@ -33,10 +33,14 @@
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/vms.CocktailVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/vms.DetailedCocktailVm"
+                                    }
+                                }
                             }
                         }
                     }
@@ -60,22 +64,34 @@
                         "name": "cocktail",
                         "in": "body",
                         "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/dtos.CocktailDto"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/dtos.CocktailDto"
+                                }
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/components/schemas/vms.CocktailVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/vms.CocktailVm"
+                                }
+                            }
                         }
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/components/schemas/vms.CocktailVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/vms.CocktailVm"
+                                }
+                            }
                         }
                     }
                 }
@@ -97,23 +113,31 @@
                     "Cocktails"
                 ],
                 "summary": "Creates a cocktail",
-                "operationId": "Cocktail_Create",
+                "operationId": "Create_Cocktail",
                 "parameters": [
                     {
                         "description": "Cocktail object",
                         "name": "cocktail",
                         "in": "body",
                         "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/dtos.CreateCocktailDto"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/dtos.CreateCocktailDto"
+                                }
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {
-                            "$ref": "#/components/schemas/vms.CocktailVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/vms.CocktailVm"
+                                }
+                            }
                         }
                     }
                 }
@@ -157,22 +181,34 @@
                         "name": "cocktail",
                         "in": "body",
                         "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/dtos.CocktailIngredientDto"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/dtos.CocktailIngredientDto"
+                                }
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {
-                            "$ref": "#/components/schemas/vms.CocktailIngredientVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/vms.CocktailIngredientVm"
+                                }
+                            }
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
-                        "schema": {
-                            "type": "object"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
                         }
                     }
                 }
@@ -213,8 +249,12 @@
                 "responses": {
                     "204": {
                         "description": "No Content",
-                        "schema": {
-                            "type": "object"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
                         }
                     }
                 }
@@ -236,10 +276,14 @@
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/vms.IngredientVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/vms.IngredientVm"
+                                    }
+                                }
                             }
                         }
                     }
@@ -263,16 +307,24 @@
                         "name": "cocktail",
                         "in": "body",
                         "required": true,
-                        "schema": {
-                            "$ref": "#/components/schemas/dtos.IngredientDto"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/dtos.IngredientDto"
+                                }
+                            }
                         }
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {
-                            "$ref": "#/components/schemas/vms.IngredientVm"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/vms.IngredientVm"
+                                }
+                            }
                         }
                     }
                 }

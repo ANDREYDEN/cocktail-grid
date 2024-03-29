@@ -6,8 +6,9 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import Account from './Account.vue'
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas'
+import { useQuery } from '@tanstack/vue-query';
+import { getCocktails } from '../openapi/cocktailGridComponents';
 
-const cocktails = ref<VmsDetailedCocktailVm[] | null>()
 const ingredients = ref<VmsIngredientVm[] | null>()
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
@@ -15,6 +16,10 @@ const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
 
 const auth = useAuth0();
+const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails, isRefetching: refetchingCocktails } = useQuery({
+  queryKey: ['getCocktails'],
+  queryFn: () => getCocktails({})
+})
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -31,17 +36,8 @@ const ingredientsToRender = computed(() => {
 })
 
 onMounted(async () => {
-  await getCocktails()
   await getIngredient()
 })
-
-const getCocktails = async () => {
-  const response = await axios.get(`${backendUrl}/cocktails`)
-
-  if (response.status === 200) {
-    cocktails.value = response.data
-  }
-}
 
 const getIngredient = async () => {
   const response = await axios.get(`${backendUrl}/ingredients`)
@@ -87,7 +83,7 @@ const handleCocktailIngredientDelete = async (cocktail: VmsDetailedCocktailVm, i
     }
   })
   if (response.status == 204) {
-    await getCocktails()
+    await refetchCocktails()
   }
 }
 
@@ -203,7 +199,7 @@ const columnIndexRange = computed(() => {
     <Account />
   </header>
 
-  <div v-if="!cocktails || !ingredients">
+  <div v-if="loadingCocktails || refetchingCocktails || !ingredients">
     <p>Loading...</p>
   </div>
   <div v-else>

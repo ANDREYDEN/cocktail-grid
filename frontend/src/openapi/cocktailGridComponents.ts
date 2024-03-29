@@ -5,46 +5,52 @@
  */
 import type * as Fetcher from "./cocktailGridFetcher";
 import { cocktailGridFetch } from "./cocktailGridFetcher";
+import type * as Schemas from "./cocktailGridSchemas";
 
-export type CocktailGetQueryParams = {
+export type GetCocktailsQueryParams = {
   /**
    * exclude ingredients
    */
   compact?: void;
 };
 
-export type CocktailGetError = Fetcher.ErrorWrapper<undefined>;
+export type GetCocktailsError = Fetcher.ErrorWrapper<undefined>;
 
-export type CocktailGetVariables = {
-  queryParams?: CocktailGetQueryParams;
+export type GetCocktailsResponse = Schemas.VmsDetailedCocktailVm[];
+
+export type GetCocktailsVariables = {
+  queryParams?: GetCocktailsQueryParams;
 };
 
 /**
  * Retrieves all available cocktails
  */
-export const cocktailGet = (
-  variables: CocktailGetVariables,
+export const getCocktails = (
+  variables: GetCocktailsVariables,
   signal?: AbortSignal
 ) =>
   cocktailGridFetch<
-    undefined,
-    CocktailGetError,
+    GetCocktailsResponse,
+    GetCocktailsError,
     undefined,
     {},
-    CocktailGetQueryParams,
+    GetCocktailsQueryParams,
     {}
   >({ url: "/cocktails", method: "get", ...variables, signal });
 
-export type CocktailCreateError = Fetcher.ErrorWrapper<undefined>;
+export type CreateCocktailError = Fetcher.ErrorWrapper<undefined>;
 
 /**
  * Creates a new cocktail
  */
-export const cocktailCreate = (signal?: AbortSignal) =>
-  cocktailGridFetch<undefined, CocktailCreateError, undefined, {}, {}, {}>({
-    url: "/cocktails",
-    method: "post",
-    signal,
-  });
+export const createCocktail = (signal?: AbortSignal) =>
+  cocktailGridFetch<
+    Schemas.VmsCocktailVm,
+    CreateCocktailError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/cocktails", method: "post", signal });
 
-export const operationsByTag = { cocktails: { cocktailGet, cocktailCreate } };
+export const operationsByTag = { cocktails: { getCocktails, createCocktail } };

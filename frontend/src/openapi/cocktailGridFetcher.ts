@@ -69,9 +69,7 @@ export async function cocktailGridFetch<
       delete requestHeaders["Content-Type"];
     }
 
-    const response = await window.fetch(
-      `${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
-      {
+    const options = {
         signal,
         method: method.toUpperCase(),
         body: body
@@ -81,6 +79,10 @@ export async function cocktailGridFetch<
           : undefined,
         headers: requestHeaders,
       }
+      console.log(options)
+    const response = await window.fetch(
+      `${baseUrl}${resolveUrl(url, queryParams, pathParams)}`,
+      options
     );
     if (!response.ok) {
       let error: ErrorWrapper<TError>;
