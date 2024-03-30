@@ -145,6 +145,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Adds an ingredient",
+                "operationId": "Create_CocktailIngredient",
                 "parameters": [
                     {
                         "type": "integer",
@@ -202,6 +203,7 @@ const docTemplate = `{
                     "Cocktails"
                 ],
                 "summary": "Deletes an ingredient from a cocktail",
+                "operationId": "Delete_CocktailIngredient",
                 "parameters": [
                     {
                         "type": "integer",

@@ -161,6 +161,7 @@
                     "Cocktails"
                 ],
                 "summary": "Adds an ingredient",
+                "operationId": "Create_CocktailIngredient",
                 "parameters": [
                     {
                         "type": "integer",
@@ -181,12 +182,8 @@
                         "name": "cocktail",
                         "in": "body",
                         "required": true,
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/dtos.CocktailIngredientDto"
-                                }
-                            }
+                        "schema": {
+                            "$ref": "#/components/schemas/dtos.CocktailIngredientDto"
                         }
                     }
                 ],
@@ -230,6 +227,7 @@
                     "Cocktails"
                 ],
                 "summary": "Deletes an ingredient from a cocktail",
+                "operationId": "Delete_CocktailIngredient",
                 "parameters": [
                     {
                         "type": "integer",

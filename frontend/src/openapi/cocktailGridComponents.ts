@@ -53,6 +53,85 @@ export const createCocktail = (signal?: AbortSignal) =>
     {}
   >({ url: "/cocktails", method: "post", signal });
 
+export type CreateCocktailIngredientPathParams = {
+  /**
+   * Cocktail ID
+   */
+  cocktailId: void;
+  /**
+   * Ingredient ID
+   */
+  ingredientId: void;
+};
+
+export type CreateCocktailIngredientError = Fetcher.ErrorWrapper<{
+  status: 422;
+  payload: Record<string, any>;
+}>;
+
+export type CreateCocktailIngredientVariables = {
+  pathParams: CreateCocktailIngredientPathParams;
+};
+
+/**
+ * Adds an existing ingredient to the cocktail
+ */
+export const createCocktailIngredient = (
+  variables: CreateCocktailIngredientVariables,
+  signal?: AbortSignal
+) =>
+  cocktailGridFetch<
+    Schemas.VmsCocktailIngredientVm,
+    CreateCocktailIngredientError,
+    undefined,
+    {},
+    {},
+    CreateCocktailIngredientPathParams
+  >({
+    url: "/cocktails/{cocktailId}/ingredients/{ingredientId}",
+    method: "post",
+    ...variables,
+    signal,
+  });
+
+export type DeleteCocktailIngredientPathParams = {
+  /**
+   * Cocktail ID
+   */
+  cocktailId: void;
+  /**
+   * Ingredient ID
+   */
+  ingredientId: void;
+};
+
+export type DeleteCocktailIngredientError = Fetcher.ErrorWrapper<undefined>;
+
+export type DeleteCocktailIngredientVariables = {
+  pathParams: DeleteCocktailIngredientPathParams;
+};
+
+/**
+ * Deletes an ingredient from a cocktail
+ */
+export const deleteCocktailIngredient = (
+  variables: DeleteCocktailIngredientVariables,
+  signal?: AbortSignal
+) =>
+  cocktailGridFetch<
+    Record<string, any>,
+    DeleteCocktailIngredientError,
+    undefined,
+    {},
+    {},
+    DeleteCocktailIngredientPathParams
+  >({
+    url: "/cocktails/{cocktailId}/ingredients/{ingredientId}",
+    method: "delete",
+    ...variables,
+    signal,
+  });
+
 export type GetIngredientsError = Fetcher.ErrorWrapper<undefined>;
 
 export type GetIngredientsResponse = Schemas.VmsIngredientVm[];
@@ -86,6 +165,11 @@ export const createIngredient = (signal?: AbortSignal) =>
   >({ url: "/ingredients", method: "post", signal });
 
 export const operationsByTag = {
-  cocktails: { getCocktails, createCocktail },
+  cocktails: {
+    getCocktails,
+    createCocktail,
+    createCocktailIngredient,
+    deleteCocktailIngredient,
+  },
   ingredients: { getIngredients, createIngredient },
 };

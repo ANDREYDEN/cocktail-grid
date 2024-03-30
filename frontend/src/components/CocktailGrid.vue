@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import axios from 'axios'
 import GridCell from './GridCell.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import Account from './Account.vue'
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas'
-import { useQuery } from '@tanstack/vue-query';
-import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
+import type * as Schemas from "../openapi/cocktailGridSchemas";
+import { useMutation, useQuery } from '@tanstack/vue-query';
+import { getCocktails, getIngredients, deleteCocktailIngredient, DeleteCocktailIngredientVariables, DeleteCocktailIngredientError, createCocktailIngredient, CreateCocktailIngredientError, CreateCocktailIngredientVariables } from '../openapi/cocktailGridComponents';
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
@@ -22,6 +21,15 @@ const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails,
 const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngredients, isRefetching: refetchingIngredients } = useQuery({
   queryKey: ['getIngredients'],
   queryFn: () => getIngredients()
+})
+const { mutateAsync: mutateDeleteCocktailIngredient } = useMutation<Record<string, any>, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables>({
+  mutationKey: ['deleteCocktailIngredient'],
+  mutationFn: (params) => deleteCocktailIngredient(params),
+})
+
+const { mutateAsync: mutateCreateCocktailIngredient } = useMutation<Schemas.VmsCocktailIngredientVm, CreateCocktailIngredientError, CreateCocktailIngredientVariables>({
+  mutationKey: ['createCocktailIngredient'],
+  mutationFn: (params) => createCocktailIngredient(params),
 })
 
 const cocktailsToRender = computed(() => {
@@ -64,18 +72,6 @@ const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
 
 const handleIngredientDelete = (ingredient: VmsIngredientVm) => {
 
-}
-
-const handleCocktailIngredientDelete = async (cocktail: VmsDetailedCocktailVm, ingredient: VmsIngredientVm) => {
-  const token = await auth.getAccessTokenSilently()
-  const response = await axios.delete(`${backendUrl}/cocktails/${cocktail.id}/ingredients/${ingredient.id}`, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
-  })
-  if (response.status == 204) {
-    await refetchCocktails()
-  }
 }
 
 const flipAxis = () => {
@@ -131,7 +127,12 @@ const handleItemDelete = (row: number, column: number) => {
     if (row === 0) {
       return handleIngredientDelete(ingredients.value?.[column - 1]!)
     }
-    return handleCocktailIngredientDelete(cocktails.value?.[row - 1]!, ingredients.value?.[column - 1]!)
+    return mutateDeleteCocktailIngredient({
+      pathParams: {
+        cocktailId: cocktails.value?.[row - 1]?.id!,
+        ingredientId: ingredients.value?.[column - 1]?.id!
+      }
+    })
   } else {
     if (column === 0) {
       return handleIngredientDelete(ingredients.value?.[row - 1]!)
@@ -139,10 +140,44 @@ const handleItemDelete = (row: number, column: number) => {
     if (row === 0) {
       return handleCocktailDelete(cocktails.value?.[column - 1]!)
     }
-    return handleCocktailIngredientDelete(cocktails.value?.[column - 1]!, ingredients.value?.[row - 1]!)
+    return mutateDeleteCocktailIngredient({
+      pathParams: {
+        cocktailId: cocktails.value?.[column - 1]?.id!,
+        ingredientId: ingredients.value?.[row - 1]?.id!
+      }
+    })
   }
 }
 
+const handleItemEdit = (row: number, column: number, value: string) => {
+  if (cocktailsAsRows.value) {
+    if (column === 0) {
+      return 
+    }
+    if (row === 0) {
+      return 
+    }
+    return mutateCreateCocktailIngredient({
+      pathParams: {
+        cocktailId: cocktails.value?.[row - 1]?.id!,
+        ingredientId: ingredients.value?.[column - 1]?.id!,
+      },
+    })
+  } else {
+    if (column === 0) {
+      return 
+    }
+    if (row === 0) {
+      return 
+    }
+    return mutateCreateCocktailIngredient({
+      pathParams: {
+        cocktailId: cocktails.value?.[column - 1]?.id!,
+        ingredientId: ingredients.value?.[row - 1]?.id!
+      }
+    })
+  }
+}
 const handleAddCocktail = () => {
 
 }
@@ -208,8 +243,9 @@ const loading = computed(() => {
             <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
           </GridCell>
           <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
-            :deletable="auth.isAuthenticated.value" @delete="handleItemDelete(row, column)"
-            @click="handleItemSelected(row, column)" :text="itemText(row, column)" />
+            :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
+            @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
+            :text="itemText(row, column)" />
         </div>
       </div>
     </div>

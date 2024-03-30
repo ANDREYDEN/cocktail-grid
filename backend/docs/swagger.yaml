@@ -149,6 +149,7 @@ paths:
       consumes:
       - application/json
       description: Deletes an ingredient from a cocktail
+      operationId: Delete_CocktailIngredient
       parameters:
       - description: Cocktail ID
         in: path
@@ -176,6 +177,7 @@ paths:
       consumes:
       - application/json
       description: Adds an existing ingredient to the cocktail
+      operationId: Create_CocktailIngredient
       parameters:
       - description: Cocktail ID
         in: path

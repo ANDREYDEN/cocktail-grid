@@ -21,6 +21,7 @@ type CocktailIngredientController struct{}
 //	@Schemes
 //	@Description	Adds an existing ingredient to the cocktail
 //	@Tags			Cocktails
+//	@ID				Create_CocktailIngredient
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktailId		path		int							true	"Cocktail ID"
@@ -72,6 +73,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Schemes
 //	@Description	Deletes an ingredient from a cocktail
 //	@Tags			Cocktails
+//	@ID				Delete_CocktailIngredient
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktailId		path		int	true	"Cocktail ID"
