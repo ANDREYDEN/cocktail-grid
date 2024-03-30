@@ -19,6 +19,7 @@ type IngredientController struct{}
 //	@Schemes
 //	@Description	Retrieves all available ingredients
 //	@Tags			Ingredients
+//	@ID				Get_Ingredients
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	[]vms.IngredientVm
@@ -40,6 +41,7 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 //	@Schemes
 //	@Description	Creates a new ingredient
 //	@Tags			Ingredients
+//	@ID				Create_Ingredient
 //	@Accept			json
 //	@Produce		json
 //	@Param			cocktail	body		dtos.IngredientDto	true	"Ingredient object"

@@ -241,6 +241,7 @@ const docTemplate = `{
                     "Ingredients"
                 ],
                 "summary": "Get all ingredients",
+                "operationId": "Get_Ingredients",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -265,6 +266,7 @@ const docTemplate = `{
                     "Ingredients"
                 ],
                 "summary": "Creates an ingredient",
+                "operationId": "Create_Ingredient",
                 "parameters": [
                     {
                         "description": "Ingredient object",

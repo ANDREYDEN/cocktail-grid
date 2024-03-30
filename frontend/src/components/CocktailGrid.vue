@@ -7,9 +7,8 @@ import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import Account from './Account.vue'
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas'
 import { useQuery } from '@tanstack/vue-query';
-import { getCocktails } from '../openapi/cocktailGridComponents';
+import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
 
-const ingredients = ref<VmsIngredientVm[] | null>()
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
@@ -19,6 +18,10 @@ const auth = useAuth0();
 const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails, isRefetching: refetchingCocktails } = useQuery({
   queryKey: ['getCocktails'],
   queryFn: () => getCocktails({})
+})
+const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngredients, isRefetching: refetchingIngredients } = useQuery({
+  queryKey: ['getIngredients'],
+  queryFn: () => getIngredients()
 })
 
 const cocktailsToRender = computed(() => {
@@ -34,18 +37,6 @@ const ingredientsToRender = computed(() => {
   }
   return ingredients.value?.filter(i => selectedCocktails.value.some(c => c.ingredients?.some(ci => ci.ingredientId === i.id)))
 })
-
-onMounted(async () => {
-  await getIngredient()
-})
-
-const getIngredient = async () => {
-  const response = await axios.get(`${backendUrl}/ingredients`)
-
-  if (response.status === 200) {
-    ingredients.value = response.data
-  }
-}
 
 const handleCocktailSelect = (cocktail: VmsDetailedCocktailVm) => {
   if (selectedVmsIngredientVms.value.length > 0) return
@@ -189,6 +180,9 @@ const columnIndexRange = computed(() => {
   const length = (cocktailsAsRows.value ? ingredientsToRender.value?.length : cocktailsToRender.value?.length) ?? 0
   return Array.from({ length: length + 1 }, (_, i) => i)
 })
+const loading = computed(() => {
+  return loadingCocktails.value || refetchingCocktails.value || loadingIngredients.value || refetchingIngredients.value
+})
 
 </script>
 
@@ -199,7 +193,7 @@ const columnIndexRange = computed(() => {
     <Account />
   </header>
 
-  <div v-if="loadingCocktails || refetchingCocktails || !ingredients">
+  <div v-if="loading">
     <p>Loading...</p>
   </div>
   <div v-else>

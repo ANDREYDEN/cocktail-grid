@@ -214,6 +214,7 @@ paths:
       consumes:
       - application/json
       description: Retrieves all available ingredients
+      operationId: Get_Ingredients
       produces:
       - application/json
       responses:
@@ -230,6 +231,7 @@ paths:
       consumes:
       - application/json
       description: Creates a new ingredient
+      operationId: Create_Ingredient
       parameters:
       - description: Ingredient object
         in: body

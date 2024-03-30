@@ -53,4 +53,39 @@ export const createCocktail = (signal?: AbortSignal) =>
     {}
   >({ url: "/cocktails", method: "post", signal });
 
-export const operationsByTag = { cocktails: { getCocktails, createCocktail } };
+export type GetIngredientsError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetIngredientsResponse = Schemas.VmsIngredientVm[];
+
+/**
+ * Retrieves all available ingredients
+ */
+export const getIngredients = (signal?: AbortSignal) =>
+  cocktailGridFetch<
+    GetIngredientsResponse,
+    GetIngredientsError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/ingredients", method: "get", signal });
+
+export type CreateIngredientError = Fetcher.ErrorWrapper<undefined>;
+
+/**
+ * Creates a new ingredient
+ */
+export const createIngredient = (signal?: AbortSignal) =>
+  cocktailGridFetch<
+    Schemas.VmsIngredientVm,
+    CreateIngredientError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/ingredients", method: "post", signal });
+
+export const operationsByTag = {
+  cocktails: { getCocktails, createCocktail },
+  ingredients: { getIngredients, createIngredient },
+};
