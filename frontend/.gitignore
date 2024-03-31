@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-./src/openapi/cocktailGridSchemas.ts
-./src/openapi/cocktailGridComponents.ts
+src/openapi/cocktailGridSchemas.ts
+src/openapi/cocktailGridComponents.ts
