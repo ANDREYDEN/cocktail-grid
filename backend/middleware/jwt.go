@@ -86,7 +86,6 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 
 			token := contextKey.(*validator.ValidatedClaims)
 			claims := token.CustomClaims.(*CustomClaims)
-			log.Println(claims)
 			hasScope := claims.HasScope(scope.ToString())
 			if !hasScope {
 				ctx.AbortWithStatusJSON(

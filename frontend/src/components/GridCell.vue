@@ -35,7 +35,7 @@ const hovering = ref(false)
 const inEditMode = ref(false)
 const candidate = ref<string>(props.text?.toString() ?? '')
 const textInput = ref<HTMLInputElement>()
-const hasText = computed(() => !!props.text)
+const hasText = computed(() => !['', undefined, NaN].includes(props.text))
 const showActions = computed(() => props.editable && hovering.value)
 
 function handleDelete(e: MouseEvent) {
@@ -65,12 +65,12 @@ function handleEndEditing() {
             <CheckCircleIcon v-if="inEditMode" class="text-green-500 w-5 h-5 hover:cursor-pointer"
                 @click="handleEndEditing" />
         </div>
-        <div class="flex items-baseline">
-            <div v-if="hasText" :class="textClass">
+        <div>
+            <div v-if="hasText" :class="textClass" class="flex items-baseline">
                 <div class="inline" v-if="!inEditMode">{{ text }}</div>
                 <div v-if="!selectable && !inEditMode" class="ml-1 text-lg">oz.</div>
             </div>
-            <input v-if="inEditMode" type="number" ref="textInput" :value="candidate"
+            <input v-if="inEditMode" type="number" ref="textInput" v-model="candidate"
                 class="outline-none bg-transparent" @keyup.enter="handleEndEditing" />
             <slot v-if="!hasText"></slot>
         </div>

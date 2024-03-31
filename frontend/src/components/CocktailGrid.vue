@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import GridCell from './GridCell.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
-import Account from './Account.vue'
-import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas'
-import type * as Schemas from "../openapi/cocktailGridSchemas";
-import { useMutation, useQuery } from '@tanstack/vue-query';
-import { getCocktails, getIngredients, deleteCocktailIngredient, DeleteCocktailIngredientVariables, DeleteCocktailIngredientError, createCocktailIngredient, CreateCocktailIngredientError, CreateCocktailIngredientVariables } from '../openapi/cocktailGridComponents';
+import { useQuery } from '@tanstack/vue-query';
+import { computed, ref } from 'vue';
+import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
+import { useCreateCocktailIngredient, useDeleteCocktailIngredient } from '../openapi/cocktailGridHooks';
+import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
+import Account from './Account.vue';
+import GridCell from './GridCell.vue';
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
@@ -22,15 +22,9 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
   queryKey: ['getIngredients'],
   queryFn: () => getIngredients()
 })
-const { mutateAsync: mutateDeleteCocktailIngredient } = useMutation<Record<string, any>, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables>({
-  mutationKey: ['deleteCocktailIngredient'],
-  mutationFn: (params) => deleteCocktailIngredient(params),
-})
 
-const { mutateAsync: mutateCreateCocktailIngredient } = useMutation<Schemas.VmsCocktailIngredientVm, CreateCocktailIngredientError, CreateCocktailIngredientVariables>({
-  mutationKey: ['createCocktailIngredient'],
-  mutationFn: (params) => createCocktailIngredient(params),
-})
+const { mutateCreateCocktailIngredient } = useCreateCocktailIngredient()
+const { mutateDeleteCocktailIngredient } = useDeleteCocktailIngredient()
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -119,7 +113,7 @@ const handleItemSelected = (row: number, column: number) => {
   }
 }
 
-const handleItemDelete = (row: number, column: number) => {
+const handleItemDelete = async (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
       return handleCocktailDelete(cocktails.value?.[row - 1]!)
@@ -127,12 +121,13 @@ const handleItemDelete = (row: number, column: number) => {
     if (row === 0) {
       return handleIngredientDelete(ingredients.value?.[column - 1]!)
     }
-    return mutateDeleteCocktailIngredient({
+    await mutateDeleteCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[row - 1]?.id!,
         ingredientId: ingredients.value?.[column - 1]?.id!
       }
     })
+    await refetchCocktails()
   } else {
     if (column === 0) {
       return handleIngredientDelete(ingredients.value?.[row - 1]!)
@@ -140,16 +135,17 @@ const handleItemDelete = (row: number, column: number) => {
     if (row === 0) {
       return handleCocktailDelete(cocktails.value?.[column - 1]!)
     }
-    return mutateDeleteCocktailIngredient({
+    await mutateDeleteCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[column - 1]?.id!,
         ingredientId: ingredients.value?.[row - 1]?.id!
       }
     })
+    await refetchCocktails()
   }
 }
 
-const handleItemEdit = (row: number, column: number, value: string) => {
+const handleItemEdit = async (row: number, column: number, value: string) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
       return
@@ -157,7 +153,7 @@ const handleItemEdit = (row: number, column: number, value: string) => {
     if (row === 0) {
       return
     }
-    return mutateCreateCocktailIngredient({
+    await mutateCreateCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[row - 1]?.id!,
         ingredientId: ingredients.value?.[column - 1]?.id!,
@@ -166,6 +162,7 @@ const handleItemEdit = (row: number, column: number, value: string) => {
         quantity: +value
       }
     })
+    await refetchCocktails()
   } else {
     if (column === 0) {
       return
@@ -173,7 +170,7 @@ const handleItemEdit = (row: number, column: number, value: string) => {
     if (row === 0) {
       return
     }
-    return mutateCreateCocktailIngredient({
+    await mutateCreateCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[column - 1]?.id!,
         ingredientId: ingredients.value?.[row - 1]?.id!
@@ -182,6 +179,7 @@ const handleItemEdit = (row: number, column: number, value: string) => {
         quantity: +value
       }
     })
+    await refetchCocktails()
   }
 }
 const handleAddCocktail = () => {

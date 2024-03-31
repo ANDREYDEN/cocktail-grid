@@ -100,6 +100,10 @@ export async function cocktailGridFetch<
       throw error;
     }
 
+    if (response.status == 204) {
+      return {} as TData 
+    }
+
     if (response.headers.get("content-type")?.includes("json")) {
       return await response.json();
     } else {
