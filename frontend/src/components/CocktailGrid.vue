@@ -23,8 +23,8 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
   queryFn: () => getIngredients()
 })
 
-const { mutateCreateCocktailIngredient } = useCreateCocktailIngredient()
-const { mutateDeleteCocktailIngredient } = useDeleteCocktailIngredient()
+const { mutateAsync: mutateCreateCocktailIngredient } = useCreateCocktailIngredient()
+const { mutateAsync: mutateDeleteCocktailIngredient } = useDeleteCocktailIngredient()
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
