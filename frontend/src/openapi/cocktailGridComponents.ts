@@ -11,7 +11,7 @@ export type GetCocktailsQueryParams = {
   /**
    * exclude ingredients
    */
-  compact?: void;
+  compact?: string;
 };
 
 export type GetCocktailsError = Fetcher.ErrorWrapper<undefined>;
@@ -40,28 +40,35 @@ export const getCocktails = (
 
 export type CreateCocktailError = Fetcher.ErrorWrapper<undefined>;
 
+export type CreateCocktailVariables = {
+  body?: Schemas.DtosCreateCocktailDto;
+};
+
 /**
  * Creates a new cocktail
  */
-export const createCocktail = (signal?: AbortSignal) =>
+export const createCocktail = (
+  variables: CreateCocktailVariables,
+  signal?: AbortSignal
+) =>
   cocktailGridFetch<
     Schemas.VmsCocktailVm,
     CreateCocktailError,
-    undefined,
+    Schemas.DtosCreateCocktailDto,
     {},
     {},
     {}
-  >({ url: "/cocktails", method: "post", signal });
+  >({ url: "/cocktails", method: "post", ...variables, signal });
 
 export type CreateCocktailIngredientPathParams = {
   /**
    * Cocktail ID
    */
-  cocktailId: void;
+  cocktailId: number;
   /**
    * Ingredient ID
    */
-  ingredientId: void;
+  ingredientId: number;
 };
 
 export type CreateCocktailIngredientError = Fetcher.ErrorWrapper<{
@@ -70,6 +77,7 @@ export type CreateCocktailIngredientError = Fetcher.ErrorWrapper<{
 }>;
 
 export type CreateCocktailIngredientVariables = {
+  body?: Schemas.DtosCocktailIngredientDto;
   pathParams: CreateCocktailIngredientPathParams;
 };
 
@@ -83,7 +91,7 @@ export const createCocktailIngredient = (
   cocktailGridFetch<
     Schemas.VmsCocktailIngredientVm,
     CreateCocktailIngredientError,
-    undefined,
+    Schemas.DtosCocktailIngredientDto,
     {},
     {},
     CreateCocktailIngredientPathParams
@@ -98,11 +106,11 @@ export type DeleteCocktailIngredientPathParams = {
   /**
    * Cocktail ID
    */
-  cocktailId: void;
+  cocktailId: number;
   /**
    * Ingredient ID
    */
-  ingredientId: void;
+  ingredientId: number;
 };
 
 export type DeleteCocktailIngredientError = Fetcher.ErrorWrapper<undefined>;
@@ -151,18 +159,25 @@ export const getIngredients = (signal?: AbortSignal) =>
 
 export type CreateIngredientError = Fetcher.ErrorWrapper<undefined>;
 
+export type CreateIngredientVariables = {
+  body?: Schemas.DtosIngredientDto;
+};
+
 /**
  * Creates a new ingredient
  */
-export const createIngredient = (signal?: AbortSignal) =>
+export const createIngredient = (
+  variables: CreateIngredientVariables,
+  signal?: AbortSignal
+) =>
   cocktailGridFetch<
     Schemas.VmsIngredientVm,
     CreateIngredientError,
-    undefined,
+    Schemas.DtosIngredientDto,
     {},
     {},
     {}
-  >({ url: "/ingredients", method: "post", signal });
+  >({ url: "/ingredients", method: "post", ...variables, signal });
 
 export const operationsByTag = {
   cocktails: {

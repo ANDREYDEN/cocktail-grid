@@ -152,28 +152,34 @@ const handleItemDelete = (row: number, column: number) => {
 const handleItemEdit = (row: number, column: number, value: string) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
-      return 
+      return
     }
     if (row === 0) {
-      return 
+      return
     }
     return mutateCreateCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[row - 1]?.id!,
         ingredientId: ingredients.value?.[column - 1]?.id!,
       },
+      body: {
+        quantity: +value
+      }
     })
   } else {
     if (column === 0) {
-      return 
+      return
     }
     if (row === 0) {
-      return 
+      return
     }
     return mutateCreateCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[column - 1]?.id!,
         ingredientId: ingredients.value?.[row - 1]?.id!
+      },
+      body: {
+        quantity: +value
       }
     })
   }
