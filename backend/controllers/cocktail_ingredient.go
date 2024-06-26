@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -46,7 +47,7 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	var cocktailIngredientDto dtos.CocktailIngredientDto
 
 	if err := ctx.BindJSON(&cocktailIngredientDto); err != nil {
-		panic(err)
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 	}
 
 	var cocktailIngredient = models.CocktailIngredient{
@@ -58,6 +59,20 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 	db := db.GetDB()
 	result := db.Create(&cocktailIngredient)
 	if result.Error != nil {
+		// TODO: make this check better when SQLITE is no longer used
+		if strings.Contains(result.Error.Error(), "UNIQUE constraint failed") {
+			ctx.AbortWithStatusJSON(
+				http.StatusUnprocessableEntity,
+				gin.H{
+					"error": fmt.Sprintf(
+						"Ingredient (id: %d) already exists as part of this cocktail (id: %d)",
+						cocktailIngredient.IngredientID,
+						cocktailIngredient.CocktailID,
+					),
+				},
+			)
+			return
+		}
 		ctx.AbortWithStatusJSON(
 			http.StatusUnprocessableEntity,
 			gin.H{"error": result.Error.Error()},
