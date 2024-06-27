@@ -25,9 +25,10 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
 })
 
 const { mutateAsync: mutateCreateCocktailIngredient, error: createCocktailIngredientError } = useCreateCocktailIngredient()
-const { mutateAsync: mutateDeleteCocktailIngredient } = useDeleteCocktailIngredient()
+const { mutateAsync: mutateDeleteCocktailIngredient, error: deleteCocktailIngredientError } = useDeleteCocktailIngredient()
 
 useErrorToast(createCocktailIngredientError)
+useErrorToast(deleteCocktailIngredientError)
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {

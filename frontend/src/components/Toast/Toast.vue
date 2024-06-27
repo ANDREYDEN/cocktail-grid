@@ -2,6 +2,7 @@
 import { provide, ref } from 'vue';
 import { ShowInfoParams, Severity } from "./ToastData"
 import { toastInjectionKey } from "../../injectionKeys"
+import { XMarkIcon } from '@heroicons/vue/16/solid'
 
 const severityToColor: { [key in Severity]: string } = {
     'info': 'bg-blue-300',
@@ -9,20 +10,32 @@ const severityToColor: { [key in Severity]: string } = {
     'warn': 'bg-yellow-300',
     'error': 'bg-red-300'
 }
-const title = ref<string>()
-const description = ref<string>()
+const title = ref("Title")
+const description = ref("Description")
 const isOpen = ref(false)
 const color = ref(severityToColor['info'])
+const currentCloseTimeout = ref<number>()
 
 const showInfoToast = ({ title: newTitle, description: newDescription, severity = 'info' }: ShowInfoParams) => {
     title.value = newTitle
     description.value = newDescription
-    isOpen.value = true
     color.value = severityToColor[severity]
 
-    setTimeout(() => {
-        isOpen.value = false
-    }, 3000);
+    open()
+}
+
+const open = () => {
+    isOpen.value = true
+
+    if (currentCloseTimeout.value) {
+        clearTimeout(currentCloseTimeout.value)
+    }
+
+    currentCloseTimeout.value = setTimeout(close, 3000);
+}
+
+const close = () => {
+    isOpen.value = false
 }
 
 provide(toastInjectionKey, { showToast: showInfoToast })
@@ -30,7 +43,10 @@ provide(toastInjectionKey, { showToast: showInfoToast })
 
 <template>
     <slot />
-    <dialog :open="isOpen" class="absolute bottom-2 p-2 w-1/2 rounded" :class="color">
+    <dialog :open="isOpen" class="absolute bottom-2 p-2 w-1/2 rounded-lg" :class="color">
+        <button @click="close" class="absolute w-6 h-6 p-1 right-2 top-2 hover:bg-red-500 rounded">
+            <XMarkIcon />
+        </button>
         <h1 class="text-lg">
             {{ title }}
         </h1>
