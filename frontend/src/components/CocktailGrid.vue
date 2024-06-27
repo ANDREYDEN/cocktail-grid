@@ -2,12 +2,13 @@
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
 import { useCreateCocktailIngredient, useDeleteCocktailIngredient } from '../openapi/cocktailGridHooks';
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import GridCell from './GridCell.vue';
+import { useErrorToast } from '../hooks/useErrorToast'
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
@@ -23,8 +24,10 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
   queryFn: () => getIngredients()
 })
 
-const { mutateAsync: mutateCreateCocktailIngredient } = useCreateCocktailIngredient()
+const { mutateAsync: mutateCreateCocktailIngredient, error: createCocktailIngredientError } = useCreateCocktailIngredient()
 const { mutateAsync: mutateDeleteCocktailIngredient } = useDeleteCocktailIngredient()
+
+useErrorToast(createCocktailIngredientError)
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -183,7 +186,6 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
   }
 }
 const handleAddCocktail = () => {
-
 }
 
 const handleAddIngredient = () => {
