@@ -16,6 +16,7 @@ export function useErrorToast(error: Ref<any>) {
 }
 
 function handleError(error: any): { title: string, description: string } {
+    console.log(error)
     let title = error.message ?? 'Error'
     let description = error.stack?.error ?? 'Unknown error occured'
 

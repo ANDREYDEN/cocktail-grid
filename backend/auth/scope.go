@@ -12,7 +12,7 @@ func (s Scope) ToString() string {
 }
 
 func (s Scope) IsEmpty() bool {
-	return s.Verb == "" && s.Noun == "" 
+	return s.Verb == "" && s.Noun == ""
 }
 
 var CreateCocktail Scope
@@ -20,6 +20,7 @@ var UpdateCocktail Scope
 var CreateIngredient Scope
 var CreateCocktailIngredient Scope
 var DeleteCocktailIngredient Scope
+var UpdateCocktailIngredient Scope
 
 func InitScopes() {
 	create := "create"
@@ -35,4 +36,5 @@ func InitScopes() {
 	CreateIngredient = Scope{Verb: create, Noun: ingredient}
 	CreateCocktailIngredient = Scope{Verb: create, Noun: cocktailIngredient}
 	DeleteCocktailIngredient = Scope{Verb: delete, Noun: cocktailIngredient}
+	UpdateCocktailIngredient = Scope{Verb: update, Noun: cocktailIngredient}
 }

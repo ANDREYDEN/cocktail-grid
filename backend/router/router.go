@@ -64,6 +64,11 @@ func NewRouter() *gin.Engine {
 						middleware.EnsureValidToken(scope.DeleteCocktailIngredient),
 						cocktailIngredientController.DeleteCocktailIngredient,
 					)
+					ingredientGroup.PUT(
+						"",
+						middleware.EnsureValidToken(scope.UpdateCocktailIngredient),
+						cocktailIngredientController.UpdateCocktailIngredient,
+					)
 				}
 			}
 		}

@@ -1,12 +1,19 @@
 import { useAuth0 } from "@auth0/auth0-vue";
 import { useMutation } from "@tanstack/vue-query";
-import { CreateCocktailIngredientError, CreateCocktailIngredientVariables, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables, createCocktailIngredient, deleteCocktailIngredient } from "./cocktailGridComponents";
+import { CreateCocktailIngredientError, CreateCocktailIngredientVariables, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables, UpdateCocktailIngredientError, UpdateCocktailIngredientVariables, createCocktailIngredient, deleteCocktailIngredient, updateCocktailIngredient } from "./cocktailGridComponents";
 import { VmsCocktailIngredientVm } from "./cocktailGridSchemas";
 
 export function useCreateCocktailIngredient() {
     return useMutationWithAuth<VmsCocktailIngredientVm, CreateCocktailIngredientError, CreateCocktailIngredientVariables>(
         'createCocktailIngredient', 
         createCocktailIngredient
+    )
+}
+
+export function useUpdateCocktailIngredient() {
+    return useMutationWithAuth<VmsCocktailIngredientVm, UpdateCocktailIngredientError, UpdateCocktailIngredientVariables>(
+        'updateCocktailIngredient', 
+        updateCocktailIngredient
     )
 }
 

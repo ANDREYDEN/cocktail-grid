@@ -90,7 +90,7 @@ func EnsureValidToken(scope scope.Scope) gin.HandlerFunc {
 			if !hasScope {
 				ctx.AbortWithStatusJSON(
 					http.StatusUnauthorized,
-					map[string]string{"message": fmt.Sprintf("Missing required scope: %s", scope.ToString())},
+					map[string]string{"error": fmt.Sprintf("Missing required scope: %s", scope.ToString())},
 				)
 			}
 

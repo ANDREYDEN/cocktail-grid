@@ -6,7 +6,7 @@ import App from './App.vue'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 
 const identityScopes = ["profile", "email"]
-var crudScopes =  ["create:cocktail", "create:cocktail_ingredient", "delete:cocktail_ingredient", "delete:cocktail"]
+var crudScopes =  ["create:cocktail", "create:cocktail_ingredient", "delete:cocktail_ingredient", "update:cocktail_ingredient", "delete:cocktail"]
 var requestedScopes = [
     ...identityScopes,
     ... crudScopes

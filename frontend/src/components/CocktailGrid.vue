@@ -4,7 +4,7 @@ import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, inject, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
-import { useCreateCocktailIngredient, useDeleteCocktailIngredient } from '../openapi/cocktailGridHooks';
+import { useCreateCocktailIngredient, useDeleteCocktailIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import GridCell from './GridCell.vue';
@@ -25,9 +25,11 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
 })
 
 const { mutateAsync: mutateCreateCocktailIngredient, error: createCocktailIngredientError } = useCreateCocktailIngredient()
+const { mutateAsync: mutateUpdateCocktailIngredient, error: updateCocktailIngredientError } = useUpdateCocktailIngredient()
 const { mutateAsync: mutateDeleteCocktailIngredient, error: deleteCocktailIngredientError } = useDeleteCocktailIngredient()
 
 useErrorToast(createCocktailIngredientError)
+useErrorToast(updateCocktailIngredientError)
 useErrorToast(deleteCocktailIngredientError)
 
 const cocktailsToRender = computed(() => {
@@ -157,10 +159,16 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
     if (row === 0) {
       return
     }
-    await mutateCreateCocktailIngredient({
+
+    const ingredient = ingredients.value?.[column - 1]
+    const cocktailIngredientExists = cocktails.value?.[row - 1]?.ingredients?.some(i => i.ingredientId === ingredient?.id)
+
+    const upsertCocktailIngredient = (cocktailIngredientExists ? mutateUpdateCocktailIngredient : mutateCreateCocktailIngredient)
+
+    await upsertCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[row - 1]?.id!,
-        ingredientId: ingredients.value?.[column - 1]?.id!,
+        ingredientId: ingredient?.id!,
       },
       body: {
         quantity: +value
@@ -174,7 +182,13 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
     if (row === 0) {
       return
     }
-    await mutateCreateCocktailIngredient({
+
+    const ingredient = ingredients.value?.[row - 1]
+    const cocktailIngredientExists = cocktails.value?.[column - 1]?.ingredients?.some(i => i.ingredientId === ingredient?.id)
+
+    const upsertCocktailIngredient = (cocktailIngredientExists ? mutateUpdateCocktailIngredient : mutateCreateCocktailIngredient)
+
+    await upsertCocktailIngredient({
       pathParams: {
         cocktailId: cocktails.value?.[column - 1]?.id!,
         ingredientId: ingredients.value?.[row - 1]?.id!

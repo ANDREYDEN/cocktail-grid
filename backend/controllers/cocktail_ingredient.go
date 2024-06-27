@@ -16,6 +16,11 @@ import (
 
 type CocktailIngredientController struct{}
 
+type CRUDCocktailIngredientPathParams struct {
+	CocktailID   uint `uri:"cocktailId" binding:"required"`
+	IngredientID uint `uri:"ingredientId" binding:"required"`
+}
+
 // CreateCocktailIngredient godoc
 //
 //	@Summary	Adds an ingredient
@@ -25,23 +30,17 @@ type CocktailIngredientController struct{}
 //	@ID				Create_CocktailIngredient
 //	@Accept			json
 //	@Produce		json
-//	@Param			cocktailId		path		int							true	"Cocktail ID"
-//	@Param			ingredientId	path		int							true	"Ingredient ID"
-//	@Param			cocktail		body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
-//	@Success		201				{object}	vms.CocktailIngredientVm
-//	@Failure		422				{object}	interface{}
+//	@Param			cocktailId			path		int							true	"Cocktail ID"
+//	@Param			ingredientId		path		int							true	"Ingredient ID"
+//	@Param			cocktailIngredient	body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
+//	@Success		201					{object}	vms.CocktailIngredientVm
+//	@Failure		422					{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [post]
 //	@Security		BearerAuth
 func (cocktailController CocktailIngredientController) CreateCocktailIngredient(ctx *gin.Context) {
-	type CreateCocktailIngredientPathParams struct {
-		CocktailID   uint `uri:"cocktailId" binding:"required"`
-		IngredientID uint `uri:"ingredientId" binding:"required"`
-	}
-
-	var pathParams CreateCocktailIngredientPathParams
-
-	if err := ctx.ShouldBindUri(&pathParams); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	pathParams, ok := GetPathParams[CRUDCocktailIngredientPathParams](ctx)
+	if !ok {
+		return
 	}
 
 	var cocktailIngredientDto dtos.CocktailIngredientDto
@@ -93,18 +92,12 @@ func (cocktailController CocktailIngredientController) CreateCocktailIngredient(
 //	@Produce		json
 //	@Param			cocktailId		path		int	true	"Cocktail ID"
 //	@Param			ingredientId	path		int	true	"Ingredient ID"
-//	@Success		204				{object}	interface{}
+//	@Success		201				{object}	interface{}
 //	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [delete]
 //	@Security		BearerAuth
 func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(ctx *gin.Context) {
-	type CreateCocktailIngredientPathParams struct {
-		CocktailID   uint `uri:"cocktailId" binding:"required"`
-		IngredientID uint `uri:"ingredientId" binding:"required"`
-	}
-
-	var pathParams CreateCocktailIngredientPathParams
-	if err := ctx.ShouldBindUri(&pathParams); err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	pathParams, ok := GetPathParams[CRUDCocktailIngredientPathParams](ctx)
+	if !ok {
 		return
 	}
 
@@ -126,4 +119,64 @@ func (cocktailController CocktailIngredientController) DeleteCocktailIngredient(
 	}
 
 	ctx.IndentedJSON(http.StatusNoContent, gin.H{})
+}
+
+// UpdateCocktailIngredient godoc
+//
+//	@Summary	Updates a cocktail ingredient
+//	@Schemes
+//	@Description	Updates a cocktail ingredient
+//	@Tags			Cocktails
+//	@ID				Update_CocktailIngredient
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktailId			path		int							true	"Cocktail ID"
+//	@Param			ingredientId		path		int							true	"Ingredient ID"
+//	@Param			cocktailIngredient	body		dtos.CocktailIngredientDto	true	"Cocktail ingredient object"
+//	@Success		200					{object}	interface{}
+//	@Router			/cocktails/{cocktailId}/ingredients/{ingredientId} [put]
+//	@Security		BearerAuth
+func (cocktailController CocktailIngredientController) UpdateCocktailIngredient(ctx *gin.Context) {
+	pathParams, ok := GetPathParams[CRUDCocktailIngredientPathParams](ctx)
+	if !ok {
+		return
+	}
+
+	var cocktailIngredientDto dtos.CocktailIngredientDto
+	if err := ctx.BindJSON(&cocktailIngredientDto); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	var cocktailIngredient = models.CocktailIngredient{
+		CocktailID:   pathParams.CocktailID,
+		IngredientID: pathParams.IngredientID,
+	}
+
+	db := db.GetDB()
+
+	err := db.First(&cocktailIngredient).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Cocktail ingredient (%d, %d) was not found", pathParams.CocktailID, pathParams.IngredientID)})
+			return
+		}
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	cocktailIngredient.Quantity = cocktailIngredientDto.Quantity
+
+	db.Save(&cocktailIngredient)
+
+	ctx.IndentedJSON(http.StatusOK, vms.FromCocktailIngredientToVm(cocktailIngredient))
+}
+
+func GetPathParams[T any](ctx *gin.Context) (pathParams T, ok bool) {
+	err := ctx.ShouldBindUri(&pathParams)
+	ok = err == nil
+	if !ok {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	}
+	return
 }
