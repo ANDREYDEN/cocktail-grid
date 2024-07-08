@@ -109,3 +109,43 @@ func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, vms.FromCocktailToVm(cocktail))
 }
+
+// DeleteCocktail godoc
+//
+//	@Summary	Deletes a cocktail
+//	@Schemes
+//	@Description	Deletes a cocktail
+//	@Tags			Cocktails
+//	@ID				Delete_Cocktail
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktailId	path		int	true	"Cocktail ID"
+//	@Success		200			{object}	interface{}
+//	@Router			/cocktails/{cocktailId} [delete]
+//	@Security		BearerAuth
+func (cocktailController CocktailController) DeleteCocktail(ctx *gin.Context) {
+	type DeleteCocktailPathParams struct {
+		CocktailId uint `uri:"cocktailId" binding:"required"`
+	}
+
+	pathParams, ok := GetPathParams[DeleteCocktailPathParams](ctx)
+	if !ok {
+		return
+	}
+
+	db := db.GetDB()
+
+	print("ID:", pathParams.CocktailId, ctx.Param("cocktailId"))
+
+	err := db.First(&models.Cocktail{}, pathParams.CocktailId).Delete(&models.Cocktail{}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Cocktail (%d) was not found", pathParams.CocktailId)})
+			return
+		}
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNoContent, gin.H{})
+}

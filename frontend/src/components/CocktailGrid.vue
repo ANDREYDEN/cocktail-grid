@@ -4,7 +4,7 @@ import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, inject, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
-import { useCreateCocktailIngredient, useDeleteCocktailIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
+import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import GridCell from './GridCell.vue';
@@ -28,10 +28,12 @@ const { data: ingredients, isLoading: loadingIngredients, refetch: refetchIngred
 const { mutateAsync: mutateCreateCocktailIngredient, error: createCocktailIngredientError } = useCreateCocktailIngredient()
 const { mutateAsync: mutateUpdateCocktailIngredient, error: updateCocktailIngredientError } = useUpdateCocktailIngredient()
 const { mutateAsync: mutateDeleteCocktailIngredient, error: deleteCocktailIngredientError } = useDeleteCocktailIngredient()
+const { mutateAsync: mutateDeleteCocktail, error: deleteCocktailError } = useDeleteCocktail()
 
 useErrorToast(createCocktailIngredientError)
 useErrorToast(updateCocktailIngredientError)
 useErrorToast(deleteCocktailIngredientError)
+useErrorToast(deleteCocktailError)
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -68,7 +70,11 @@ const handleIngredientSelect = (ingredient: VmsIngredientVm) => {
 }
 
 const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
-
+  return mutateDeleteCocktail({
+    pathParams: {
+      cocktailId: cocktail.id!
+    }
+  })
 }
 
 const handleIngredientDelete = (ingredient: VmsIngredientVm) => {
@@ -123,33 +129,34 @@ const handleItemSelected = (row: number, column: number) => {
 const handleItemDelete = async (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
-      return handleCocktailDelete(cocktails.value?.[row - 1]!)
-    }
-    if (row === 0) {
-      return handleIngredientDelete(ingredients.value?.[column - 1]!)
-    }
-    await mutateDeleteCocktailIngredient({
-      pathParams: {
-        cocktailId: cocktails.value?.[row - 1]?.id!,
-        ingredientId: ingredients.value?.[column - 1]?.id!
+      await handleCocktailDelete(cocktails.value?.[row - 1]!)
+    } else
+      if (row === 0) {
+        await handleIngredientDelete(ingredients.value?.[column - 1]!)
+      } else {
+        await mutateDeleteCocktailIngredient({
+          pathParams: {
+            cocktailId: cocktails.value?.[row - 1]?.id!,
+            ingredientId: ingredients.value?.[column - 1]?.id!
+          }
+        })
       }
-    })
-    await refetchCocktails()
   } else {
     if (column === 0) {
-      return handleIngredientDelete(ingredients.value?.[row - 1]!)
-    }
-    if (row === 0) {
-      return handleCocktailDelete(cocktails.value?.[column - 1]!)
-    }
-    await mutateDeleteCocktailIngredient({
-      pathParams: {
-        cocktailId: cocktails.value?.[column - 1]?.id!,
-        ingredientId: ingredients.value?.[row - 1]?.id!
+      await handleIngredientDelete(ingredients.value?.[row - 1]!)
+    } else
+      if (row === 0) {
+        await handleCocktailDelete(cocktails.value?.[column - 1]!)
+      } else {
+        await mutateDeleteCocktailIngredient({
+          pathParams: {
+            cocktailId: cocktails.value?.[column - 1]?.id!,
+            ingredientId: ingredients.value?.[row - 1]?.id!
+          }
+        })
       }
-    })
-    await refetchCocktails()
   }
+  await refetchCocktails()
 }
 
 const handleItemEdit = async (row: number, column: number, value: string) => {

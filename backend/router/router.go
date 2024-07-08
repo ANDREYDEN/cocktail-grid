@@ -48,6 +48,12 @@ func NewRouter() *gin.Engine {
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
 		{
+			cocktailGroup.DELETE(
+				"",
+				middleware.EnsureValidToken(scope.DeleteCocktail),
+				cocktailController.DeleteCocktail,
+			)
+
 			ingredientsGroup := cocktailGroup.Group("/ingredients")
 			{
 				ingredientGroup := ingredientsGroup.Group("/:ingredientId")
