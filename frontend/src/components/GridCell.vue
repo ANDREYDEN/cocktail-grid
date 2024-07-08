@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<GridCellProps>(), {
 const containerClass = computed(() => ({
     'cursor-pointer text-lg': props.selectable,
     'hover:bg-blue-100': props.selectable && !props.selected,
-    'hover:border-2 hover:border-black': true,
+    'border-2 border-black': inEditMode.value,
     'bg-blue-300': props.selected,
 }))
 const textClass = computed(() => ({
@@ -36,7 +36,7 @@ const inEditMode = ref(false)
 const candidate = ref<string>(props.text?.toString() ?? '')
 const textInput = ref<HTMLInputElement>()
 const hasText = computed(() => !['', undefined, NaN].includes(props.text))
-const showActions = computed(() => props.editable && hovering.value)
+const showActions = computed(() => (props.editable && hovering.value) || inEditMode.value)
 
 function handleDelete(e: MouseEvent) {
     e.stopPropagation()
@@ -56,8 +56,8 @@ function handleEndEditing() {
 </script>
 
 <template>
-    <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg" :class="containerClass"
-        @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
+    <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg hover:border-2 hover:border-black"
+        :class="containerClass" @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
         <div v-if="showActions" class="absolute flex gap-1 top-2 right-2">
             <PencilSquareIcon v-if="!inEditMode" class="text-black w-5 h-5 hover:cursor-pointer"
                 @click="handleStartEditing" />
