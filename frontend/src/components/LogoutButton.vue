@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
+import CustomButton from './CustomButton.vue';
 
 const auth0 = useAuth0();
 
@@ -14,8 +15,10 @@ function logout() {
 </script>
 
 <template>
-    <button class="p-2 hover:bg-blue-100 rounded-lg" @click="logout">
+    <CustomButton @click="logout">
         Log out
-        <ArrowRightStartOnRectangleIcon class="w-5 h-5 inline" />
-    </button>
+        <template v-slot:icon>
+            <ArrowRightStartOnRectangleIcon />
+        </template>
+    </CustomButton>
 </template>

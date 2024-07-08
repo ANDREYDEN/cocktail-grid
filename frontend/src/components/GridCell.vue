@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<GridCellProps>(), {
 const containerClass = computed(() => ({
     'cursor-pointer text-lg': props.selectable,
     'hover:bg-blue-100': props.selectable && !props.selected,
-    'hover:border hover:border-2 hover:border-black': true,
+    'hover:border-2 hover:border-black': true,
     'bg-blue-300': props.selected,
 }))
 const textClass = computed(() => ({

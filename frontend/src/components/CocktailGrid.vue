@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuth0 } from '@auth0/auth0-vue';
-import { ArrowsUpDownIcon } from '@heroicons/vue/24/solid';
+import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, inject, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
@@ -9,6 +9,7 @@ import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridS
 import Account from './Account.vue';
 import GridCell from './GridCell.vue';
 import { useErrorToast } from '../hooks/useErrorToast'
+import CustomButton from './CustomButton.vue';
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
@@ -252,12 +253,22 @@ const loading = computed(() => {
   <div v-if="loading">
     <p>Loading...</p>
   </div>
-  <div v-else>
-    <div>
-      <button @click="handleAddCocktail">Add Cocktail</button>
-      <button @click="handleAddIngredient">Add Ingredient</button>
+  <div class="m-8" v-else>
+    <div class="flex flex-row gap-4 mb-4">
+      <CustomButton outlined icon-position="left" @click="handleAddCocktail">
+        Cocktail
+        <template v-slot:icon>
+          <PlusCircleIcon />
+        </template>
+      </CustomButton>
+      <CustomButton outlined icon-position="left" @click="handleAddIngredient">
+        Ingredient
+        <template v-slot:icon>
+          <PlusCircleIcon />
+        </template>
+      </CustomButton>
     </div>
-    <div class="m-8 p-8 overflow-scroll rounded-lg bg-blue-50">
+    <div class="p-8 overflow-scroll rounded-lg bg-blue-50">
       <div class="flex gap-2" v-for="row in rowIndexRange">
         <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
           <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
