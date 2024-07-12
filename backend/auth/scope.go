@@ -19,6 +19,7 @@ var CreateCocktail Scope
 var UpdateCocktail Scope
 var DeleteCocktail Scope
 var CreateIngredient Scope
+var DeleteIngredient Scope
 var CreateCocktailIngredient Scope
 var DeleteCocktailIngredient Scope
 var UpdateCocktailIngredient Scope
@@ -36,6 +37,7 @@ func InitScopes() {
 	UpdateCocktail = Scope{Verb: update, Noun: cocktail}
 	DeleteCocktail = Scope{Verb: delete, Noun: cocktail}
 	CreateIngredient = Scope{Verb: create, Noun: ingredient}
+	DeleteIngredient = Scope{Verb: delete, Noun: ingredient}
 	CreateCocktailIngredient = Scope{Verb: create, Noun: cocktailIngredient}
 	DeleteCocktailIngredient = Scope{Verb: delete, Noun: cocktailIngredient}
 	UpdateCocktailIngredient = Scope{Verb: update, Noun: cocktailIngredient}

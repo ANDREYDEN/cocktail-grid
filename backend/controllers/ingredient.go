@@ -6,9 +6,12 @@ import (
 	"cocktail-grid/backend/models"
 	slice_utils "cocktail-grid/backend/utils"
 	"cocktail-grid/backend/vms"
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type IngredientController struct{}
@@ -62,4 +65,40 @@ func (cocktailController IngredientController) CreateIngredient(ctx *gin.Context
 	db.Create(&ingredient)
 
 	ctx.IndentedJSON(http.StatusCreated, vms.FromIngredientToVm(ingredient))
+}
+
+// DeleteIngredient godoc
+//
+//	@Summary	Deletes an ingredient
+//	@Schemes
+//	@Description	Deletes an ingredient
+//	@Tags			Ingredients
+//	@ID				Delete_Ingredient
+//	@Accept			json
+//	@Produce		json
+//	@Param			ingredientId	path		int	true	"Ingredient ID"
+//	@Success		200				{object}	interface{}
+//	@Router			/ingredients/{ingredientId} [delete]
+//	@Security		BearerAuth
+func (ingredientController IngredientController) DeleteIngredient(ctx *gin.Context) {
+	type DeleteIngredientPathParams struct {
+		IngredientId uint `uri:"ingredientId" binding:"required"`
+	}
+
+	pathParams, ok := GetPathParams[DeleteIngredientPathParams](ctx)
+	if !ok {
+		return
+	}
+
+	err := db.GetDB().First(&models.Ingredient{}, pathParams.IngredientId).Delete(&models.Ingredient{}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Ingredient (%d) was not found", pathParams.IngredientId)})
+			return
+		}
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusNoContent, gin.H{})
 }

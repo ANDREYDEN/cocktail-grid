@@ -135,8 +135,6 @@ func (cocktailController CocktailController) DeleteCocktail(ctx *gin.Context) {
 
 	db := db.GetDB()
 
-	print("ID:", pathParams.CocktailId, ctx.Param("cocktailId"))
-
 	err := db.First(&models.Cocktail{}, pathParams.CocktailId).Delete(&models.Cocktail{}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

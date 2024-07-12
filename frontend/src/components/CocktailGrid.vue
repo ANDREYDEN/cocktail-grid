@@ -4,7 +4,7 @@ import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, inject, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
-import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
+import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useDeleteIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import GridCell from './GridCell.vue';
@@ -29,11 +29,13 @@ const { mutateAsync: mutateCreateCocktailIngredient, error: createCocktailIngred
 const { mutateAsync: mutateUpdateCocktailIngredient, error: updateCocktailIngredientError } = useUpdateCocktailIngredient()
 const { mutateAsync: mutateDeleteCocktailIngredient, error: deleteCocktailIngredientError } = useDeleteCocktailIngredient()
 const { mutateAsync: mutateDeleteCocktail, error: deleteCocktailError } = useDeleteCocktail()
+const { mutateAsync: mutateDeleteIngredient, error: deleteIngredientError } = useDeleteIngredient()
 
 useErrorToast(createCocktailIngredientError)
 useErrorToast(updateCocktailIngredientError)
 useErrorToast(deleteCocktailIngredientError)
 useErrorToast(deleteCocktailError)
+useErrorToast(deleteIngredientError)
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -78,7 +80,11 @@ const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
 }
 
 const handleIngredientDelete = (ingredient: VmsIngredientVm) => {
-
+  return mutateDeleteIngredient({
+    pathParams: {
+      ingredientId: ingredient.id!
+    }
+  })
 }
 
 const flipAxis = () => {
@@ -157,6 +163,7 @@ const handleItemDelete = async (row: number, column: number) => {
       }
   }
   await refetchCocktails()
+  await refetchIngredients()
 }
 
 const handleItemEdit = async (row: number, column: number, value: string) => {

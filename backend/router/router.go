@@ -54,23 +54,23 @@ func NewRouter() *gin.Engine {
 				cocktailController.DeleteCocktail,
 			)
 
-			ingredientsGroup := cocktailGroup.Group("/ingredients")
+			cocktailIngredientsGroup := cocktailGroup.Group("/ingredients")
 			{
-				ingredientGroup := ingredientsGroup.Group("/:ingredientId")
+				cocktailIngredientGroup := cocktailIngredientsGroup.Group("/:ingredientId")
 				{
 					cocktailIngredientController := new(controllers.CocktailIngredientController)
 
-					ingredientGroup.POST(
+					cocktailIngredientGroup.POST(
 						"",
 						middleware.EnsureValidToken(scope.CreateCocktailIngredient),
 						cocktailIngredientController.CreateCocktailIngredient,
 					)
-					ingredientGroup.DELETE(
+					cocktailIngredientGroup.DELETE(
 						"",
 						middleware.EnsureValidToken(scope.DeleteCocktailIngredient),
 						cocktailIngredientController.DeleteCocktailIngredient,
 					)
-					ingredientGroup.PUT(
+					cocktailIngredientGroup.PUT(
 						"",
 						middleware.EnsureValidToken(scope.UpdateCocktailIngredient),
 						cocktailIngredientController.UpdateCocktailIngredient,
@@ -90,6 +90,15 @@ func NewRouter() *gin.Engine {
 			middleware.EnsureValidToken(scope.CreateIngredient),
 			ingredientController.CreateIngredient,
 		)
+
+		ingredientGroup := ingredientsGroup.Group("/:ingredientId")
+		{
+			ingredientGroup.DELETE(
+				"",
+				middleware.EnsureValidToken(scope.DeleteIngredient),
+				ingredientController.DeleteIngredient,
+			)
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
