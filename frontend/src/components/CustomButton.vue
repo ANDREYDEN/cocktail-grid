@@ -1,7 +1,7 @@
 <script setup lang="ts">
 export interface CustomButtonProps {
     iconPosition?: 'left' | 'right'
-    outlined: boolean
+    outlined?: boolean
 }
 withDefaults(defineProps<CustomButtonProps>(), {
     iconPosition: 'right',

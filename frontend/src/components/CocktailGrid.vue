@@ -2,7 +2,7 @@
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
-import { computed, inject, ref } from 'vue';
+import { computed, inject, onRenderTracked, onRenderTriggered, ref } from 'vue';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
 import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useDeleteIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
@@ -10,10 +10,14 @@ import Account from './Account.vue';
 import GridCell from './GridCell.vue';
 import { useErrorToast } from '../hooks/useErrorToast'
 import CustomButton from './CustomButton.vue';
+import CreateCocktailModal from './CreateCocktailModal.vue';
+import { useModal } from './Modal/useModal';
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
+
+const createCocktailModalState = useModal()
 
 const auth = useAuth0();
 const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails, isRefetching: refetchingCocktails } = useQuery({
@@ -215,8 +219,6 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
     await refetchCocktails()
   }
 }
-const handleAddCocktail = () => {
-}
 
 const handleAddIngredient = () => {
 
@@ -255,6 +257,9 @@ const loading = computed(() => {
   return loadingCocktails.value || refetchingCocktails.value || loadingIngredients.value || refetchingIngredients.value
 })
 
+onRenderTriggered((e) => {
+  // debugger
+})
 </script>
 
 <template>
@@ -269,12 +274,13 @@ const loading = computed(() => {
   </div>
   <div class="m-8" v-else>
     <div class="flex flex-row gap-4 mb-4">
-      <CustomButton outlined icon-position="left" @click="handleAddCocktail">
+      <CustomButton outlined icon-position="left" @click="createCocktailModalState.onOpen">
         Cocktail
         <template v-slot:icon>
           <PlusCircleIcon />
         </template>
       </CustomButton>
+      <CreateCocktailModal v-bind="createCocktailModalState"/>
       <CustomButton outlined icon-position="left" @click="handleAddIngredient">
         Ingredient
         <template v-slot:icon>
