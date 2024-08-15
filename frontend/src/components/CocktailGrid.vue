@@ -280,7 +280,7 @@ onRenderTriggered((e) => {
           <PlusCircleIcon />
         </template>
       </CustomButton>
-      <CreateCocktailModal v-bind="createCocktailModalState"/>
+      <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails"/>
       <CustomButton outlined icon-position="left" @click="handleAddIngredient">
         Ingredient
         <template v-slot:icon>

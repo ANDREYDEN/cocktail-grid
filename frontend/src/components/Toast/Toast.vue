@@ -43,7 +43,7 @@ provide(toastInjectionKey, { showToast: showInfoToast })
 
 <template>
     <slot />
-    <dialog :open="isOpen" class="absolute bottom-2 p-2 w-1/2 rounded-lg" :class="color">
+    <dialog :open="isOpen" class="absolute bottom-2 p-2 w-1/2 rounded-lg z-50" :class="color">
         <button @click="close" class="absolute w-6 h-6 p-1 right-2 top-2 hover:bg-red-500 rounded">
             <XMarkIcon />
         </button>

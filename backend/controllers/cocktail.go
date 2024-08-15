@@ -67,6 +67,11 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 		return
 	}
 
+	if cocktailDto.Title == "" {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Title is required"})
+		return
+	}
+
 	cocktail := dtos.FromDtoToCocktail(cocktailDto)
 
 	db := db.GetDB()
