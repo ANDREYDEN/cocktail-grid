@@ -9,6 +9,7 @@ import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngred
 import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import CreateCocktailModal from './CreateCocktailModal.vue';
+import CreateIngredientModal from './CreateIngredientModal.vue';
 import CustomButton from './CustomButton.vue';
 import GridCell from './GridCell.vue';
 import { useModal } from './Modal/useModal';
@@ -18,6 +19,7 @@ const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
 
 const createCocktailModalState = useModal()
+const createIngredientModalState = useModal()
 
 const auth = useAuth0();
 const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails, isRefetching: refetchingCocktails } = useQuery({
@@ -220,10 +222,6 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
   }
 }
 
-const handleAddIngredient = () => {
-
-}
-
 const itemText = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (row === 0) {
@@ -281,12 +279,13 @@ onRenderTriggered((e) => {
         </template>
       </CustomButton>
       <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails"/>
-      <CustomButton outlined icon-position="left" @click="handleAddIngredient">
+      <CustomButton outlined icon-position="left" @click="createIngredientModalState.onOpen">
         Ingredient
         <template v-slot:icon>
           <PlusCircleIcon />
         </template>
       </CustomButton>
+      <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients"/>
     </div>
     <div class="p-8 overflow-scroll rounded-lg bg-blue-50">
       <div class="flex gap-2" v-for="row in rowIndexRange">
