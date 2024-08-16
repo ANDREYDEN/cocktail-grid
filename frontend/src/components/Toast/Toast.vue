@@ -28,10 +28,10 @@ const open = () => {
     isOpen.value = true
 
     if (currentCloseTimeout.value) {
-        clearTimeout(currentCloseTimeout.value)
+        window.clearTimeout(currentCloseTimeout.value)
     }
 
-    currentCloseTimeout.value = setTimeout(close, 3000);
+    currentCloseTimeout.value = window.setTimeout(close, 3000);
 }
 
 const close = () => {
