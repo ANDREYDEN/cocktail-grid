@@ -41,4 +41,4 @@ const handleCreate = async (e: Element) => {
       <CustomButton outlined @click="handleCreate" :loading="createCocktailLoading">Create</CustomButton>
     </template>
   </Modal>
-</template>./Modal/Modal.vue
+</template>
