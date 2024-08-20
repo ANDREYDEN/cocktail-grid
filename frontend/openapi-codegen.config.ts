@@ -6,7 +6,7 @@ import { defineConfig } from "@openapi-codegen/cli";
 export default defineConfig({
   cocktailGrid: {
     from: {
-      relativePath: "../Backend/docs/swagger.json",
+      relativePath: "./src/openapi/swagger.json",
       source: "file",
     },
     outputDir: "./src/openapi",

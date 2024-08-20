@@ -23,4 +23,5 @@ go.work
 *.db
 
 .env
-docs/
+docs/*
+!docs/swagger.json

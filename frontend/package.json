@@ -11,6 +11,7 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "swaggergen": "npx openapi-codegen gen cocktailGrid",
+    "swagger": "cp ../backend/docs/swagger.json ./src/openapi/swagger.json && npx openapi-codegen gen cocktailGrid",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

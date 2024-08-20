@@ -6,7 +6,6 @@ COPY package*.json ./
 RUN yarn
 
 COPY . .
-RUN yarn swaggergen
 RUN yarn build
 
 
