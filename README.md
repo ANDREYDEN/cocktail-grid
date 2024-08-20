@@ -48,6 +48,23 @@ Optionally you can run the containers separately:
     docker compose up backend
   ```
 
+## Deployment
+
+In a production environment the `frontend` and `backend` containers can be started with:
+```
+docker-compose up -f docker-compose.prod.yml -d
+```
+
+Sometimes a fresh build might be required:
+```
+docker-compose up -f docker-compose.prod.yml -d --build
+```
+
+In case the machine runs out of space, dangling docker resources can be cleaned up:
+```
+docker system prune
+```
+
 ## References
 
 - [Go containarization](https://karol-filipczuk.medium.com/development-environment-for-web-app-with-containers-docker-vue-js-go-part-1-b0f4d663bd64)
