@@ -52,12 +52,12 @@ Optionally you can run the containers separately:
 
 In a production environment the `frontend` and `backend` containers can be started with:
 ```
-docker-compose up -f docker-compose.prod.yml -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 Sometimes a fresh build might be required:
 ```
-docker-compose up -f docker-compose.prod.yml -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 In case the machine runs out of space, dangling docker resources can be cleaned up:
