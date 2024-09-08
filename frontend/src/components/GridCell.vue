@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CheckCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
+import { CheckCircleIcon, PencilSquareIcon, TrashIcon, XCircleIcon } from '@heroicons/vue/24/solid'
 
 export interface GridCellProps {
     selectable?: boolean
@@ -16,10 +16,11 @@ const props = withDefaults(defineProps<GridCellProps>(), {
 })
 
 const containerClass = computed(() => ({
-    'cursor-pointer text-lg': props.selectable,
+    'cursor-pointer': props.selectable,
     'hover:bg-blue-100': props.selectable && !props.selected,
-    'border-2 border-black': inEditMode.value,
     'bg-blue-300': props.selected,
+    'hover:border-2 hover:border-black': props.editable || props.selectable,
+    'border-2 border-black': inEditMode.value,
 }))
 const textClass = computed(() => ({
     'text-3xl text-gray-500': !props.selectable
@@ -56,7 +57,7 @@ function handleEndEditing() {
 </script>
 
 <template>
-    <div class="relative flex items-center justify-center flex-shrink-0 w-48 h-16 rounded-lg hover:border-2 hover:border-black"
+    <div class="relative flex items-center justify-center flex-shrink-0 w-28 md:w-48 h-10 md:h-16 rounded-lg text-lg"
         :class="containerClass" @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
         <div v-if="showActions" class="absolute flex gap-1 top-2 right-2">
             <PencilSquareIcon v-if="!inEditMode" class="text-black w-5 h-5 hover:cursor-pointer"
@@ -64,15 +65,17 @@ function handleEndEditing() {
             <TrashIcon v-if="!inEditMode" class="text-red-500 w-5 h-5 hover:cursor-pointer" @click="handleDelete" />
             <CheckCircleIcon v-if="inEditMode" class="text-green-500 w-5 h-5 hover:cursor-pointer"
                 @click="handleEndEditing" />
+            <XCircleIcon v-if="inEditMode" class="text-red-500 w-5 h-5 hover:cursor-pointer"
+                @click="inEditMode = false" />
         </div>
-        <div>
-            <div v-if="hasText" :class="textClass" class="flex items-baseline">
-                <div class="inline" v-if="!inEditMode">{{ text }}</div>
-                <div v-if="!selectable && !inEditMode" class="ml-1 text-lg">oz.</div>
+        <div v-if="hasText && !inEditMode" :class="textClass" class="flex items-center">
+            <div class="flex items-baseline justify-center w-28 md:w-48">
+                <div class="inline truncate text-ellipsis">{{ text }}</div>
+                <div v-if="!selectable" class="ml-1 text-lg">oz.</div>
             </div>
-            <input v-if="inEditMode" type="number" ref="textInput" v-model="candidate"
-                class="outline-none bg-transparent" @keyup.enter="handleEndEditing" />
-            <slot v-if="!hasText"></slot>
         </div>
+        <input v-if="inEditMode" type="number" ref="textInput" v-model="candidate"
+            class="outline-none bg-transparent w-2/3" @keyup.enter="handleEndEditing" />
+        <slot v-if="!hasText"></slot>
     </div>
 </template>

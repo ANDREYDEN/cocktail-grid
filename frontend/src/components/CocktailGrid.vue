@@ -2,7 +2,7 @@
 import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
-import { computed, onRenderTriggered, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useErrorToast } from '../hooks/useErrorToast';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
 import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useDeleteIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
@@ -254,10 +254,6 @@ const columnIndexRange = computed(() => {
 const loading = computed(() => {
   return loadingCocktails.value || refetchingCocktails.value || loadingIngredients.value || refetchingIngredients.value
 })
-
-onRenderTriggered((e) => {
-  // debugger
-})
 </script>
 
 <template>
@@ -267,37 +263,34 @@ onRenderTriggered((e) => {
     <Account />
   </header>
 
-  <div v-if="loading">
-    <p>Loading...</p>
+  <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mx-4 mb-4">
+    <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createCocktailModalState.onOpen">
+      Cocktail
+      <template v-slot:icon>
+        <PlusCircleIcon />
+      </template>
+    </CustomButton>
+    <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails" />
+    <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createIngredientModalState.onOpen">
+      Ingredient
+      <template v-slot:icon>
+        <PlusCircleIcon />
+      </template>
+    </CustomButton>
+    <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients" />
   </div>
-  <div class="m-8" v-else>
-    <div class="flex flex-row gap-4 mb-4">
-      <CustomButton outlined icon-position="left" @click="createCocktailModalState.onOpen">
-        Cocktail
-        <template v-slot:icon>
-          <PlusCircleIcon />
-        </template>
-      </CustomButton>
-      <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails"/>
-      <CustomButton outlined icon-position="left" @click="createIngredientModalState.onOpen">
-        Ingredient
-        <template v-slot:icon>
-          <PlusCircleIcon />
-        </template>
-      </CustomButton>
-      <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients"/>
-    </div>
-    <div class="p-8 overflow-scroll rounded-lg bg-blue-50">
-      <div class="flex gap-2" v-for="row in rowIndexRange">
-        <div class="flex gap-2 flex-shrink-0" v-for="column in columnIndexRange">
-          <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
-            <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
-          </GridCell>
-          <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
-            :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
-            @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
-            :text="itemText(row, column)" />
-        </div>
+  <div class="m-4 p-4 md:p-8 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
+    'bg-slate-300 h-96 animate-pulse': loading
+  }">
+    <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">
+      <div v-for="column in columnIndexRange">
+        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
+          <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
+        </GridCell>
+        <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
+          :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
+          @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
+          :text="itemText(row, column)" />
       </div>
     </div>
   </div>
