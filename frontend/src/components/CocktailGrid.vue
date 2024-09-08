@@ -257,41 +257,46 @@ const loading = computed(() => {
 </script>
 
 <template>
-  <header class="flex items-center">
-    <h1 class="text-center text-5xl my-8 grow">Cocktail Grid</h1>
+  <header class="flex items-center p-4 mb-4 border-b-2 sticky top-0 w-full bg-white z-50 isolate">
+    <img src="../../public/logo.png" alt="Cocktail Grid Logo" class="w-10 h-10 md:w-16 md:h-16">
+
+    <h1 class="text-center text-3xl md:text-5xl grow">Cocktail Grid</h1>
 
     <Account />
   </header>
 
-  <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mx-4 mb-4">
-    <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createCocktailModalState.onOpen">
-      Cocktail
-      <template v-slot:icon>
-        <PlusCircleIcon />
-      </template>
-    </CustomButton>
-    <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails" />
-    <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createIngredientModalState.onOpen">
-      Ingredient
-      <template v-slot:icon>
-        <PlusCircleIcon />
-      </template>
-    </CustomButton>
-    <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients" />
-  </div>
-  <div class="m-4 p-4 md:p-8 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
-    'bg-slate-300 h-96 animate-pulse': loading
-  }">
-    <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">
-      <div v-for="column in columnIndexRange">
-        <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
-          <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
-        </GridCell>
-        <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
-          :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
-          @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
-          :text="itemText(row, column)" />
+  <main class="relative">
+    <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mx-4 mb-4">
+      <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createCocktailModalState.onOpen">
+        Cocktail
+        <template v-slot:icon>
+          <PlusCircleIcon />
+        </template>
+      </CustomButton>
+      <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails" />
+      <CustomButton outlined icon-position="left" :skeleton-loading="loading"
+        @click="createIngredientModalState.onOpen">
+        Ingredient
+        <template v-slot:icon>
+          <PlusCircleIcon />
+        </template>
+      </CustomButton>
+      <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients" />
+    </div>
+    <div class="m-4 p-4 md:p-8 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
+      'bg-slate-300 h-96 animate-pulse': loading
+    }">
+      <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">
+        <div v-for="column in columnIndexRange">
+          <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
+            <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
+          </GridCell>
+          <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
+            :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
+            @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
+            :text="itemText(row, column)" />
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>

@@ -7,9 +7,9 @@ const auth = useAuth0();
 </script>
 
 <template>
-    <div class="m-2">
+    <div>
         <LoginButton v-if="!auth.isAuthenticated.value" />
-        <div v-if="auth.isAuthenticated.value">{{ auth.user.value?.name }}</div>
+        <div class="px-2" v-if="auth.isAuthenticated.value">{{ auth.user.value?.name }}</div>
         <LogoutButton v-if="auth.isAuthenticated.value" />
     </div>
 </template>
