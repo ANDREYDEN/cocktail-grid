@@ -258,7 +258,7 @@ const loading = computed(() => {
 
 <template>
   <header class="flex items-center p-4 mb-4 border-b-2 sticky top-0 w-full bg-white z-50 isolate">
-    <img src="../../public/logo.png" alt="Cocktail Grid Logo" class="w-10 h-10 md:w-16 md:h-16">
+    <img src="../../public/logo.svg" alt="Cocktail Grid Logo" class="w-10 h-10 md:w-16 md:h-16">
 
     <h1 class="text-center text-3xl md:text-5xl grow">Cocktail Grid</h1>
 
