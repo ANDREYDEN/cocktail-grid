@@ -265,8 +265,8 @@ const loading = computed(() => {
     <Account />
   </header>
 
-  <main class="relative">
-    <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mx-4 mb-4">
+  <main class="relative my-4 mx-4 md:mx-8">
+    <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mb-4">
       <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createCocktailModalState.onOpen">
         Cocktail
         <template v-slot:icon>
@@ -283,7 +283,7 @@ const loading = computed(() => {
       </CustomButton>
       <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients" />
     </div>
-    <div class="m-4 p-4 md:p-8 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
+    <div class="p-4 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
       'bg-slate-300 h-96 animate-pulse': loading
     }">
       <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">

@@ -31,7 +31,7 @@ func (cocktailController IngredientController) GetAllIngredients(ctx *gin.Contex
 	var ingredients []models.Ingredient
 
 	db := db.GetDB()
-	db.Find(&ingredients)
+	db.Order("LOWER(name)").Find(&ingredients)
 
 	ingredientVms := slice_utils.Map(ingredients, vms.FromIngredientToVm)
 

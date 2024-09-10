@@ -36,7 +36,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	if compact == "" {
 		query = db.Preload("CocktailIngredients.Ingredient")
 	}
-	query.Find(&cocktails)
+	query.Order("LOWER(title)").Find(&cocktails)
 
 	if compact == "" {
 		cocktailVms := slice_utils.Map(cocktails, vms.FromCocktailToDetailedVm)
