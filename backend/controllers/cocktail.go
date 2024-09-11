@@ -56,7 +56,7 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 //	@ID				Create_Cocktail
 //	@Accept			json
 //	@Produce		json
-//	@Param			cocktail	body		dtos.CreateCocktailDto	true	"Cocktail object"
+//	@Param			cocktail	body		dtos.CocktailDto	true	"Cocktail object"
 //	@Success		201			{object}	vms.CocktailVm
 //	@Router			/cocktails [post]
 //	@Security		ApiKeyAuth
@@ -86,13 +86,25 @@ func (cocktailController CocktailController) CreateCocktail(ctx *gin.Context) {
 //	@Schemes
 //	@Description	Update an existing cocktail
 //	@Tags			Cocktails
+//	@ID				Update_Cocktail
 //	@Accept			json
 //	@Produce		json
+//	@Param			cocktailId	path		int					true	"Cocktail ID"
 //	@Param			cocktail	body		dtos.CocktailDto	true	"Cocktail object"
 //	@Success		200			{object}	vms.CocktailVm
 //	@Success		404			{object}	vms.CocktailVm
-//	@Router			/cocktails [put]
+//	@Router			/cocktails/{cocktailId} [put]
+//	@Security		BearerAuth
 func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {
+	type UpdateCocktailPathParams struct {
+		CocktailId uint `uri:"cocktailId" binding:"required"`
+	}
+
+	pathParams, ok := GetPathParams[UpdateCocktailPathParams](ctx)
+	if !ok {
+		return
+	}
+
 	var cocktailDto dtos.CocktailDto
 	if err := ctx.BindJSON(&cocktailDto); err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
@@ -101,7 +113,7 @@ func (cocktailController CocktailController) UpdateCocktail(ctx *gin.Context) {
 
 	db := db.GetDB()
 	var cocktail models.Cocktail
-	result := db.First(&cocktail, cocktailDto.ID)
+	result := db.First(&cocktail, pathParams.CocktailId)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("No cocktail found with id %d", cocktail.ID)})
 		return

@@ -50,44 +50,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Update an existing cocktail",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Cocktails"
-                ],
-                "summary": "Update a cocktail",
-                "parameters": [
-                    {
-                        "description": "Cocktail object",
-                        "name": "cocktail",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dtos.CocktailDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/vms.CocktailVm"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/vms.CocktailVm"
-                        }
-                    }
-                }
-            },
             "post": {
                 "security": [
                     {
@@ -113,7 +75,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateCocktailDto"
+                            "$ref": "#/definitions/dtos.CocktailDto"
                         }
                     }
                 ],
@@ -128,6 +90,57 @@ const docTemplate = `{
             }
         },
         "/cocktails/{cocktailId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update an existing cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cocktails"
+                ],
+                "summary": "Update a cocktail",
+                "operationId": "Update_Cocktail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cocktail ID",
+                        "name": "cocktailId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Cocktail object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CocktailDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vms.CocktailVm"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/vms.CocktailVm"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -423,9 +436,6 @@ const docTemplate = `{
         "dtos.CocktailDto": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "imageUrl": {
                     "type": "string"
                 },
@@ -439,17 +449,6 @@ const docTemplate = `{
             "properties": {
                 "quantity": {
                     "type": "number"
-                }
-            }
-        },
-        "dtos.CreateCocktailDto": {
-            "type": "object",
-            "properties": {
-                "imageUrl": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
                 }
             }
         },

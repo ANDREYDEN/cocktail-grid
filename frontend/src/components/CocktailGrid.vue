@@ -5,18 +5,20 @@ import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 import { useErrorToast } from '../hooks/useErrorToast';
 import { getCocktails, getIngredients } from '../openapi/cocktailGridComponents';
-import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useDeleteIngredient, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
-import { VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
+import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngredient, useDeleteIngredient, useUpdateCocktail, useUpdateCocktailIngredient } from '../openapi/cocktailGridHooks';
+import { VmsCocktailVm, VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
-import CreateCocktailModal from './CreateCocktailModal.vue';
+import UpsertCocktailModal from './UpsertCocktailModal.vue';
 import CreateIngredientModal from './CreateIngredientModal.vue';
 import CustomButton from './CustomButton.vue';
 import GridCell from './GridCell.vue';
 import { useModal } from './Modal/useModal';
+import HeaderCell from './HeaderCell.vue';
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
+const cocktailToEdit = ref<VmsCocktailVm>()
 
 const createCocktailModalState = useModal()
 const createIngredientModalState = useModal()
@@ -37,11 +39,12 @@ const { mutateAsync: mutateDeleteCocktailIngredient, error: deleteCocktailIngred
 const { mutateAsync: mutateDeleteCocktail, error: deleteCocktailError } = useDeleteCocktail()
 const { mutateAsync: mutateDeleteIngredient, error: deleteIngredientError } = useDeleteIngredient()
 
-useErrorToast(createCocktailIngredientError)
-useErrorToast(updateCocktailIngredientError)
-useErrorToast(deleteCocktailIngredientError)
-useErrorToast(deleteCocktailError)
-useErrorToast(deleteIngredientError)
+useErrorToast(createCocktailIngredientError
+  || updateCocktailIngredientError
+  || deleteCocktailIngredientError
+  || deleteCocktailError
+  || deleteIngredientError
+)
 
 const cocktailsToRender = computed(() => {
   if (selectedVmsIngredientVms.value.length == 0) {
@@ -85,6 +88,7 @@ const handleCocktailDelete = (cocktail: VmsDetailedCocktailVm) => {
   })
 }
 
+
 const handleIngredientDelete = (ingredient: VmsIngredientVm) => {
   return mutateDeleteIngredient({
     pathParams: {
@@ -97,7 +101,7 @@ const flipAxis = () => {
   cocktailsAsRows.value = !cocktailsAsRows.value
 }
 
-const isItemSelected = (row: number, column: number) => {
+const isHeaderSelected = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (row === 0) {
       const targetedVmsIngredientVm = ingredientsToRender.value?.[column - 1]
@@ -120,7 +124,7 @@ const isItemSelected = (row: number, column: number) => {
   return false
 }
 
-const handleItemSelected = (row: number, column: number) => {
+const handleHeaderSelected = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
       return handleCocktailSelect(cocktails.value?.[row - 1]!)
@@ -172,15 +176,38 @@ const handleItemDelete = async (row: number, column: number) => {
   await refetchIngredients()
 }
 
-const handleItemEdit = async (row: number, column: number, value: string) => {
+const handleHeaderEdit = (row: number, column: number) => {
   if (cocktailsAsRows.value) {
     if (column === 0) {
-      return
+      const cocktail = cocktails.value?.[row - 1]
+      if (!cocktail) {
+        return
+      }
+
+      cocktailToEdit.value = cocktail
+      createCocktailModalState.value.onOpen()
     }
     if (row === 0) {
       return
     }
+  } else {
+    if (column === 0) {
+      return
+    }
+    if (row === 0) {
+      const cocktail = cocktails.value?.[column - 1]
+      if (!cocktail) {
+        return
+      }
 
+      cocktailToEdit.value = cocktail
+      createCocktailModalState.value.onOpen()
+    }
+  }
+}
+
+const handleItemEdit = async (row: number, column: number, value: string) => {
+  if (cocktailsAsRows.value) {
     const ingredient = ingredients.value?.[column - 1]
     const cocktailIngredientExists = cocktails.value?.[row - 1]?.ingredients?.some(i => i.ingredientId === ingredient?.id)
 
@@ -197,13 +224,6 @@ const handleItemEdit = async (row: number, column: number, value: string) => {
     })
     await refetchCocktails()
   } else {
-    if (column === 0) {
-      return
-    }
-    if (row === 0) {
-      return
-    }
-
     const ingredient = ingredients.value?.[row - 1]
     const cocktailIngredientExists = cocktails.value?.[column - 1]?.ingredients?.some(i => i.ingredientId === ingredient?.id)
 
@@ -273,7 +293,8 @@ const loading = computed(() => {
           <PlusCircleIcon />
         </template>
       </CustomButton>
-      <CreateCocktailModal v-bind="createCocktailModalState" @create="refetchCocktails" />
+      <UpsertCocktailModal :key="cocktailToEdit?.id" v-bind="createCocktailModalState" :cocktail="cocktailToEdit"
+        @create="refetchCocktails" />
       <CustomButton outlined icon-position="left" :skeleton-loading="loading"
         @click="createIngredientModalState.onOpen">
         Ingredient
@@ -288,13 +309,15 @@ const loading = computed(() => {
     }">
       <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">
         <div v-for="column in columnIndexRange">
-          <GridCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
+          <HeaderCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
             <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
-          </GridCell>
-          <GridCell v-else :selectable="row === 0 || column === 0" :selected="isItemSelected(row, column)"
-            :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
-            @delete="handleItemDelete(row, column)" @click="handleItemSelected(row, column)"
+          </HeaderCell>
+          <HeaderCell v-else-if="row === 0 || column === 0" :selected="isHeaderSelected(row, column)"
+            :editable="auth.isAuthenticated.value" @edit="() => handleHeaderEdit(row, column)"
+            @delete="handleItemDelete(row, column)" @click="handleHeaderSelected(row, column)"
             :text="itemText(row, column)" />
+          <GridCell v-else :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
+            @delete="handleItemDelete(row, column)" :text="itemText(row, column)" />
         </div>
       </div>
     </div>

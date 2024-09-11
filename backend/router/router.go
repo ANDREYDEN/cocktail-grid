@@ -40,11 +40,6 @@ func NewRouter() *gin.Engine {
 			middleware.EnsureValidToken(scope.CreateCocktail),
 			cocktailController.CreateCocktail,
 		)
-		cocktailsGroup.PUT(
-			"",
-			middleware.EnsureValidToken(scope.UpdateCocktail),
-			cocktailController.UpdateCocktail,
-		)
 
 		cocktailGroup := cocktailsGroup.Group("/:cocktailId")
 		{
@@ -52,6 +47,12 @@ func NewRouter() *gin.Engine {
 				"",
 				middleware.EnsureValidToken(scope.DeleteCocktail),
 				cocktailController.DeleteCocktail,
+			)
+
+			cocktailGroup.PUT(
+				"",
+				middleware.EnsureValidToken(scope.UpdateCocktail),
+				cocktailController.UpdateCocktail,
 			)
 
 			cocktailIngredientsGroup := cocktailGroup.Group("/ingredients")

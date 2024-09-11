@@ -43,10 +43,57 @@
           }
         }
       },
+      "post" : {
+        "tags" : [ "Cocktails" ],
+        "summary" : "Creates a cocktail",
+        "description" : "Creates a new cocktail",
+        "operationId" : "Create_Cocktail",
+        "requestBody" : {
+          "description" : "Cocktail object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/dtos.CocktailDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/vms.CocktailVm"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "ApiKeyAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "cocktail"
+      }
+    },
+    "/cocktails/{cocktailId}" : {
       "put" : {
         "tags" : [ "Cocktails" ],
         "summary" : "Update a cocktail",
         "description" : "Update an existing cocktail",
+        "operationId" : "Update_Cocktail",
+        "parameters" : [ {
+          "name" : "cocktailId",
+          "in" : "path",
+          "description" : "Cocktail ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
         "requestBody" : {
           "description" : "Cocktail object",
           "content" : {
@@ -80,43 +127,11 @@
             }
           }
         },
-        "x-codegen-request-body-name" : "cocktail"
-      },
-      "post" : {
-        "tags" : [ "Cocktails" ],
-        "summary" : "Creates a cocktail",
-        "description" : "Creates a new cocktail",
-        "operationId" : "Create_Cocktail",
-        "requestBody" : {
-          "description" : "Cocktail object",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/dtos.CreateCocktailDto"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "201" : {
-            "description" : "Created",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/vms.CocktailVm"
-                }
-              }
-            }
-          }
-        },
         "security" : [ {
-          "ApiKeyAuth" : [ ]
+          "BearerAuth" : [ ]
         } ],
         "x-codegen-request-body-name" : "cocktail"
-      }
-    },
-    "/cocktails/{cocktailId}" : {
+      },
       "delete" : {
         "tags" : [ "Cocktails" ],
         "summary" : "Deletes a cocktail",
@@ -405,9 +420,6 @@
       "dtos.CocktailDto" : {
         "type" : "object",
         "properties" : {
-          "id" : {
-            "type" : "integer"
-          },
           "imageUrl" : {
             "type" : "string"
           },
@@ -421,17 +433,6 @@
         "properties" : {
           "quantity" : {
             "type" : "number"
-          }
-        }
-      },
-      "dtos.CreateCocktailDto" : {
-        "type" : "object",
-        "properties" : {
-          "imageUrl" : {
-            "type" : "string"
-          },
-          "title" : {
-            "type" : "string"
           }
         }
       },
