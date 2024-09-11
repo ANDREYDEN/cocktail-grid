@@ -394,6 +394,51 @@ const docTemplate = `{
             }
         },
         "/ingredients/{ingredientId}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates an ingredient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Updates an ingredient",
+                "operationId": "Update_Ingredient",
+                "parameters": [
+                    {
+                        "description": "Ingredient object",
+                        "name": "cocktail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.IngredientDto"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Ingredient ID",
+                        "name": "ingredientId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {

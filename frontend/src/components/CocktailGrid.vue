@@ -9,7 +9,7 @@ import { useCreateCocktailIngredient, useDeleteCocktail, useDeleteCocktailIngred
 import { VmsCocktailVm, VmsDetailedCocktailVm, VmsIngredientVm } from '../openapi/cocktailGridSchemas';
 import Account from './Account.vue';
 import UpsertCocktailModal from './UpsertCocktailModal.vue';
-import CreateIngredientModal from './CreateIngredientModal.vue';
+import UpsertIngredientModal from './UpsertIngredientModal.vue';
 import CustomButton from './CustomButton.vue';
 import GridCell from './GridCell.vue';
 import { useModal } from './Modal/useModal';
@@ -19,6 +19,7 @@ const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
 const cocktailsAsRows = ref<boolean>(true)
 const cocktailToEdit = ref<VmsCocktailVm>()
+const ingredientToEdit = ref<VmsIngredientVm>()
 
 const createCocktailModalState = useModal()
 const createIngredientModalState = useModal()
@@ -188,11 +189,23 @@ const handleHeaderEdit = (row: number, column: number) => {
       createCocktailModalState.value.onOpen()
     }
     if (row === 0) {
-      return
+      const ingredient = ingredients.value?.[column - 1]
+      if (!ingredient) {
+        return
+      }
+
+      ingredientToEdit.value = ingredient
+      createIngredientModalState.value.onOpen()
     }
   } else {
     if (column === 0) {
-      return
+      const ingredient = ingredients.value?.[row - 1]
+      if (!ingredient) {
+        return
+      }
+
+      ingredientToEdit.value = ingredient
+      createIngredientModalState.value.onOpen()
     }
     if (row === 0) {
       const cocktail = cocktails.value?.[column - 1]
@@ -293,7 +306,7 @@ const loading = computed(() => {
           <PlusCircleIcon />
         </template>
       </CustomButton>
-      <UpsertCocktailModal :key="cocktailToEdit?.id" v-bind="createCocktailModalState" :cocktail="cocktailToEdit"
+      <UpsertCocktailModal :key="cocktailToEdit?.id ?? ''" v-bind="createCocktailModalState" :cocktail="cocktailToEdit"
         @create="refetchCocktails" />
       <CustomButton outlined icon-position="left" :skeleton-loading="loading"
         @click="createIngredientModalState.onOpen">
@@ -302,7 +315,8 @@ const loading = computed(() => {
           <PlusCircleIcon />
         </template>
       </CustomButton>
-      <CreateIngredientModal v-bind="createIngredientModalState" @create="refetchIngredients" />
+      <UpsertIngredientModal :key="ingredientToEdit?.id ?? ''" v-bind="createIngredientModalState"
+        :ingredient="ingredientToEdit" @create="refetchIngredients" />
     </div>
     <div class="p-4 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
       'bg-slate-300 h-96 animate-pulse': loading

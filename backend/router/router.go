@@ -94,6 +94,12 @@ func NewRouter() *gin.Engine {
 
 		ingredientGroup := ingredientsGroup.Group("/:ingredientId")
 		{
+			ingredientGroup.PUT(
+				"",
+				middleware.EnsureValidToken(scope.UpdateIngredient),
+				ingredientController.UpdateIngredient,
+			)
+
 			ingredientGroup.DELETE(
 				"",
 				middleware.EnsureValidToken(scope.DeleteIngredient),

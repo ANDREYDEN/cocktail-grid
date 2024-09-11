@@ -381,6 +381,50 @@
       }
     },
     "/ingredients/{ingredientId}" : {
+      "put" : {
+        "tags" : [ "Ingredients" ],
+        "summary" : "Updates an ingredient",
+        "description" : "Updates an ingredient",
+        "operationId" : "Update_Ingredient",
+        "parameters" : [ {
+          "name" : "ingredientId",
+          "in" : "path",
+          "description" : "Ingredient ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Ingredient object",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/dtos.IngredientDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "BearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "cocktail"
+      },
       "delete" : {
         "tags" : [ "Ingredients" ],
         "summary" : "Deletes an ingredient",

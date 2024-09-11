@@ -67,6 +67,51 @@ func (cocktailController IngredientController) CreateIngredient(ctx *gin.Context
 	ctx.IndentedJSON(http.StatusCreated, vms.FromIngredientToVm(ingredient))
 }
 
+// UpdateIngredient godoc
+//
+//	@Summary	Updates an ingredient
+//	@Schemes
+//	@Description	Updates an ingredient
+//	@Tags			Ingredients
+//	@ID				Update_Ingredient
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktail		body		dtos.IngredientDto	true	"Ingredient object"
+//	@Param			ingredientId	path		int					true	"Ingredient ID"
+//	@Success		200				{object}	interface{}
+//	@Router			/ingredients/{ingredientId} [put]
+//	@Security		BearerAuth
+func (ingredientController IngredientController) UpdateIngredient(ctx *gin.Context) {
+	type UpdateIngredientPathParams struct {
+		IngredientId uint `uri:"ingredientId" binding:"required"`
+	}
+
+	pathParams, ok := GetPathParams[UpdateIngredientPathParams](ctx)
+	if !ok {
+		return
+	}
+
+	var ingredientDto dtos.IngredientDto
+	if err := ctx.BindJSON(&ingredientDto); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+
+	db := db.GetDB()
+	var ingredient models.Ingredient
+	result := db.First(&ingredient, pathParams.IngredientId)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("No ingredient found with id %d", ingredient.ID)})
+		return
+	}
+
+	ingredient.Name = ingredientDto.Name
+
+	db.Save(&ingredient)
+
+	ctx.IndentedJSON(http.StatusOK, vms.FromIngredientToVm(ingredient))
+}
+
 // DeleteIngredient godoc
 //
 //	@Summary	Deletes an ingredient
