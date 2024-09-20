@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useAuth } from '#hooks/useAuth';
-import { useAuth0 } from '@auth0/auth0-vue';
 
 const { isLoading, user } = useAuth();
 const hasPicture = computed(() => !!user.value?.picture)
@@ -9,8 +8,6 @@ const pictureError = ref()
 const firstLetter = computed(() => {
     return user.value?.name?.[0] ?? '?'
 })
-console.log({ hasPicture: hasPicture.value, firstLetter: firstLetter.value });
-
 </script>
 
 <template>

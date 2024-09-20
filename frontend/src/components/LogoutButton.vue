@@ -3,6 +3,10 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
 import CustomButton from './CustomButton.vue';
 
+export interface LogoutButtonProps {
+    loading: boolean
+}
+withDefaults(defineProps<LogoutButtonProps>(), { loading: false })
 const auth0 = useAuth0();
 
 function logout() {
@@ -15,7 +19,7 @@ function logout() {
 </script>
 
 <template>
-    <CustomButton @click="logout">
+    <CustomButton :skeleton-loading="loading" @click="logout">
         Log out
         <template v-slot:icon>
             <ArrowRightStartOnRectangleIcon />
