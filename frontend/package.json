@@ -43,5 +43,16 @@
     "vite": "^4.2.0",
     "vue-tsc": "^1.2.0"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "imports": {
+    "#hooks/useAuth": {
+      "storybook": "./src/hooks/useAuth.mock.ts",
+      "default": "./src/hooks/useAuth.ts"
+    },
+    "#*": [
+      "./*",
+      "./*.ts",
+      "./*.tsx"
+    ]
+  }
 }
