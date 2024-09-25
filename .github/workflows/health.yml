@@ -1,0 +1,23 @@
+name: Build & Verify Health
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: main
+
+jobs:
+  frontend-build:
+    name: Frontend & Backend Startup
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+        - uses: actions/checkout@v4
+
+        - name: Run docker-compose
+          uses: hoverkraft-tech/compose-action@v2.0.1
+          with:
+            compose-file: "./docker-compose.prod.yml"
+        
+        - name: Health Check
+          run: curl localhost:8080
