@@ -20,4 +20,4 @@ jobs:
             compose-file: "./docker-compose.prod.yml"
         
         - name: Health Check
-          run: curl localhost:8080
+          run: sleep 30 && curl localhost:8080
