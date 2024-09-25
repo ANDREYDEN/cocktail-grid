@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuth } from '#hooks/useAuth';
+import { useAuth } from '@hooks/useAuth';
 import CustomButton from './CustomButton.vue';
 import LoginButton from './LoginButton.vue';
 import LogoutButton from './LogoutButton.vue';

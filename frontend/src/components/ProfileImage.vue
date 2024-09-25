@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useAuth } from '#hooks/useAuth';
+import { useAuth } from '@hooks/useAuth';
 
 const { isLoading, user } = useAuth();
 const hasPicture = computed(() => !!user.value?.picture)
