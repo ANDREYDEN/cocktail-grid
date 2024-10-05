@@ -1,6 +1,6 @@
 package vms
 
-import "cocktail-grid/backend/models"
+import "cocktail-grid/backend/src/domain/models"
 
 type CocktailVm struct {
 	ID       uint   `json:"id"`
@@ -13,18 +13,17 @@ type DetailedCocktailVm struct {
 	Ingredients []CocktailIngredientVm `json:"ingredients"`
 }
 
-// Maps a Cocktail model to a CocktailVm. 
+// Maps a Cocktail model to a CocktailVm.
 // The cocktail should have its CocktailIngredients preloaded.
 func FromCocktailToVm(cocktail models.Cocktail) CocktailVm {
 	return CocktailVm{
-		ID:	   cocktail.ID,
+		ID:       cocktail.ID,
 		Title:    cocktail.Title,
 		ImageURL: cocktail.ImageURL,
 	}
 }
 
-
-// Maps a Cocktail model to a CocktailVm. 
+// Maps a Cocktail model to a CocktailVm.
 // The cocktail should have its CocktailIngredients preloaded.
 func FromCocktailToDetailedVm(cocktail models.Cocktail) DetailedCocktailVm {
 	ingredientVms := []CocktailIngredientVm{}
@@ -34,7 +33,7 @@ func FromCocktailToDetailedVm(cocktail models.Cocktail) DetailedCocktailVm {
 	}
 
 	return DetailedCocktailVm{
-	CocktailVm: FromCocktailToVm(cocktail),
+		CocktailVm:  FromCocktailToVm(cocktail),
 		Ingredients: ingredientVms,
 	}
 }

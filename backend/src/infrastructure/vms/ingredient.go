@@ -1,6 +1,6 @@
 package vms
 
-import "cocktail-grid/backend/models"
+import "cocktail-grid/backend/src/domain/models"
 
 type IngredientVm struct {
 	ID   uint   `json:"id"`

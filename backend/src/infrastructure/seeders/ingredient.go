@@ -1,7 +1,7 @@
 package seeders
 
 import (
-	"cocktail-grid/backend/models"
+	"cocktail-grid/backend/src/domain/models"
 
 	"gorm.io/gorm"
 )

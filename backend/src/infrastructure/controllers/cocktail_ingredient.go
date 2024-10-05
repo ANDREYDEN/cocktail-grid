@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"cocktail-grid/backend/db"
-	"cocktail-grid/backend/dtos"
-	"cocktail-grid/backend/models"
-	"cocktail-grid/backend/vms"
+	"cocktail-grid/backend/src/domain/models"
+	"cocktail-grid/backend/src/infrastructure/db"
+	"cocktail-grid/backend/src/infrastructure/dtos"
+	"cocktail-grid/backend/src/infrastructure/vms"
 	"errors"
 	"fmt"
 	"net/http"

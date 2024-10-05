@@ -1,8 +1,8 @@
 package seeders
 
 import (
-	"cocktail-grid/backend/db"
-	"cocktail-grid/backend/models"
+	"cocktail-grid/backend/src/domain/models"
+	"cocktail-grid/backend/src/infrastructure/db"
 	"log"
 )
 
@@ -19,7 +19,7 @@ func Seed() {
 	}
 	SeedCocktail(db, &margarita)
 	SeedCocktail(db, &mojito)
-	
+
 	log.Printf("Running Ingredient Seeder...")
 	tequila := models.Ingredient{
 		Name: "Silver Tequila",

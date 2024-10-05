@@ -1,11 +1,11 @@
 package main
 
 import (
-	scope "cocktail-grid/backend/auth"
-	"cocktail-grid/backend/db"
-	"cocktail-grid/backend/docs"
-	"cocktail-grid/backend/router"
-	"cocktail-grid/backend/seeders"
+	scope "cocktail-grid/backend/src/infrastructure/auth"
+	"cocktail-grid/backend/src/infrastructure/db"
+	"cocktail-grid/backend/src/infrastructure/docs"
+	"cocktail-grid/backend/src/infrastructure/router"
+	"cocktail-grid/backend/src/infrastructure/seeders"
 	"fmt"
 	"log"
 	"os"
@@ -13,14 +13,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-//	@title						CocktailGrid API
-//	@description				An API to get cocktails and ingredients
-//	@version					1
-//	@BasePath					/
+// @title						CocktailGrid API
+// @description				An API to get cocktails and ingredients
+// @version					1
+// @BasePath					/
 //
-//	@securityDefinitions.apikey	BearerAuth
-//	@in							header
-//	@name						Authorization
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {

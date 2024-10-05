@@ -1,9 +1,9 @@
 package router
 
 import (
-	scope "cocktail-grid/backend/auth"
-	controllers "cocktail-grid/backend/controllers"
-	"cocktail-grid/backend/middleware"
+	scope "cocktail-grid/backend/src/infrastructure/auth"
+	controllers "cocktail-grid/backend/src/infrastructure/controllers"
+	"cocktail-grid/backend/src/infrastructure/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

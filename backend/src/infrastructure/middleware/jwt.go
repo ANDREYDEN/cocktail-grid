@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	scope "cocktail-grid/backend/auth"
+	scope "cocktail-grid/backend/src/infrastructure/auth"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
 	"github.com/auth0/go-jwt-middleware/v2/jwks"

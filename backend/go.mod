@@ -1,4 +1,4 @@
-module cocktail-grid/backend
+module cocktail-grid/backend/src/infrastructure
 
 go 1.20
 

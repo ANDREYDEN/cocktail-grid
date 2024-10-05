@@ -1,6 +1,6 @@
 package dtos
 
-import "cocktail-grid/backend/models"
+import "cocktail-grid/backend/src/domain/models"
 
 type CocktailDto struct {
 	Title    string `json:"title"`
@@ -8,8 +8,8 @@ type CocktailDto struct {
 }
 
 func FromDtoToCocktail(cocktailDto CocktailDto) models.Cocktail {
-	return models.Cocktail {
-		Title: cocktailDto.Title,
+	return models.Cocktail{
+		Title:    cocktailDto.Title,
 		ImageURL: cocktailDto.ImageURL,
-	} 
+	}
 }
