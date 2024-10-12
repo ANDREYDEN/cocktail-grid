@@ -41,15 +41,15 @@ function handleEdit(e: MouseEvent) {
 </script>
 
 <template>
-    <div class="cursor-pointer relative flex items-center justify-center w-28 md:w-48 h-10 md:h-14 rounded-lg text-lg"
+    <div class="m-1 cursor-pointer relative flex items-center justify-center flex-shrink-0 w-28 md:w-48 h-10 md:h-14 rounded-lg text-lg"
         :class="containerClass" @click="$emit('click')" @mouseover="hovering = true" @mouseleave="hovering = false">
         <div v-if="showActions" class="absolute flex gap-1 top-2 right-2">
             <PencilSquareIcon class="text-black w-5 h-5 hover:cursor-pointer" @click="handleEdit" />
             <TrashIcon class="text-red-500 w-5 h-5 hover:cursor-pointer" @click="handleDelete" />
         </div>
-        <div v-if="hasText" class="flex items-center justify-center w-24 md:w-44">
-            <div class="inline truncate text-ellipsis capitalize">{{ text }}</div>
+        <div class="flex items-center justify-center w-24 md:w-44">
+            <div v-if="hasText" class="inline truncate text-ellipsis capitalize">{{ text }}</div>
+            <slot v-else></slot>
         </div>
-        <slot v-else></slot>
     </div>
 </template>

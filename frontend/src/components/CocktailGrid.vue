@@ -290,7 +290,7 @@ const loading = computed(() => {
 </script>
 
 <template>
-  <header class="flex items-center p-4 mb-4 border-b-2 sticky top-0 w-full bg-white z-50 isolate">
+  <header class="flex items-center p-4 mb-4 border-b-2 sticky top-0 w-full bg-white z-50 isolate max-h-[15vh]">
     <img src="../../public/logo.svg" alt="Cocktail Grid Logo" class="w-10 h-10 md:w-16 md:h-16">
 
     <h1 class="text-center text-3xl md:text-5xl grow">Cocktail Grid</h1>
@@ -298,7 +298,7 @@ const loading = computed(() => {
     <Account />
   </header>
 
-  <main class="relative my-4 mx-4 md:mx-8">
+  <main class="relative mx-4 md:mx-8 h-auto flex flex-col max-h-[calc(85vh-1rem)]">
     <div v-if="auth.isAuthenticated.value" class="flex flex-row gap-4 mb-4">
       <CustomButton outlined icon-position="left" :skeleton-loading="loading" @click="createCocktailModalState.onOpen">
         Cocktail
@@ -318,11 +318,13 @@ const loading = computed(() => {
       <UpsertIngredientModal :key="ingredientToEdit?.id ?? ''" v-bind="createIngredientModalState"
         :ingredient="ingredientToEdit" @create="refetchIngredients" />
     </div>
-    <div class="p-4 overflow-scroll rounded-lg bg-blue-50 flex flex-col gap-2" :class="{
+    <div class="mb-4 overflow-auto rounded-lg bg-blue-50 flex flex-col isolate" :class="{
       'bg-slate-300 h-96 animate-pulse': loading
     }">
-      <div v-if="!loading" v-for="row in rowIndexRange" class="flex gap-2">
-        <div v-for="column in columnIndexRange">
+      <div v-if="!loading" v-for="row in rowIndexRange"
+        class="flex w-max first:sticky first:top-0 first:z-20 first:bg-blue-50 first:border-black first:border-b">
+        <div v-for="column in columnIndexRange"
+          class="first:sticky first:left-0 first:z-10 first:bg-blue-50 first:border-black first:border-r">
           <HeaderCell v-if="row === 0 && column === 0" selectable @click="flipAxis">
             <ArrowsUpDownIcon class="text-black w-8 h-8 rotate-45" />
           </HeaderCell>
@@ -330,8 +332,10 @@ const loading = computed(() => {
             :editable="auth.isAuthenticated.value" @edit="() => handleHeaderEdit(row, column)"
             @delete="handleItemDelete(row, column)" @click="handleHeaderSelected(row, column)"
             :text="itemText(row, column)" />
-          <GridCell v-else :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
-            @delete="handleItemDelete(row, column)" :text="itemText(row, column)" />
+          <div v-else>
+            <GridCell :editable="auth.isAuthenticated.value" @edit="(value) => handleItemEdit(row, column, value)"
+              @delete="handleItemDelete(row, column)" :text="itemText(row, column)" />
+          </div>
         </div>
       </div>
     </div>
