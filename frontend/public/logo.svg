@@ -1,6 +1,6 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 250H250V500H50C22.3858 500 0 477.614 0 450V250Z" fill="#C7C7C7"/>
-<path d="M0 53C0 25.3858 22.3858 3 50 3H250V253H0V53Z" fill="white"/>
+<path d="M0 50C0 22.3858 22.3858 0 50 0H250V250H0V50Z" fill="white"/>
 <path d="M250 0H450C477.614 0 500 22.3858 500 50V250H250V0Z" fill="#C7C7C7"/>
 <path d="M250 250H500V450C500 477.614 477.614 500 450 500H250V250Z" fill="white"/>
 <rect x="240" y="237" width="20" height="223" rx="10" fill="black"/>
