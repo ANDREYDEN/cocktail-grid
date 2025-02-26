@@ -4,6 +4,7 @@ import (
 	scope "cocktail-grid/backend/auth"
 	controllers "cocktail-grid/backend/controllers"
 	"cocktail-grid/backend/middleware"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,13 @@ func NewRouter() *gin.Engine {
 		"Content-Type",
 	}
 	router.Use(cors.New(corsConfig))
+
+	rootGroup := router.Group("/")
+	{
+		rootGroup.GET("", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, "{}")
+		})
+	}
 
 	cocktailsGroup := router.Group("/cocktails")
 	{
