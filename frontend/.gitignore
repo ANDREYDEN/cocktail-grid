@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# OpenAPI generation
 src/openapi/cocktailGridSchemas.ts
 src/openapi/cocktailGridComponents.ts
 

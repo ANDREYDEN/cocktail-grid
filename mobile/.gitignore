@@ -36,3 +36,7 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# OpenAPI generation
+openapi/cocktailGridSchemas.ts
+openapi/cocktailGridComponents.ts

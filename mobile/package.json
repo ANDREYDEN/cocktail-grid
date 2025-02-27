@@ -9,7 +9,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "swaggergen": "npx openapi-codegen gen cocktailGrid",
+    "swagger": "cp ../backend/docs/swagger.json ./openapi/swagger.json && npx openapi-codegen gen cocktailGrid"
   },
   "jest": {
     "preset": "jest-expo"
@@ -39,7 +41,10 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "react-native-svg": "15.8.0"
+    "react-native-svg": "15.8.0",
+    "@openapi-codegen/cli": "^3.0.0",
+    "@openapi-codegen/typescript": "^11.0.0",
+    "@tanstack/react-query": "^5.24.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
