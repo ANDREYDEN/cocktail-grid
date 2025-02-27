@@ -1,10 +1,11 @@
 import { VmsCocktailVm } from '@/openapi/cocktailGridSchemas'
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'
 import { Image } from 'expo-image'
+import { router } from 'expo-router'
 
 export default function CocktailListItem({ cocktail }: { cocktail: VmsCocktailVm }) {
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => router.push(`/(tabs)/cocktails/${cocktail.id}`)}>
             <Image source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
             <Text style={styles.title}>{cocktail.title}</Text>
         </TouchableOpacity>
