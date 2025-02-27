@@ -20,14 +20,6 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <FlatList data={cocktails} renderItem={(itemInfo) => <CocktailListItem cocktail={itemInfo.item} />} />
-    </View>
+    <FlatList data={cocktails} renderItem={(itemInfo) => <CocktailListItem cocktail={itemInfo.item} />} />
   );
 }
