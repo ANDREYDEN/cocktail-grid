@@ -1,7 +1,7 @@
 import CocktailListItem from "@/components/CocktailListItem";
 import Loader from "@/components/Loader";
 import { useGetCocktails } from "@/openapi/cocktailGridComponents";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 
 export default function Index() {
   const { data: cocktails, isLoading: cocktailsLoading, error: cocktailsError } = useGetCocktails({ queryParams: { compact: 'true' } })
