@@ -1,7 +1,7 @@
 import { VmsCocktailVm } from '@/openapi/cocktailGridSchemas'
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'
-import { Image } from 'expo-image'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { router } from 'expo-router'
+import Animated from 'react-native-reanimated'
 
 export default function CocktailListItem({ cocktail }: { cocktail: VmsCocktailVm }) {
     const handleClick = () => {
@@ -10,7 +10,7 @@ export default function CocktailListItem({ cocktail }: { cocktail: VmsCocktailVm
 
     return (
         <TouchableOpacity style={styles.container} onPress={handleClick}>
-            <Image source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
+            <Animated.Image sharedTransitionTag={`cocktail-image-${cocktail.id}`} source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
             <Text style={styles.title}>{cocktail.title}</Text>
         </TouchableOpacity>
     )

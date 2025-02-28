@@ -1,8 +1,8 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
-import { Image } from "expo-image";
-import { useGetCocktail, useGetCocktails } from "@/openapi/cocktailGridComponents";
+import { useGetCocktail } from "@/openapi/cocktailGridComponents";
 import CocktailIngredientsList from "@/components/CocktailIngredientsList";
+import Animated from 'react-native-reanimated'
 
 type CocktailPageQueryParams = {
     title?: string
@@ -15,7 +15,7 @@ export default function CocktailPage() {
     return (
         <View style={styles.container}>
             <Stack.Screen name="CocktailPage" options={{ title, headerBackTitle: 'Back' }} />
-            <Image source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
+            <Animated.Image sharedTransitionTag={`cocktail-image-${id}`} source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
             <Text style={styles.title}>{title}</Text>
             <CocktailIngredientsList style={{ width: '100%' }} ingredients={cocktail?.ingredients ?? []} isLoading={cocktailLoading} />
         </View>

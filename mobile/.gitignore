@@ -40,3 +40,7 @@ app-example
 # OpenAPI generation
 openapi/cocktailGridSchemas.ts
 openapi/cocktailGridComponents.ts
+
+# Native Folders
+ios/
+android/
