@@ -90,6 +90,37 @@ const docTemplate = `{
             }
         },
         "/cocktails/{cocktailId}": {
+            "get": {
+                "description": "Retrieves a specific cocktail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cocktail"
+                ],
+                "summary": "Gets a cocktail",
+                "operationId": "Get_Cocktail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Cocktail ID",
+                        "name": "cocktailId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vms.DetailedCocktailVm"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {

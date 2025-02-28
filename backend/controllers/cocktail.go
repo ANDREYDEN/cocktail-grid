@@ -47,6 +47,36 @@ func (cocktailController CocktailController) GetAllCocktails(ctx *gin.Context) {
 	}
 }
 
+// GetCocktail godoc
+//
+//	@Summary	Gets a cocktail
+//	@Schemes
+//	@Description	Retrieves a specific cocktail
+//	@Tags			Cocktail
+//	@ID				Get_Cocktail
+//	@Accept			json
+//	@Produce		json
+//	@Param			cocktailId	path		int	true	"Cocktail ID"
+//	@Success		200			{object}	vms.DetailedCocktailVm
+//	@Router			/cocktails/{cocktailId} [get]
+func (cocktailController CocktailController) GetCocktail(ctx *gin.Context) {
+	type GetCocktailPathParams struct {
+		CocktailId uint `uri:"cocktailId" binding:"required"`
+	}
+
+	pathParams, ok := GetPathParams[GetCocktailPathParams](ctx)
+	if !ok {
+		return
+	}
+
+	db := db.GetDB()
+	var cocktail models.Cocktail
+	db.Preload("CocktailIngredients.Ingredient").First(&cocktail, pathParams.CocktailId)
+
+	cocktailVm := vms.FromCocktailToDetailedVm(cocktail)
+	ctx.IndentedJSON(http.StatusOK, cocktailVm)
+}
+
 // CreateCocktail godoc
 //
 //	@Summary	Creates a cocktail

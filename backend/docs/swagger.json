@@ -78,6 +78,35 @@
       }
     },
     "/cocktails/{cocktailId}" : {
+      "get" : {
+        "tags" : [ "Cocktail" ],
+        "summary" : "Gets a cocktail",
+        "description" : "Retrieves a specific cocktail",
+        "operationId" : "Get_Cocktail",
+        "parameters" : [ {
+          "name" : "cocktailId",
+          "in" : "path",
+          "description" : "Cocktail ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/vms.DetailedCocktailVm"
+                }
+              }
+            }
+          }
+        }
+      },
       "put" : {
         "tags" : [ "Cocktails" ],
         "summary" : "Update a cocktail",
