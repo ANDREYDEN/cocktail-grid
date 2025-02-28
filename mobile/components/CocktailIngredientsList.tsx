@@ -15,14 +15,14 @@ export default function CocktailIngredientsList({ style, ingredients, isLoading 
         <View style={style}>
             <Text style={styles.title}>Ingredients</Text>
             <View style={styles.container}>
-                <Text>Name</Text>
-                <Text>Quantity</Text>
+                <Text style={styles.tableHeader}>Name</Text>
+                <Text style={styles.tableHeader}>Quantity</Text>
             </View>
-            <ScrollView>
+            <ScrollView style={{ height: '100%' }}>
                 {ingredients.map((ingredient) => (
                     <View key={ingredient.ingredientId} style={styles.container}>
                         <Text>{ingredient.ingredientName}</Text>
-                        <Text>{ingredient.quantity}</Text>
+                        <Text>{ingredient.quantity} oz.</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textTransform: 'uppercase',
         margin: 10,
+        marginTop: 20,
     },
     container: {
         flexDirection: 'row',
@@ -42,5 +43,8 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    tableHeader: {
+        fontWeight: 'bold',
     }
 })
