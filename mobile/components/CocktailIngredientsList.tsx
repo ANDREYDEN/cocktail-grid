@@ -1,6 +1,7 @@
 import { VmsCocktailIngredientVm } from "@/openapi/cocktailGridSchemas";
 import { View, Text, StyleSheet, ScrollView, ViewStyle, StyleProp } from "react-native";
 import Loader from "./Loader";
+import EmptyList from "./EmptyList";
 
 type CocktailIngredientsListProps = {
     ingredients: VmsCocktailIngredientVm[]
@@ -10,6 +11,10 @@ type CocktailIngredientsListProps = {
 
 export default function CocktailIngredientsList({ style, ingredients, isLoading }: CocktailIngredientsListProps) {
     if (isLoading) return <Loader />
+
+    if (!ingredients.length) {
+        return <EmptyList style={{ flex: 1 }} text="No ingredients" />
+    }
 
     return (
         <View style={style}>
