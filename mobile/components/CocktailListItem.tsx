@@ -4,8 +4,12 @@ import { Image } from 'expo-image'
 import { router } from 'expo-router'
 
 export default function CocktailListItem({ cocktail }: { cocktail: VmsCocktailVm }) {
+    const handleClick = () => {
+        router.push(`/cocktails/${cocktail.id}?title=${cocktail.title}`)
+    }
+
     return (
-        <TouchableOpacity style={styles.container} onPress={() => router.push(`/cocktails/${cocktail.id}`)}>
+        <TouchableOpacity style={styles.container} onPress={handleClick}>
             <Image source={{ uri: 'https://picsum.photos/200' }} style={styles.image} />
             <Text style={styles.title}>{cocktail.title}</Text>
         </TouchableOpacity>
