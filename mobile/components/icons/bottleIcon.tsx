@@ -1,4 +1,4 @@
-import Svg, { Path, Rect } from "react-native-svg";
+import Svg, { Rect } from "react-native-svg";
 
 export function BottleIcon() {
     return (

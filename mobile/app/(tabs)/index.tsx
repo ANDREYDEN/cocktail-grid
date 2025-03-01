@@ -4,7 +4,7 @@ import { useGetCocktails } from "@/openapi/cocktailGridComponents";
 import { FlatList } from "react-native";
 
 export default function Index() {
-  const { data: cocktails, isLoading: cocktailsLoading, error: cocktailsError } = useGetCocktails({ queryParams: { compact: 'true' } })
+  const { data: cocktails, isLoading: cocktailsLoading } = useGetCocktails({ queryParams: { compact: 'true' } })
 
   if (cocktailsLoading) return <Loader />
 
