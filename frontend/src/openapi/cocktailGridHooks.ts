@@ -1,6 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-vue";
+import { useAuth } from "@hooks/useAuth";
 import { useMutation } from "@tanstack/vue-query";
-import { CreateCocktailError, CreateCocktailIngredientError, CreateCocktailIngredientVariables, CreateCocktailVariables, CreateIngredientError, CreateIngredientVariables, DeleteCocktailError, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables, DeleteCocktailVariables, DeleteIngredientError, DeleteIngredientVariables, UpdateCocktailIngredientError, UpdateCocktailIngredientVariables, createCocktail, createCocktailIngredient, createIngredient, deleteCocktail, deleteCocktailIngredient, deleteIngredient, updateCocktailIngredient, updateCocktail, UpdateCocktailError, UpdateCocktailVariables, updateIngredient, UpdateIngredientError, UpdateIngredientVariables } from "./cocktailGridComponents";
+import { createCocktail, CreateCocktailError, createCocktailIngredient, CreateCocktailIngredientError, CreateCocktailIngredientVariables, CreateCocktailVariables, createIngredient, CreateIngredientError, CreateIngredientVariables, deleteCocktail, DeleteCocktailError, deleteCocktailIngredient, DeleteCocktailIngredientError, DeleteCocktailIngredientVariables, DeleteCocktailVariables, deleteIngredient, DeleteIngredientError, DeleteIngredientVariables, updateCocktail, UpdateCocktailError, updateCocktailIngredient, UpdateCocktailIngredientError, UpdateCocktailIngredientVariables, UpdateCocktailVariables, updateIngredient, UpdateIngredientError, UpdateIngredientVariables } from "./cocktailGridComponents";
 import { VmsCocktailIngredientVm } from "./cocktailGridSchemas";
 
 export function useCreateCocktailIngredient() {
@@ -67,9 +67,9 @@ export function useDeleteIngredient() {
 }
 
 function useMutationWithAuth<TResult=Record<string, any>,TError=void, TParams={}>(key: string, fetchFn: (params: TParams) => Promise<any>) {
-    const auth = useAuth0()
+    const auth = useAuth()
     const mutationFnWithAuth = async (params: TParams) => {
-        const token = await auth.getAccessTokenSilently()
+        const token = await auth.getToken()
         return await fetchFn({
             ...params,
             headers: {

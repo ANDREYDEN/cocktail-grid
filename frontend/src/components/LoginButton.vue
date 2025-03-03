@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/vue/24/solid';
+import { useAuth } from '@hooks/useAuth';
 import CustomButton from './CustomButton.vue';
 
-const auth0 = useAuth0();
+const auth = useAuth();
 
 function login() {
-    auth0.loginWithRedirect();
+    auth.login();
 }
 </script>
 

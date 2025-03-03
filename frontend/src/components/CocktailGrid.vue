@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowsUpDownIcon, PlusCircleIcon } from '@heroicons/vue/24/solid';
 import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
@@ -14,6 +13,7 @@ import CustomButton from './CustomButton.vue';
 import GridCell from './GridCell.vue';
 import { useModal } from './Modal/useModal';
 import HeaderCell from './HeaderCell.vue';
+import { useAuth } from '@hooks/useAuth';
 
 const selectedCocktails = ref<VmsDetailedCocktailVm[]>([])
 const selectedVmsIngredientVms = ref<VmsIngredientVm[]>([])
@@ -24,7 +24,7 @@ const ingredientToEdit = ref<VmsIngredientVm>()
 const createCocktailModalState = useModal()
 const createIngredientModalState = useModal()
 
-const auth = useAuth0();
+const auth = useAuth();
 const { data: cocktails, isLoading: loadingCocktails, refetch: refetchCocktails, isRefetching: refetchingCocktails } = useQuery({
   queryKey: ['getCocktails'],
   queryFn: () => getCocktails({})

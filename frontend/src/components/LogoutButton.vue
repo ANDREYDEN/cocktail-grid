@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { useAuth0 } from '@auth0/auth0-vue';
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/solid';
+import { useAuth } from '@hooks/useAuth';
 import CustomButton from './CustomButton.vue';
 
-const auth0 = useAuth0();
+const auth = useAuth();
 
 function logout() {
-    auth0.logout({
-        logoutParams: {
-            returnTo: window.location.origin
-        }
-    });
+    auth.logout({ returnTo: window.location.origin });
 }
 </script>
 
