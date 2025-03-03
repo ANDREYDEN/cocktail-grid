@@ -10,9 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.cocktail-grid"
+      "bundleIdentifier": "com.anden.cocktail-grid"
     },
     "android": {
+      "package": "com.anden.cocktailgrid",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "monochromeImage": "./assets/images/adaptive-icon.png"
