@@ -22,7 +22,6 @@ go.work
 
 *.db
 
-.env
 docs/*
 !docs/swagger.json
 !docs/docs.go
