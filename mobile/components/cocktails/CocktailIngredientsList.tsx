@@ -7,8 +7,8 @@ import {
   ViewStyle,
   StyleProp,
 } from "react-native";
-import Loader from "./Loader";
-import EmptyList from "./EmptyList";
+import Loader from "@/components/Loader";
+import EmptyList from "@/components/EmptyList";
 
 type CocktailIngredientsListProps = {
   ingredients: VmsCocktailIngredientVm[];

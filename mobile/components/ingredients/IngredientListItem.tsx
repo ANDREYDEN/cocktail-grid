@@ -1,22 +1,22 @@
-import { VmsCocktailVm } from "@/openapi/cocktailGridSchemas";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
 import Animated from "react-native-reanimated";
-import OptionsIcon from "./icons/OptionsIcon";
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
+import OptionsIcon from "@/components/icons/OptionsIcon";
+import { VmsIngredientVm } from "@/openapi/cocktailGridSchemas";
 
-export default function CocktailListItem({
-  cocktail,
+export default function IngredientListItem({
+  ingredient,
 }: {
-  cocktail: VmsCocktailVm;
+  ingredient: VmsIngredientVm;
 }) {
   const handleClick = () => {
-    router.push(`/cocktails/${cocktail.id}?title=${cocktail.title}`);
+    router.push(`/ingredients/${ingredient.id}?name=${ingredient.name}`);
   };
 
   const handleEdit = () => {};
@@ -26,11 +26,11 @@ export default function CocktailListItem({
     <TouchableOpacity style={styles.container} onPress={handleClick}>
       <View style={styles.leftContent}>
         <Animated.Image
-          sharedTransitionTag={`cocktail-image-${cocktail.id}`}
+          sharedTransitionTag={`ingredient-image-${ingredient.id}`}
           source={{ uri: "https://picsum.photos/200" }}
           style={styles.image}
         />
-        <Text style={styles.title}>{cocktail.title}</Text>
+        <Text style={styles.title}>{ingredient.name}</Text>
       </View>
       <Menu>
         <MenuTrigger>

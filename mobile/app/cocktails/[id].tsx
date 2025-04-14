@@ -1,8 +1,8 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 import { useGetCocktail } from "@/openapi/cocktailGridComponents";
-import CocktailIngredientsList from "@/components/CocktailIngredientsList";
 import Animated from "react-native-reanimated";
+import CocktailIngredientsList from "@/components/cocktails/CocktailIngredientsList";
 
 type CocktailPageQueryParams = {
   title?: string;
