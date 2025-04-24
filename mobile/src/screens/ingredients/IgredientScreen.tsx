@@ -1,16 +1,12 @@
-import { Stack, useLocalSearchParams } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { Stack } from "expo-router";
+import { View, Animated, Text, StyleSheet } from "react-native";
 
-type IngredientPageQueryParams = {
+type IngredientScreenProps = {
+  id: number;
   name?: string;
 };
 
-export default function IngredientPage() {
-  const { id, name } = useLocalSearchParams<
-    "/ingredients/[id]",
-    IngredientPageQueryParams
-  >();
+export default function IngredientScreen({ id, name }: IngredientScreenProps) {
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -18,7 +14,7 @@ export default function IngredientPage() {
         options={{ title: name, headerBackTitle: "Back" }}
       />
       <Animated.Image
-        sharedTransitionTag={`ingredient-image-${id}`}
+        // sharedTransitionTag={`ingredient-image-${id}`}
         source={{ uri: "https://picsum.photos/200" }}
         style={styles.image}
       />

@@ -35,8 +35,8 @@ yarn-error.*
 app-example
 
 # OpenAPI generation
-openapi/cocktailGridSchemas.ts
-openapi/cocktailGridComponents.ts
+src/openapi/cocktailGridSchemas.ts
+src/openapi/cocktailGridComponents.ts
 
 # Native Folders
 ios/

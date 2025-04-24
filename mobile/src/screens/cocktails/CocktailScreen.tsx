@@ -1,22 +1,17 @@
-import { Stack, useLocalSearchParams } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import CocktailIngredientsList from "@/screens/cocktails/components/CocktailIngredientsList";
 import { useGetCocktail } from "@/openapi/cocktailGridComponents";
-import Animated from "react-native-reanimated";
-import CocktailIngredientsList from "@/components/cocktails/CocktailIngredientsList";
+import { Stack } from "expo-router";
+import { View, Animated, Text, StyleSheet } from "react-native";
 
-type CocktailPageQueryParams = {
+type CoctailScreenProps = {
+  id: number;
   title?: string;
 };
 
-export default function CocktailPage() {
-  const { id, title } = useLocalSearchParams<
-    "/cocktails/[id]",
-    CocktailPageQueryParams
-  >();
+export default function CocktailScreen({ id, title }: CoctailScreenProps) {
   const { data: cocktail, isLoading: cocktailLoading } = useGetCocktail({
-    pathParams: { cocktailId: +id },
+    pathParams: { cocktailId: id },
   });
-
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -24,7 +19,7 @@ export default function CocktailPage() {
         options={{ title, headerBackTitle: "Back" }}
       />
       <Animated.Image
-        sharedTransitionTag={`cocktail-image-${id}`}
+        // sharedTransitionTag={`cocktail-image-${id}`}
         source={{ uri: "https://picsum.photos/200" }}
         style={styles.image}
       />

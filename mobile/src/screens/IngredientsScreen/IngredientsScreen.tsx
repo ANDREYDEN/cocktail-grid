@@ -1,27 +1,27 @@
-import CocktailListItem from "@/components/cocktails/CocktailListItem";
 import Loader from "@/components/Loader";
-import { useGetCocktails } from "@/openapi/cocktailGridComponents";
-import { FlatList, Text, StyleSheet, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, Text, StyleSheet } from "react-native";
+import IngredientListItem from "./components/IngredientListItem";
+import { useGetIngredients } from "@/openapi/cocktailGridComponents";
 
-export default function Index() {
+export default function IngredientsScreen() {
   const {
     data: cocktails,
     isPending: cocktailsLoading,
     refetch: refetchCocktails,
-  } = useGetCocktails({
-    queryParams: { compact: "true" },
-  });
+  } = useGetIngredients({});
 
   if (cocktailsLoading) return <Loader />;
 
   if (cocktails?.length === 0) {
-    return <Text style={styles.emptyStateText}>No cocktails found</Text>;
+    return <Text style={styles.emptyStateText}>No ingredients found</Text>;
   }
 
   return (
     <FlatList
       data={cocktails}
-      renderItem={(itemInfo) => <CocktailListItem cocktail={itemInfo.item} />}
+      renderItem={(itemInfo) => (
+        <IngredientListItem ingredient={itemInfo.item} />
+      )}
       refreshControl={
         <RefreshControl
           refreshing={cocktailsLoading}
