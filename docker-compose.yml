@@ -6,7 +6,7 @@ services:
             context: ./backend
             dockerfile: Dockerfile
         image: cocktail_grid-backend:latest
-        command: reflex -r '\.go$$' -s swag init && go run .
+        command: reflex -r '\.go$$' -s go run .
         volumes:
             - ./backend:/go/src/app
         ports:
